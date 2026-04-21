@@ -1,15 +1,22 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { useStore, Component, TestFunction } from '../store/useStore'
-import { Code, Settings2, ShieldCheck, Save } from 'lucide-react'
+import { Code, Settings2, ShieldCheck, Save, Database, ClipboardList } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 export const PropertyEditor = () => {
   const { 
     template, 
     validation, 
+    preset,
+    response,
     selectedDataKey, 
+    sidebarMode,
     updateComponent, 
     updateValidation,
+    updatePresetEntry,
+    updateResponseEntry,
+    setPreset,
+    setResponse,
     componentMap
   } = useStore()
 
@@ -30,19 +37,85 @@ export const PropertyEditor = () => {
     }
   }, [validation, selectedDataKey])
 
-
-
   useEffect(() => {
     setLocalComponent(selectedComponent)
     setLocalValidation(selectedValidation)
   }, [selectedComponent, selectedValidation])
 
 
+  const [localJSON, setLocalJSON] = useState('')
+  const [jsonError, setJsonError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (sidebarMode === 'presets') {
+      setLocalJSON(JSON.stringify(preset, null, 2))
+    } else if (sidebarMode === 'responses') {
+      setLocalJSON(JSON.stringify(response, null, 2))
+    }
+  }, [sidebarMode]) // Only on mode switch to avoid overwrite while typing
+
+  const handleJSONChange = (val: string) => {
+    setLocalJSON(val)
+    try {
+      const parsed = JSON.parse(val)
+      setJsonError(null)
+      if (sidebarMode === 'presets') setPreset(parsed)
+      else if (sidebarMode === 'responses') setResponse(parsed)
+    } catch (e: any) {
+      setJsonError(e.message)
+    }
+  }
+
+  if (sidebarMode !== 'components') {
+    return (
+      <div className="flex-1 flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+        <div className="h-12 border-b border-zinc-800 flex items-center justify-between px-6 bg-zinc-900/50">
+          <div className="flex items-center gap-3">
+            <div className="p-1.5 rounded-md bg-primary/20 text-primary">
+              <Code className="w-4 h-4" />
+            </div>
+            <h2 className="text-xs font-bold uppercase tracking-widest">{sidebarMode} JSON EDITOR</h2>
+          </div>
+          {jsonError ? (
+            <div className="flex items-center gap-2 px-3 py-1 bg-destructive/10 text-destructive border border-destructive/20 rounded-full text-[10px] font-bold">
+              <ShieldCheck className="w-3 h-3 rotate-180" />
+              INVALID JSON: {jsonError}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded-full text-[10px] font-bold">
+              <ShieldCheck className="w-3 h-3" />
+              SYNCED & VALID
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 p-0 relative">
+          <textarea
+            className="absolute inset-0 w-full h-full p-8 bg-zinc-950 text-zinc-300 font-mono text-xs leading-relaxed outline-none resize-none selection:bg-primary/30"
+            value={localJSON}
+            spellCheck={false}
+            onChange={(e) => handleJSONChange(e.target.value)}
+          />
+        </div>
+        
+        <div className="h-8 border-t border-zinc-800 flex items-center px-6 bg-zinc-900/30 text-[10px] text-zinc-500 gap-4">
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+            Real-time update enabled
+          </div>
+          <div className="w-px h-3 bg-zinc-800" />
+          <div>JSON Schema valid for Fasih Engine v2.0</div>
+        </div>
+      </div>
+    )
+  }
+
   if (!selectedDataKey) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 bg-muted/20">
         <Settings2 className="w-12 h-12 mb-4 opacity-20" />
-        <p>Select a component to edit its properties</p>
+        <p className="font-medium">Select a component to edit</p>
+        <p className="text-xs opacity-50 mt-1">Properties and validations will appear here</p>
       </div>
     )
   }

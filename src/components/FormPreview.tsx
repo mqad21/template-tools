@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useStore } from '../store/useStore'
-import { Eye, Loader2, AlertCircle } from 'lucide-react'
+import { Eye, Loader2, AlertCircle, RefreshCw } from 'lucide-react'
+import { cn } from '../lib/utils'
 
 const JS_URL = "https://esurvey.bps.go.id/api/form-engine/js-umd/2";
 const CSS_URL = "https://esurvey.bps.go.id/api/form-engine/css/2";
@@ -19,6 +20,12 @@ export const FormPreview = () => {
   const [error, setError] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const instanceRef = useRef<any>(null)
+  const [reloadKey, setReloadKey] = useState(0)
+
+  const handleReload = () => {
+    setError(null)
+    setReloadKey(prev => prev + 1)
+  }
 
   useEffect(() => {
     let mounted = true
@@ -51,7 +58,7 @@ export const FormPreview = () => {
           if (!mounted) return;
           const FasihForm = window.FasihForm || window.lib;
           console.log("Checking for FasihForm/lib:", !!FasihForm, typeof FasihForm);
-          
+
           if (typeof FasihForm === "function" || (FasihForm && typeof FasihForm.render === 'function')) {
             setLoading(false);
             setReady(true);
@@ -82,7 +89,7 @@ export const FormPreview = () => {
     if (!ready || error || !template || !containerRef.current) return
 
     const FasihForm = window.FasihForm || window.lib;
-    
+
     // Debounce re-render to avoid flicker and race conditions
     const timer = setTimeout(() => {
       // 1. Destroy previous instance if it exist
@@ -104,10 +111,12 @@ export const FormPreview = () => {
         const root = document.createElement('div');
         root.id = "preview-root-inner";
         containerRef.current.appendChild(root);
+        root.style.height = 'calc(100svh - 175px)';
+        root.style.width = '100%';
       }
 
       const options = {
-        mode: "PAPI",
+        mode: "CAPI",
         assignmentId: "preview",
         template: JSON.parse(JSON.stringify(template)), // Deep clone to ensure FF doesn't mutate store state
         validation: validation ? JSON.parse(JSON.stringify(validation)) : null,
@@ -116,7 +125,7 @@ export const FormPreview = () => {
         remark: {},
         principals: [],
         formMode: 1,
-        initialMode: 1,
+        initialMode: 2,
         user: {
           username: "tester",
           role: "Developer",
@@ -127,9 +136,10 @@ export const FormPreview = () => {
       try {
         const FF = typeof FasihForm === 'function' ? FasihForm : (FasihForm.render ? FasihForm : null);
         if (!FF) throw new Error("FasihForm constructor or render function not found");
-        
+
         // Target the inner root we just created
         instanceRef.current = FF("#preview-root-inner", options);
+
         instanceRef.current.render();
       } catch (err: any) {
         console.error("FasihForm render error:", err)
@@ -138,7 +148,7 @@ export const FormPreview = () => {
     }, 150) // Slightly longer debounce for stability
 
     return () => clearTimeout(timer)
-  }, [template, validation, preset, response, ready, error])
+  }, [template, validation, preset, response, ready, error, reloadKey])
 
   return (
     <div className="w-full border-l bg-muted/10 flex flex-col h-full overflow-hidden">
@@ -147,11 +157,20 @@ export const FormPreview = () => {
           <Eye className="w-4 h-4 text-primary" />
           <span className="text-sm font-semibold">Live Preview</span>
         </div>
-        {!loading && !error && (
-          <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold uppercase">
-            Active
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {!loading && !error && (
+            <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold uppercase">
+              Active
+            </span>
+          )}
+          <button
+            onClick={handleReload}
+            className="p-1.5 hover:bg-primary/10 rounded-md transition-all text-muted-foreground hover:text-primary active:rotate-180 duration-500"
+            title="Reload Form Instance"
+          >
+            <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 relative overflow-auto">
@@ -170,7 +189,7 @@ export const FormPreview = () => {
           </div>
         )}
 
-        <div id="preview-root" ref={containerRef} className="min-h-full w-full bg-white shadow-inner p-4" />
+        <div id="preview-root" ref={containerRef} className="min-h-full w-full bg-white shadow-inner p-4 max-h-[100svh]" />
       </div>
     </div>
   )

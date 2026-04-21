@@ -5,7 +5,8 @@ import {
   Layout, Type, CheckSquare, List, Hash,
   Calendar, Clock as ClockIcon, Image, File, MapPin,
   CheckCircle2, Radio as RadioIcon, ToggleLeft,
-  Menu, FileDigit, Code2, PenLine, Star
+  Menu, FileDigit, Code2, PenLine, Star,
+  Database, ClipboardList
 } from 'lucide-react'
 import { cn, stripHtml } from '../lib/utils'
 
@@ -237,12 +238,23 @@ const ComponentTreeItem = React.memo(({
 })
 
 export const Sidebar = () => {
-  const template = useStore(state => state.template)
-  const selectedDataKey = useStore(state => state.selectedDataKey)
-  const setSelectedDataKey = useStore(state => state.setSelectedDataKey)
+  const { template, preset, response, sidebarMode, setSidebarMode, selectedDataKey, setSelectedDataKey } = useStore()
   
   const [searchTerm, setSearchTerm] = useState('')
   const searchRef = React.useRef<HTMLDivElement>(null)
+
+  const dataList = useMemo(() => {
+    if (sidebarMode === 'presets') return preset?.predata || []
+    if (sidebarMode === 'responses') return response?.answers || []
+    return []
+  }, [sidebarMode, preset, response])
+
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return dataList
+    return dataList.filter((item: any) => 
+      item.dataKey.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [dataList, searchTerm])
 
   // Handle click outside to close search results
   useEffect(() => {
@@ -269,12 +281,35 @@ export const Sidebar = () => {
 
   return (
     <div className="w-full border-r bg-card flex flex-col h-full shrink-0">
+      {/* Tab Switcher */}
+      <div className="flex border-b bg-muted/30">
+        {[
+          { id: 'components', icon: Layers, label: 'Tree' },
+          { id: 'presets', icon: Database, label: 'Presets' },
+          { id: 'responses', icon: ClipboardList, label: 'Response' },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setSidebarMode(tab.id as any)}
+            className={cn(
+              "flex-1 flex flex-col items-center gap-1 py-3 text-[9px] font-black uppercase tracking-widest transition-all border-b-2",
+              sidebarMode === tab.id 
+                ? "bg-background text-primary border-primary shadow-[inset_0_-2px_0_0_rgba(var(--primary),1)]" 
+                : "text-muted-foreground/60 border-transparent hover:text-muted-foreground hover:bg-muted/50"
+            )}
+          >
+            <tab.icon className={cn("w-4 h-4", sidebarMode === tab.id ? "animate-in zoom-in duration-300" : "")} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div className="p-4 border-b space-y-4">
         <div ref={searchRef} className="relative group/search">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search dataKey or label..."
+            placeholder={sidebarMode === 'components' ? "Search components..." : "Search data keys..."}
             className="w-full pl-9 pr-3 py-2 text-xs bg-background border rounded-md focus:outline-none focus:ring-1 focus:ring-primary/50"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -288,8 +323,8 @@ export const Sidebar = () => {
             </button>
           )}
 
-          {/* Search Results Dropdown */}
-          {searchTerm.length >= 2 && (
+          {/* Search Results Dropdown (only for components mode) */}
+          {sidebarMode === 'components' && searchTerm.length >= 2 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-card border rounded-md shadow-xl z-50 max-h-[400px] overflow-y-auto custom-scrollbar animate-in slide-in-from-top-2 duration-200">
               <div className="p-1">
                 {Object.values(useStore.getState().componentMap)
@@ -297,7 +332,7 @@ export const Sidebar = () => {
                     c.label?.toLowerCase().includes(searchTerm.toLowerCase()) || 
                     c.dataKey?.toLowerCase().includes(searchTerm.toLowerCase())
                   )
-                  .slice(0, 50) // Limit results for performance
+                  .slice(0, 50)
                   .map((result) => (
                     <button
                       key={result.dataKey}
@@ -320,14 +355,6 @@ export const Sidebar = () => {
                       </span>
                     </button>
                   ))}
-                {Object.values(useStore.getState().componentMap).filter(c => 
-                  c.label?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                  c.dataKey?.toLowerCase().includes(searchTerm.toLowerCase())
-                ).length === 0 && (
-                  <div className="px-3 py-6 text-center text-muted-foreground italic text-xs">
-                    No matching components found
-                  </div>
-                )}
               </div>
             </div>
           )}
@@ -336,22 +363,44 @@ export const Sidebar = () => {
 
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         <div className="p-2 space-y-px">
-          {Array.isArray(template.components) && template.components.map((group, idx) => {
-            const components = Array.isArray(group) ? group : [group];
-            return (
-              <div key={idx} className={cn("space-y-px", idx > 0 && "mt-4 pt-4 border-t border-dashed")}>
-                {components.map((comp, cIdx) => (
-                  comp && (
-                    <ComponentTreeItem
-                      key={comp.dataKey || `${idx}-${cIdx}`}
-                      comp={comp}
-                      searchTerm={searchTerm}
-                    />
-                  )
-                ))}
+          {sidebarMode === 'components' ? (
+            Array.isArray(template.components) && template.components.map((group, idx) => {
+              const components = Array.isArray(group) ? group : [group];
+              return (
+                <div key={idx} className={cn("space-y-px", idx > 0 && "mt-4 pt-4 border-t border-dashed")}>
+                  {components.map((comp, cIdx) => (
+                    comp && (
+                      <ComponentTreeItem
+                        key={comp.dataKey || `${idx}-${cIdx}`}
+                        comp={comp}
+                        searchTerm={searchTerm}
+                      />
+                    )
+                  ))}
+                </div>
+              )
+            })
+          ) : (
+            <div className="p-2 space-y-4">
+              <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-2">
+                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground mb-4">
+                  {sidebarMode === 'presets' ? <Database className="w-6 h-6" /> : <ClipboardList className="w-6 h-6" />}
+                </div>
+                <h3 className="text-sm font-bold capitalize">{sidebarMode} Editor</h3>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
+                  You are now in full JSON editing mode. The middle panel shows the complete {sidebarMode.slice(0,-1)} structure.
+                </p>
+                <div className="pt-2">
+                  <div className="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-1.5">
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                    Live Editor Active
+                  </div>
+                </div>
               </div>
-            )
-          })}
+
+              {/* Quick Jump / Key List if they still want it? User said "Cukup sediain JSON editornya aja", so I will skip the list for now to keep it clean */}
+            </div>
+          )}
         </div>
       </div>
     </div>

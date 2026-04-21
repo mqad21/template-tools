@@ -25,10 +25,12 @@ interface State {
   validation: any
   preset: any
   response: any
+  sidebarMode: 'components' | 'presets' | 'responses'
   selectedDataKey: string | null
   componentMap: Record<string, Component>
   
   // Actions
+  setSidebarMode: (mode: 'components' | 'presets' | 'responses') => void
   setTemplate: (template: any) => void
   setValidation: (validation: any) => void
   setPreset: (preset: any) => void
@@ -36,6 +38,8 @@ interface State {
   setSelectedDataKey: (dataKey: string | null) => void
   updateComponent: (dataKey: string, updates: Partial<Component>) => void
   updateValidation: (dataKey: string, updates: Partial<TestFunction>) => void
+  updatePresetEntry: (dataKey: string, answer: any) => void
+  updateResponseEntry: (dataKey: string, answer: any) => void
   loadSamples: () => Promise<void>
 }
 
@@ -67,6 +71,7 @@ const buildComponentMap = (components: any): Record<string, Component> => {
 }
 
 export const useStore = create<State>((set, get) => ({
+  sidebarMode: 'components',
   template: null,
   validation: null,
   preset: null,
@@ -74,6 +79,7 @@ export const useStore = create<State>((set, get) => ({
   selectedDataKey: null,
   componentMap: {},
 
+  setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
   setTemplate: (template) => set({ 
     template, 
     componentMap: buildComponentMap(template?.components) 
@@ -154,7 +160,33 @@ export const useStore = create<State>((set, get) => ({
     })
   },
 
+  updatePresetEntry: (dataKey, answer) => {
+    const { preset } = get()
+    if (!preset || !preset.predata) return
+    
+    const newPredata = [...preset.predata]
+    const index = newPredata.findIndex((p: any) => p.dataKey === dataKey)
+    if (index !== -1) {
+      newPredata[index] = { ...newPredata[index], answer }
+    } else {
+      newPredata.push({ dataKey, answer })
+    }
+    set({ preset: { ...preset, predata: newPredata } })
+  },
 
+  updateResponseEntry: (dataKey, answer) => {
+    const { response } = get()
+    if (!response || !response.answers) return
+    
+    const newAnswers = [...response.answers]
+    const index = newAnswers.findIndex((a: any) => a.dataKey === dataKey)
+    if (index !== -1) {
+      newAnswers[index] = { ...newAnswers[index], answer }
+    } else {
+      newAnswers.push({ dataKey, answer })
+    }
+    set({ response: { ...response, answers: newAnswers } })
+  },
 
   loadSamples: async () => {
     try {
