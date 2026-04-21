@@ -15,17 +15,30 @@ export default defineConfig({
             req.on('data', chunk => { body += chunk })
             req.on('end', () => {
               try {
-                const { template, validation } = JSON.parse(body)
+                const { template, validation, response, preset } = JSON.parse(body)
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
                 
-                // Save to sample
-                fs.writeFileSync('./sample/template.json', JSON.stringify(template, null, 2))
-                fs.writeFileSync('./sample/validation.json', JSON.stringify(validation, null, 2))
-                
-                // Save to history
-                if (!fs.existsSync('./history')) fs.mkdirSync('./history')
-                fs.writeFileSync(`./history/template-${timestamp}.json`, JSON.stringify(template, null, 2))
-                fs.writeFileSync(`./history/validation-${timestamp}.json`, JSON.stringify(validation, null, 2))
+                // Save to sample and public/sample
+                if (template) {
+                  fs.writeFileSync('./sample/template.json', JSON.stringify(template, null, 2))
+                  fs.writeFileSync('./public/sample/template.json', JSON.stringify(template, null, 2))
+                  if (!fs.existsSync('./history')) fs.mkdirSync('./history')
+                  fs.writeFileSync(`./history/template-${timestamp}.json`, JSON.stringify(template, null, 2))
+                }
+                if (validation) {
+                  fs.writeFileSync('./sample/validation.json', JSON.stringify(validation, null, 2))
+                  fs.writeFileSync('./public/sample/validation.json', JSON.stringify(validation, null, 2))
+                  if (!fs.existsSync('./history')) fs.mkdirSync('./history')
+                  fs.writeFileSync(`./history/validation-${timestamp}.json`, JSON.stringify(validation, null, 2))
+                }
+                if (response) {
+                  fs.writeFileSync('./sample/response.json', JSON.stringify(response, null, 2))
+                  fs.writeFileSync('./public/sample/response.json', JSON.stringify(response, null, 2))
+                }
+                if (preset) {
+                  fs.writeFileSync('./sample/preset.json', JSON.stringify(preset, null, 2))
+                  fs.writeFileSync('./public/sample/preset.json', JSON.stringify(preset, null, 2))
+                }
                 
                 res.statusCode = 200
                 res.end(JSON.stringify({ status: 'ok' }))

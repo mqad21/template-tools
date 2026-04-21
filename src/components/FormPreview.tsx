@@ -20,6 +20,7 @@ export const FormPreview = () => {
   const [error, setError] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const instanceRef = useRef<any>(null)
+  const isEngineSaveRef = useRef(false)
   const [reloadKey, setReloadKey] = useState(0)
 
   const handleReload = () => {
@@ -88,6 +89,11 @@ export const FormPreview = () => {
   useEffect(() => {
     if (!ready || error || !template || !containerRef.current) return
 
+    if (isEngineSaveRef.current) {
+      isEngineSaveRef.current = false;
+      return;
+    }
+
     const FasihForm = window.FasihForm || window.lib;
 
     // Debounce re-render to avoid flicker and race conditions
@@ -115,13 +121,26 @@ export const FormPreview = () => {
         root.style.width = '100%';
       }
 
+      // Attempt to load latest response for this template from localstorage
+      let initialResponse = response ? JSON.parse(JSON.stringify(response)) : null;
+      if (template?.id) {
+        const cached = localStorage.getItem(`fasih-preview-response-${template.id}`);
+        if (cached) {
+          try {
+            initialResponse = JSON.parse(cached);
+          } catch (e) {
+            console.error("Failed to parse cached response");
+          }
+        }
+      }
+
       const options = {
         mode: "CAPI",
         assignmentId: "preview",
         template: JSON.parse(JSON.stringify(template)), // Deep clone to ensure FF doesn't mutate store state
         validation: validation ? JSON.parse(JSON.stringify(validation)) : null,
         preset: preset ? JSON.parse(JSON.stringify(preset)) : null,
-        response: response ? JSON.parse(JSON.stringify(response)) : null,
+        response: initialResponse,
         remark: {},
         principals: [],
         formMode: 1,
@@ -139,7 +158,16 @@ export const FormPreview = () => {
 
         // Target the inner root we just created
         instanceRef.current = FF("#preview-root-inner", options);
-
+        
+        instanceRef.current.event.on('save', async (data: any) => {
+          isEngineSaveRef.current = true;
+          try {
+            useStore.getState().setResponse(data.response);
+          } catch (e) {
+            console.error("Failed to persist save:", e);
+          }
+        });
+        
         instanceRef.current.render();
       } catch (err: any) {
         console.error("FasihForm render error:", err)

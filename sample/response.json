@@ -1,12 +1,25 @@
 {
-    "dataKey": "",
-    "createdAt": "2026-04-21T06:56:30.538Z",
-    "updatedBy": "Maula Azka Fatihah A.Md.Stat.",
-    "createdBy": "Maula Azka Fatihah A.Md.Stat.",
-    "answers": [],
-    "description": "",
-    "isForceSubmit": false,
-    "templateVersion": "4.0.005",
-    "validationVersion": "4.0.005",
-    "updatedAt": "2026-04-21T06:59:22.066Z"
+  "dataKey": "",
+  "description": "",
+  "answers": [
+    {
+      "dataKey": "ec_mulai",
+      "answer": true,
+      "updatedAt": 1776812499889,
+      "createdAt": 1776812499889
+    },
+    {
+      "dataKey": "mode",
+      "answer": "CAPI",
+      "updatedAt": 1776812499888,
+      "createdAt": 1776812499720
+    }
+  ],
+  "templateVersion": "4.0.005",
+  "validationVersion": "4.0.005",
+  "updatedAt": "2026-04-21T23:01:39.926Z",
+  "updatedBy": "tester",
+  "createdAt": "2026-04-21T06:56:30.538Z",
+  "createdBy": "Maula Azka Fatihah A.Md.Stat.",
+  "isForceSubmit": false
 }

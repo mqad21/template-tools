@@ -1,1028 +1,1630 @@
 {
-  "version" : "4.0.005",
-  "testFunctions" : [ {
-    "dataKey" : "kunjungan_2",
-    "componentValidation" : [ "kunjungan_2", "kode_bang", "keberadaan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
-      "message" : "Kunjungan II harus tersi jika Non respon",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "catatan_2",
-    "componentValidation" : [ "kunjungan_2", "kode_bang", "keberadaan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
-      "message" : "Catatan II harus terisi jika Non Respon",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kunjungan_3",
-    "componentValidation" : [ "kunjungan_2", "kode_bang", "keberadaan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
-      "message" : "Waktu Kunjungan III harus terisi jika Non Respon",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "catatan_3",
-    "componentValidation" : [ "kunjungan_2", "kode_bang", "keberadaan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
-      "message" : "Catatan III harus terisi jika Non Respon",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kodepos",
-    "componentValidation" : [ "kodepos" ],
-    "validations" : [ {
-      "test" : "let result = getValue('kodepos');\nlet regex = /^[0-9]+$/;\n\nif (result.length > 0 && result != undefined){\n    !regex.test(result)\n}",
-      "message" : "Isian kodepos harus angka",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('kodepos');\n//let str = val ? val?.toString() : '';\n\nval.split('').every((char, _, arr) => char === arr[0]) && str != '99999'",
-      "message" : "Apakah kodepos memiliki angka kembar?",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('kodepos');\nlet str = val ? val?.toString() : '';\nstr.length !== 5 && str != '99999' &&  str != '';",
-      "message" : "Panjang kodepos 5 digit, jika responden tidak tahu isikan 99999",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "no_kk",
-    "componentValidation" : [ "no_kk" ],
-    "validations" : [ {
-      "test" : "let val = getValue('no_kk');\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' ",
-      "message" : "Apakah benar No KK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('no_kk')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' && str != '8888' ",
-      "message" : "No KK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nik",
-    "componentValidation" : [ "nik" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nik')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999' && str != '7777' ",
-      "message" : "Apakah benar NIK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika tinggal bersama keluarga tetapi anggota keluarga belum memiliki NIK, 9999 untuk lainnya",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nik')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '8888' && str != '7777' &&  str != '';",
-      "message" : "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_kk",
-    "componentValidation" : [ "nama_kk" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nama_kk');\n!val || /^\\s+$|^-+$/.test(val);",
-      "message" : "Nama Nama Kepala Keluarga (KK) tidak sesuai format. Contoh penulisan : SUPARMAN SETO",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nama_kk');\nval.length < 8;",
-      "message" : "Nama Kepala Keluarga (KK) mengandung kurang dari 8 karakter",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "nama_ak_lain",
-    "componentValidation" : [ "nama_ak_lain" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nama_ak_lain');\n!val || /^\\s+$|^-+$/.test(val);",
-      "message" : "Nama Anggota Keluarga Lainnya tidak sesuai format. Contoh penulisan : SUPARMAN SETO",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nama_ak_lain');\nval.length < 8;",
-      "message" : "Nama Anggota Keluarga Lainnya mengandung kurang dari 8 karakter",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "alamat_klrg",
-    "componentValidation" : [ "alamat_klrg" ],
-    "validations" : [ {
-      "test" : "let val = getValue('alamat_klrg');\nlength.val < 8;",
-      "message" : "Alamat hanya mengandung kurang dari 8 karakter",
-      "type" : 1
-    }, {
-      "test" : "let val = getValue('alamat_klrg');\n!val || /^\\s+$|^-+$/.test(val);",
-      "message" : "Alamat tidak sesuai format. Contoh penulisan : JALAN NAKULA INDAH 1 NO 98",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jalan_domisili",
-    "componentValidation" : [ "jalan_domisili" ],
-    "validations" : [ {
-      "test" : "let isi = getValue('jalan_domisili');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 10 && isi !== '-'",
-      "message" : "\"Minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kode_bang",
-    "componentValidation" : [ "kode_bang", "kunjungan_3" ],
-    "validations" : [ {
-      "test" : "let res = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet kunjungan3 = getValue('kunjungan_3') ?? '';\r\n\r\nres == '9' && kunjungan3 == 0;",
-      "message" : "Kondisi nonrespon dapat dipilih jika sudah melakukan 3 kali kunjungan",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "geotag",
-    "componentValidation" : [ "mode", "geotag" ],
-    "validations" : [ {
-      "test" : "let moda = getValue('mode')?.[0]?.value;\nlet geo = Number(getValue('geotag') ?? '0');\n\n(moda == 'CAPI' && geo == 0)",
-      "message" : "Geotaging harus terisi",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jumlah_ak",
-    "componentValidation" : [ "jumlah_ak" ],
-    "validations" : [ {
-      "test" : "let val = getValue('jumlah_ak') ?? 0;\nval < 1;",
-      "message" : "Anggota Keluarga Minimal Berjumlah 1",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "usaha_lain",
-    "componentValidation" : [ "jumlah_usaha_ditemukan", "ec_ada_usaha" ],
-    "validations" : [ {
-      "test" : "let jumlah_usaha = Number(getValue('jumlah_usaha_ditemukan') ?? '0');\n!getValue('ec_ada_usaha') && jumlah_usaha > 0;",
-      "message" : "Jumlah Usaha Ditemukan diatas 0 tetapi keberadaan usaha di P semua terisi tidak",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nik_dtsen",
-    "componentValidation" : [ "nik_dtsen@$ROW$" ],
-    "validations" : [ {
-      "test" : "let result = getValue('nik_dtsen@$ROW$');\nlet regex = /^[0-9]+$/;\n\nif (result.length > 0 && result != undefined){\n    !regex.test(result)\n}",
-      "message" : "Isian NIK harus Angka",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nik_dtsen@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' && str != '8888' ",
-      "message" : "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nik_dtsen@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '7777' && str != '8888' &&  str != '';",
-      "message" : "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_usaha_tambahan",
-    "componentValidation" : [ "nama_usaha_tambahan" ],
-    "validations" : [ {
-      "test" : "let isi = getValue('nama_usaha_tambahan');\n\nlet result = false\n\nfor (let i = 0; i < isi.length; i++) {\n    let usaha = isi[i].label\n    if (usaha.toLowerCase().includes('pt') && usaha.toLowerCase().startsWith('pt')) {\n        result = true\n        break;\n    }\n}\n\nresult",
-      "message" : "Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_usaha_tambahan');\n\nlet result = false\n\nfor (let i = 0; i < isi.length; i++) {\n    let usaha = isi[i].label\n    if (usaha.toLowerCase().includes('cv') && usaha.toLowerCase().startsWith('cv')) {\n        result = true\n        break;\n    }\n}\n\nresult",
-      "message" : "Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "keberadaan_usaha",
-    "componentValidation" : [ "kode_bang", "keberadaan_usaha@$ROW$", "kunjungan_3" ],
-    "validations" : [ {
-      "test" : "let res = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet ada = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kunjungan3 = getValue('kunjungan_3') ?? '';\r\n\r\nres !== '7' && ada == '9' && kunjungan3 == 0;",
-      "message" : "Kondisi nonrespon dapat dipilih jika sudah melakukan 3 kali kunjungan",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_usaha_edit",
-    "componentValidation" : [ "badan_usaha@$ROW$", "nama_usaha_edit@$ROW$" ],
-    "validations" : [ {
-      "test" : "let res = getValue('badan_usaha@$ROW$');\nlet isi = getValue('nama_usaha_edit@$ROW$');\n\nres?.[0]?.value == '10' \n&& !isi?.toString().endsWith(',CV') \n&& !isi?.toString().endsWith(', CV');",
-      "message" : "Status badan usaha adalah CV maka nama usaha harus diakhiri dengan ,CV",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_usaha_edit@$ROW$') ?? '';\n\nisi && isi?.toLowerCase().includes(\"cv\") && isi?.toLowerCase().startsWith(\"cv\")",
-      "message" : "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV\"",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_usaha_edit@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"pt\") && isi?.toLowerCase().startsWith(\"pt\")",
-      "message" : "Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_usaha_edit@$ROW$');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 8",
-      "message" : " \"Minimal terisi 8 karakter\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_komersial",
-    "componentValidation" : [ "nama_komersial@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nama_komersial@$ROW$')?? '';\nval === null || val === undefined || val === '';",
-      "message" : "Jika tidak memiliki nama komersial, maka tuliskan kembali nama perusahaan pada pertanyaan 8a",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_komersial@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"cv\") && isi?.toLowerCase().startsWith(\"cv\")",
-      "message" : "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV\"",
-      "type" : 2
-    }, {
-      "test" : "let isi = getValue('nama_komersial@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"pt\") && isi?.toLowerCase().startsWith(\"cv\")",
-      "message" : "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT\"  ",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "rt",
-    "componentValidation" : [ "rt@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('rt@$ROW$')?? '';\nlet minlength = val.length < 2 || val.length > 50\nval && minlength",
-      "message" : "Wajib terisi minimal 2 karakter",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "rw",
-    "componentValidation" : [ "rw@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('rw@$ROW$')?? '';\nlet minlength = val.length < 2 || val.length > 50\nval && minlength",
-      "message" : "Wajib terisi minimal 2 karakter",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kode_area",
-    "componentValidation" : [ "kode_area@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('kode_area@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nlet cek = 0;\n\nif(str.length > 0)\n{\n    if(!str.startsWith('0') && str != '')\n    cek = 1;\n}\n\ncek > 0;\n\n",
-      "message" : "Kode area harus diawali angka 0",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('kode_area@$ROW$') ?? '';\nlet str = val.toString().trim();\nlet cek = 0;\n\nif ( str !== '' && str.split('').every((char, _, arr) => char === arr[0])) {\n    cek = 1;\n}\n\ncek > 0;",
-      "message" : "Kode area tidak boleh berupa angka yang sama semua.",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('kode_area@$ROW$')?? '';\nlet cek = 0;\n\nif(str.length > 0)\n{\n    if(str.length < 3 && str.length < 4)\n    cek = 1;\n}\n\ncek > 0;",
-      "message" : "Panjang minimal 3 atau maksimal 4.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "no_telp",
-    "componentValidation" : [ "no_telp@$ROW$", "kode_area@$ROW$" ],
-    "validations" : [ {
-      "test" : "let a = getValue('no_telp@$ROW$') ?? '';\n//!(a?.length == 7 || a?.length == 8); \n\nlet cek = 0;\n\nif(a?.length > 0)\n{\n    if(a?.length < 7 || a?.length > 8)\n    cek = 1;\n}\n\ncek > 0;\n",
-      "message" : "  \"Nomor telepon harus berjumlah 7 s.d. 8 digit angka dan tidak berulang\"",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('no_telp@$ROW$')?? '';\n//let str = val ? val?.toString() : '';\nlet cek = 0;\n\nif (val !== '' && val.split('').every((char, _, arr) => char === arr[0])) {\n    cek = 1;\n}\n\ncek > 0;\n",
-      "message" : "Nomor telepon tidak boleh berupa angka yang sama semua.",
-      "type" : 2
-    }, {
-      "test" : "let area = getValue('kode_area@$ROW$');\nlet telp = getValue('no_telp@$ROW$');\narea && !telp",
-      "message" : "Kode area terisi, tetapi nomor telepon tidak terisi",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "eks",
-    "componentValidation" : [ "eks@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = Number(getValue('eks@$ROW$'))?? '';\n\nif (val != '' && val != undefined) \n{val <= 0}",
-      "message" : "Ekstensi harus terisi lebih dari 0",
-      "type" : 2
-    }, {
-      "test" : "let a = getValue('eks@$ROW$') ?? '';\n!(a?.length == 2 || a?.length == 4) && val != '' && val != undefined; ",
-      "message" : "Panjang minimal 2 atau maksimal 4.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "hp",
-    "componentValidation" : [ "hp@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('hp@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\n(!str.startsWith('08') || str.length < 10 || str.length > 13 || !(/^\\d+$/.test(str))) && str != '9999'  && str != '';",
-      "message" : "Nomor HP/whatsapp harus diawali dengan angka 08, dengan jumlah angka 10-13 digit. Contoh: 081309876211. Jika tidak ada/tidak bersedia memberikan nomor HP/whatsapp, maka diisi angka 9 sebanyak 4 kali.",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('hp@$ROW$')?? '';\n//let str = val ? val?.toString() : '';\n\nval.split('').every((char, _, arr) => char === arr[0])",
-      "message" : "Nomor HP/whatsapp tidak boleh berupa angka yang sama semua.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "email",
-    "componentValidation" : [ "email@$ROW$" ],
-    "validations" : [ {
-      "test" : "let nilai = getValue('email@$ROW$'); \r\n//console.log('email');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi =\r\n  /^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i;\r\nlet web = getValue('email@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
-      "message" : "Email tidak valid. Contoh penulisan: garuda@gmail.com",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "website",
-    "componentValidation" : [ "website@$ROW$" ],
-    "validations" : [ {
-      "test" : "let nilai = getValue('website@$ROW$');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi = /[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)/; \r\nlet web = getValue('website@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
-      "message" : "\"Homepage/website tidak sesuai format. Contoh penulisan: www.bps.go.id \"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_kawasan",
-    "componentValidation" : [ "nama_kawasan@$ROW$" ],
-    "validations" : [ {
-      "test" : "let isi = getValue('nama_kawasan@$ROW$');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 8",
-      "message" : "Minimal terisi 3 karakter",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "alamat_usaha_utama",
-    "componentValidation" : [ "alamat_usaha_utama@$ROW$" ],
-    "validations" : [ {
-      "test" : "let isi = getValue('alamat_usaha_utama@$ROW$')?? '';\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 10",
-      "message" : " \"Minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "punya_nib",
-    "componentValidation" : [ "punya_nib@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('punya_nib@$ROW$')?.[0]?.value;\nval == '2';",
-      "message" : "Apakah perusahaan benar tidak memiliki Nomor Induk Berusaha (NIB)?",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "nib",
-    "componentValidation" : [ "nib@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nib@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 13 && str != '9999' &&  str != '';",
-      "message" : "Isian NIB harus numerik dan 13 digit. Isikan 9999 jika tidak bersedia menunjukkan NIB.",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nib@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nlet resneg = str.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0])\nresneg && str != '9999' &&  str != '';",
-      "message" : "Apakah benar NIB berdigit sama semua?",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nib_lainnya",
-    "componentValidation" : [ "nib_lainnya@$ROW$" ],
-    "validations" : [ {
-      "test" : "let isi = getValue('nib_lainnya@$ROW$')?? '';\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 3",
-      "message" : "\"Wajib isi minimal 3 karakter\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "badan_usaha",
-    "componentValidation" : [ "badan_usaha@$ROW$", "kategori@$ROW$", "nama_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('yayasan')) \n&& bu !== '02'",
-      "message" : "Nama perusahaan mengandung Yayasan maka status badan usaha harus berkode 2. ",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('cv')) \n&& bu !== '06' && bu !== '07'",
-      "message" : "Nama perusahaan mengandung CV maka status badan usaha harus berkode 6 atau 7. ",
-      "type" : 2
-    }, {
-      "test" : "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
-      "message" : "Status badan usaha terisi Dana Pensiun, sehingga kategori lapangan usahanya selain F konstruksi.",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\nkat == '6530' && bu !== '04';",
-      "message" : "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 4 (Dana Pensiun)\"  ",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('bum desa') || nama.toLowerCase().includes('badan usaha milik desa') || nama.toLowerCase().includes('bumdes')) \n&& bu !== '06'",
-      "message" : "Nama perusahaan mengandung Bum Desa/Bumdes/Badan Usaha Milik Desa maka status badan usaha harus berkode 6. ",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('koperasi')) \n&& bu !== '03'",
-      "message" : "Nama perusahaan mengandung Koperasi maka status badan usaha harus berkode 3. Nama usaha dan status badan usaha harus sesuai. Tuliskan status badan usaha melengkapi nama usaha.",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('dana pensiun')) \n&& bu !== '04'",
-      "message" : " Nama perusahaan mengandung Dana Pensiun maka status badan usaha harus berkode 4. ",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('perum') || nama.toLowerCase().includes('perumda')) \n&& bu !== '05'\n",
-      "message" : "Nama perusahaan mengandung Perum atau Perumda maka status badan usaha harus berkode 5. ",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && \n(nama.toLowerCase().includes('pt/nv') || \nnama.toLowerCase().includes('pt persero') || \nnama.toLowerCase().includes('pt tbk') || \nnama.toLowerCase().includes('pt persero tbk') || \nnama.toLowerCase().includes('perseroan daerah') || \nnama.toLowerCase().includes('perseroan perorangan')) \n&& bu !== '01' && bu !== '06'\n\n",
-      "message" : "Nama perusahaan mengandung Perseroan (PT NV,  PT Persero, PT Tbk, PT PerseroTbk, Perseroan Daerah, Perseroan Perorangan) maka status badan usaha harus berkode 1 atau 6.",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\nkat == '64191' && kat == '64192' && bu !== '03';",
-      "message" : "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 3 (Koperasi)\"",
-      "type" : 2
-    }, {
-      "test" : "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '09' && kategori == 'F';",
-      "message" : "\"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "pengusaha",
-    "componentValidation" : [ "pengusaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('pengusaha@$ROW$');\nlength.val < 8;",
-      "message" : "\"Nama Pengusaha minimal 8 karakter\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "umur_pj",
-    "componentValidation" : [ "umur_pj@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = Number(getValue('umur_pj@$ROW$') ?? '0');\nval < 10 || val > 99;",
-      "message" : "Wajib terisi 10-99",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nik_pengusaha",
-    "componentValidation" : [ "nik_pengusaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nik_pengusaha@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999' && str != '9999999999999999' && str != '7777777777777777' && str != '8888888888888888' && str != '8888' && str != '7777'",
-      "message" : "Apakah benar NIK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('nik_pengusaha@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '8888' && str != '7777' &&  str != '';",
-      "message" : "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "keg_utama",
-    "componentValidation" : [ "keg_utama@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('keg_utama@$ROW$')?? '';\nstr.length < 15;",
-      "message" : "Tuliskan kegiatan utama usaha dengan jelas dan lengkap.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jenis_kegiatan",
-    "componentValidation" : [ "jenis_penjualan@$ROW$", "kategori@$ROW$" ],
-    "validations" : [ {
-      "test" : "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 2 || a == 3) && b != 'G' && b != 'I';",
-      "message" : "Untuk selain kategori G dan I, isian rincian 13b seharusnya kode 1. menjual barang atau jasa sendiri",
-      "type" : 2
-    }, {
-      "test" : "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 1 || a == 3) && b == 'G';",
-      "message" : "Untuk kategori G, isian rincian 13b seharusnya kode 2. menjual barang yang dibeli dari pihak lain",
-      "type" : 2
-    }, {
-      "test" : "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 1 || a == 2) && b == 'I';",
-      "message" : "Untuk kategori I, isian rincian 13b seharusnya kode 3. Menjual barang dengan pelayanan",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "keg_jasa",
-    "componentValidation" : [ "produk_sendiri@$ROW$", "layanan_mamin@$ROW$", "keg_penjualan@$ROW$", "keg_jasa@$ROW$" ],
-    "validations" : [ {
-      "test" : "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet mamin = getValue('layanan_mamin@$ROW$')?.[0]?.value;\nlet jual = getValue('keg_penjualan@$ROW$')?.[0]?.value;\nlet jasa = getValue('keg_jasa@$ROW$')?.[0]?.value;\n(produk == '2' && jual == '2' && jasa == '2')",
-      "message" : "Periksa kembali rincian 13b1-13b4 Minimal terpilih satu dari rincian 13b1 s.d. 13b4 terisi YA",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "lokasi_usaha",
-    "componentValidation" : [ "jenis_usaha@$ROW$", "lokasi_usaha@$ROW$", "produk_sendiri@$ROW$", "keg_penjualan@$ROW$", "layanan_mamin@$ROW$" ],
-    "validations" : [ {
-      "test" : "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(jenis == '2' && lokasi !== '10')",
-      "message" : "Jika R.9a diisi kode 2 (Usaha Keliling), maka R.13c diisi kode 10 (Usaha Keliling)",
-      "type" : 2
-    }, {
-      "test" : "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\nlet luar = lokasi == '01' || lokasi == '02' || lokasi == '06' || lokasi == '07' || lokasi == '08'\n\njenis =='1' && luar",
-      "message" : "R.13c diisi kode lokasi 1 (Apotek), 2 (swalayan), 6 (Bar), 7 (Kelab malam, diskotek), 8 (Kafe), namun R.9a diisi kode 3",
-      "type" : 1
-    }, {
-      "test" : "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\n(kat !== 'I' ||kat !== 'G'  ) && (lokasi == '10' || lokasi == '11' ) ;",
-      "message" : "Jika rincian 9c terisi 10-11, maka KBLI / Kategori yang HARUS diisi kategori G atau I",
-      "type" : 2
-    }, {
-      "test" : "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\nkat !== 'I' && (lokasi == '05' || lokasi == '06' || lokasi == '07' || lokasi == '08' || lokasi == '09'|| lokasi == '10' || lokasi == '11' ) ;",
-      "message" : "Jika rincian c terisi 5-9, maka KBLI / Kategori yang HARUS diisi kategori I",
-      "type" : 2
-    }, {
-      "test" : "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\nlet pasar = lokasi == '02' || lokasi == '03' || lokasi == '05' || lokasi == '06' || lokasi == '07'\n\njenis =='1' && pasar",
-      "message" : "R.13c d!iisi kode lokasi 2 (swalayan), 3 (los pasar), 5 (Kedai, stan, tenda), 6 (Bar), 7 (Kelab malam, diskotek), namun R.9a diisi kode 1 (Usaha di dalam bangunan tempat tinggal)",
-      "type" : 2
-    }, {
-      "test" : "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet mamin = getValue('layanan_mamin@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(mamin == '1' || produk == '1') && (lokasi == '01' || lokasi == '02' || lokasi == '03' || lokasi == '04')",
-      "message" : "\"Usaha Makan Minum, maka lokasi hanya bisa diisi kode 5-11.\"",
-      "type" : 2
-    }, {
-      "test" : "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\nkat !== 'G' && (lokasi == '01' || lokasi == '02' || lokasi == '03' || lokasi == '04') ;",
-      "message" : "Jika rincian 9c terisi 1-4, maka KBLI / Kategori yang HARUS diisi kategori G,",
-      "type" : 2
-    }, {
-      "test" : "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value?? '';\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value?? '';\n\nlet keliling = jenis == '1' || jenis == '3' || jenis == '4' || jenis == '5'\n\nlokasi == '10' && keliling",
-      "message" : "Jika R.9a diisi koe 1/3/4/5, maka R.13c TIDAK BOLEH diisi kode 10 (Usaha Keliling)",
-      "type" : 2
-    }, {
-      "test" : "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet jual = getValue('keg_penjualan@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(jual == '2' && produk == '1') && (lokasi !== '05' || lokasi !== '06' || lokasi !== '07' || lokasi !== '08' || lokasi !== '09')",
-      "message" : "Usaha perdagangan, maka lokasi hanya bisa diisi kode 1-4 dan 10-11.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "input",
-    "componentValidation" : [ "input@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('input@$ROW$')?? '';\nstr.length < 15;",
-      "message" : "Tuliskan input produksi usaha ini dengan jelas dan lengkap.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "proses",
-    "componentValidation" : [ "proses@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('proses@$ROW$')?? '';\nstr.length < 15;",
-      "message" : "Tuliskan bagaimana proses mengubah input menjadi produk (beserta alatnya) dengan jelas dan lengkap",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "produk",
-    "componentValidation" : [ "produk@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('produk@$ROW$')?? '';\nstr.length < 15;",
-      "message" : "Tuliskan produk utama usaha ini dengan jelas dan lengkap.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kbli_genai",
-    "componentValidation" : [ "msg_error", "badan_usaha@$ROW$", "kategori@$ROW$" ],
-    "validations" : [ {
-      "test" : "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\r\nlet kbli = getValue(\"kbli_akhir@$ROW$\")?.[0]?.value;\r\n\r\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
-      "message" : "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
-      "type" : 2
-    }, {
-      "test" : "getValue('msg_error') ?? '' != '';",
-      "message" : "&nbsp;",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\nlet kbli_koperasi = kat == '64191' || kat == '64192'\r\nlet bu_koperasi = bu == '03'\r\n\r\nlet kbli_koperasi_bu_bukan_koperasi = kbli_koperasi && !bu_koperasi\r\n\r\nkbli_koperasi_bu_bukan_koperasi",
-      "message" : "KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 8 (Koperasi).\"",
-      "type" : 2
-    }, {
-      "test" : "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '09' && kategori == 'F';",
-      "message" : "Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi",
-      "type" : 2
-    }, {
-      "test" : "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
-      "message" : " \"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\nlet kbli_pensiun = kat?.toString().startsWith(\"6530\") ;\r\nlet bu_pensiun = bu == '04'\r\n\r\nlet kbli_pensiun_bu_bukan = kbli_pensiun && !bu_pensiun\r\nlet kbli_bukan_bu_pensiun = !kbli_pensiun && bu_pensiun\r\n\r\nkbli_pensiun_bu_bukan ",
-      "message" : "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 4 (Dana Pensiun)\"  ",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "kbli",
-    "componentValidation" : [ "badan_usaha@$ROW$", "kategori@$ROW$" ],
-    "validations" : [ {
-      "test" : "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
-      "message" : " \"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli@$ROW$\")?? '';\r\nlet kbli_pensiun = kat?.toString().startsWith(\"6530\") ;\r\nlet bu_pensiun = bu == '04'\r\n\r\nlet kbli_pensiun_bu_bukan = kbli_pensiun && !bu_pensiun\r\nlet kbli_bukan_bu_pensiun = !kbli_pensiun && bu_pensiun\r\n\r\nkbli_pensiun_bu_bukan ",
-      "message" : "KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 14 (Dana Pensiun)",
-      "type" : 2
-    }, {
-      "test" : "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli@$ROW$\")?? '';\r\nlet kbli_koperasi = kat == '64191' || kat == '64192'\r\nlet bu_koperasi = bu == '03'\r\n\r\nlet kbli_koperasi_bu_bukan_koperasi = kbli_koperasi && !bu_koperasi\r\nlet kbli_bukan_koperasi_bu_koperasi = !kbli_koperasi && bu_koperasi\r\n\r\nkbli_koperasi_bu_bukan_koperasi || kbli_bukan_koperasi_bu_koperasi",
-      "message" : "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 3 (Koperasi)\"",
-      "type" : 2
-    }, {
-      "test" : "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\nlet kbli = getValue(\"kbli@$ROW$\")?.[0]?.value;\n\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
-      "message" : "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "cek_kbli_pml",
-    "componentValidation" : [ "cek_kbli_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_kbli_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "klasifikasi",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55101'  && klas == '5');",
-      "message" : "R13i terisi 5, tetapi R13g tidak terisi 55101",
-      "type" : 2
-    }, {
-      "test" : "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55102'  && klas == '4');",
-      "message" : "R13i terisi 4, tetapi R13g tidak terisi 55102",
-      "type" : 2
-    }, {
-      "test" : "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55104'  && klas == '2');",
-      "message" : "R13i terisi 2, tetapi R13g tidak terisi 55104",
-      "type" : 2
-    }, {
-      "test" : "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55105'  && klas == '1');",
-      "message" : "R13i terisi 1, tetapi R13g tidak terisi 55105",
-      "type" : 2
-    }, {
-      "test" : "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55103'  && klas == '3');",
-      "message" : "R13i terisi 3, tetapi R13g tidak terisi 55103",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jaringan",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\r\nlet kbli = getValue(\"kbli_akhir@$ROW$\")?.[0]?.value;\r\n\r\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
-      "message" : "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nama_kp",
-    "componentValidation" : [ "nama_kp@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nama_kp@$ROW$')?? '';\nstr.length < 10;",
-      "message" : " \"Panjang minimal 10 karakter\"",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "alamat_kp",
-    "componentValidation" : [ "alamat_kp@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('alamat_kp@$ROW$')?? '';\nstr.length < 10;",
-      "message" : "Panjang minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "email_kp",
-    "componentValidation" : [ "email_kp@$ROW$" ],
-    "validations" : [ {
-      "test" : "let nilai = getValue('email_kp@$ROW$'); \r\n//console.log('email');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi =\r\n  /^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i;\r\nlet web = getValue('email_kp@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
-      "message" : "Email tidak valid. Contoh penulisan: garuda@gmail.com",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "internet",
-    "componentValidation" : [ "internet@$ROW$", "lokasi_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let inet = getValue('internet@$ROW$')?.[0]?.value ?? '';\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value ?? '';\n(inet == '2' && lokasi =='11')",
-      "message" : "Jika r13c=11 maka r16a wajib terisi 1",
-      "type" : 2
-    }, {
-      "test" : "let internet = getValue('internet@$ROW$');\n(internet?.[0]?.value == '2' );",
-      "message" : "Apakah benar usaha ini TIDAK MENGGUNAKAN INTERNET dalam menjalankan usaha?",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "internet_lainnya",
-    "componentValidation" : [ "internet_pesanan@$ROW$", "internet_produksi@$ROW$", "internet_distribusi@$ROW$", "internet_beli@$ROW$", "internet_promosi@$ROW$", "internet_lainnya@$ROW$", "internet@$ROW$" ],
-    "validations" : [ {
-      "test" : "let b1 = getValue('internet_pesanan@$ROW$')?.[0]?.value;\nlet b2 = getValue('internet_produksi@$ROW$')?.[0]?.value;\nlet b3 = getValue('internet_distribusi@$ROW$')?.[0]?.value;\nlet b4 = getValue('internet_beli@$ROW$')?.[0]?.value;\nlet b5 = getValue('internet_promosi@$ROW$')?.[0]?.value;\nlet b6 = getValue('internet_lainnya@$ROW$')?.[0]?.value;\nlet inet = getValue('internet@$ROW$')?.[0]?.value;\n\n(inet == '1' && (b1 == '2' && b2 == '2' && b3 == '2' && b4 == '2' && b5 == '2' && b5 == '2' && b6 == '2'))\n\n",
-      "message" : "Salah satu dari 16b1 - 16b6 wajib terisi YA",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "sudah_halal",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let halal = getValue(\"halal@$ROW$\")?.[0]?.value;\nlet sudah = Number(getValue(\"sudah_halal@$ROW$\") ?? '0');\n\n(halal == '1' && sudah == 0)",
-      "message" : "Isikan jumlah varian produk yang sudah memiliki sertifikat halal dari BPJPH",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "belum_halal",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let halal = getValue(\"halal@$ROW$\")?.[0]?.value;\nlet belum = Number(getValue(\"belum_halal@$ROW$\") ?? '0');\n\n(halal == '3' && belum == 0)",
-      "message" : "Isikan jumlah varian produk yang belum memiliki sertifikat halal dari BPJPH",
-      "type" : 2
-    }, {
-      "test" : "let belum = Number(getValue(\"belum_halal@$ROW$\") ?? '0');\nlet sudah = Number(getValue(\"sudah_halal@$ROW$\") ?? '0');\n\n(belum + sudah) <1 ;",
-      "message" : "r19b + r19c minimal 1",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "sudah_bpom",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let edar = getValue(\"izin_edar@$ROW$\")?.[0]?.value;\nlet sudah = Number(getValue(\"sudah_bpom@$ROW$\") ?? '0');\n\n(edar == '1' && sudah == 0)",
-      "message" : "Isikan jumlah varian produk yang sudah memilikiizin edar dari BPOM",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "belum_bpom",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let bpom = getValue(\"izin_edar@$ROW$\")?.[0]?.value;\nlet belum = Number(getValue(\"belum_bpom@$ROW$\") ?? '0');\n\n(bpom == '3' && belum == 0)",
-      "message" : "Isikan jumlah varian produk yang belum memiliki sertifikat izin edar BPOM",
-      "type" : 2
-    }, {
-      "test" : "let belum = Number(getValue(\"belum_bpom@$ROW$\") ?? '0');\nlet sudah = Number(getValue(\"sudah_bpom@$ROW$\") ?? '0');\n\n(belum + sudah) < 1 ;",
-      "message" : "r20b+r20c minimal 1",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "peran_mbg",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet mamin = getValue(\"layanan_mamin@$ROW$\")?.[0]?.value;\n\n(mbg == '1' && mamin == '2')",
-      "message" : "Jika R.13b2 (menyediakan layanan makan minum) = 2 (Tidak) atau tidak terisi maka R.22 TIDAK BOLEH terisi 1",
-      "type" : 2
-    }, {
-      "test" : "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet jasa = getValue(\"keg_jasa@$ROW$\")?.[0]?.value;\n\n(mbg == '3' && jasa == '2')",
-      "message" : "Jika R13.b4 = 2 (Tidak) atau tidak terisi maka R.22 TIDAK BOLEH terisi 3",
-      "type" : 2
-    }, {
-      "test" : "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet mamin = getValue(\"layanan_mamin@$ROW$\")?.[0]?.value;\nlet produk = getValue(\"produk_sendiri@$ROW$\")?.[0]?.value;\n\n(mbg == '2' && (mamin == '2' && produk == '2'));",
-      "message" : "Jika [ R13.b1 = 2 (Tidak) DAN R13.b3 = 2 (Tidak) ] maka R.22 TIDAK BOLEH terisi 2",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "tk_laki",
-    "componentValidation" : [ "tk_laki@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('tk_laki@$ROW$');\nval < 0 || val > 99999",
-      "message" : "Jumlah pekerja antara 1-99.999. Minimal terisi 1 (pemilik usaha sendiri).",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "tk_pr",
-    "componentValidation" : [ "tk_pr@$ROW$", "lk_pr@$ROW$", "badan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let pr = getValue('tk_pr@$ROW$');\nlet lk = getValue('lk_pr@$ROW$');\nlet badan = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\n\nbadan == '03' && (pr+lk) < 3",
-      "message" : "Jika status badan usaha adalah koperasi (r11a kode 3), jumlah tenaga kerja minimal terisi = 3 orang.",
-      "type" : 2
-    }, {
-      "test" : "let pr = getValue('tk_pr@$ROW$');\nval < 0 || val > 99999",
-      "message" : "Jumlah pekerja antara 0-99.999. ",
-      "type" : 2
-    }, {
-      "test" : "let pr = getValue('tk_pr@$ROW$');\nlet lk = getValue('lk_pr@$ROW$');\n\n\n(pr+lk) < 1",
-      "message" : "Minimal terisi 1 (pemilik usaha sendiri).",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "cek_tk_jk_pml",
-    "componentValidation" : [ "cek_tk_jk_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_tk_jk_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "tk_dibayar",
-    "componentValidation" : [ "tk_dibayar@$ROW$", "badan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('tk_dibayar@$ROW$');\nlet badan = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\n\nbadan == '03' && val < 3\n",
-      "message" : " Jika status badan usaha adalah koperasi (r11a kode 8), jumlah tenaga kerja minimal terisi = 3 orang",
-      "type" : 2
-    }, {
-      "test" : "let val = getValue('tk_dibayar@$ROW$');\nval < 0 || val > 99999",
-      "message" : "Jumlah pekerja dibayar antara 0- 99999",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "tk_tdk_dibayar",
-    "componentValidation" : [ "total_tk_jk@$ROW$", "total_tk_bayar@$ROW$", "tk_dibayar@$ROW$", "tk_tdk_dibayar@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('tk_dibayar@$ROW$');\nval < 0 || val > 99999",
-      "message" : "Jumlah pekerja dibayar antara 0- 99999",
-      "type" : 2
-    }, {
-      "test" : "let a = getValue('tk_dibayar@$ROW$');\nlet b = getValue('tk_tdk_dibayar@$ROW$');\nlet c = getValue('total_tk_bayar@$ROW$');\n\nc == 1 && a == 1 && b == 0 ;",
-      "message" : "Jika total pekerja = 1, maka seharusnya pekerja dibayar = 0, pekerja tidak dibayar = 1",
-      "type" : 2
-    }, {
-      "test" : "let total1 = getValue('total_tk_jk@$ROW$');\nlet total2 = getValue('total_tk_bayar@$ROW$');\n\n(total1 !== total2)",
-      "message" : "Total pekerja (a1+b1) harus sama dengan Total pekerja (a2+b2)",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "cek_tk_bayar_pml",
-    "componentValidation" : [ "cek_tk_bayar_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_tk_bayar_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "tahun_operasi",
-    "componentValidation" : [ "tahun_operasi@$ROW$", "punya_nib@$ROW$", "badan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let th = Number(getValue('tahun_operasi@$ROW$') ?? '0');\nth < 1800 || th > 2026;",
-      "message" : "Tahun mulai beroperasi harus diantara 1800 s.d 2026",
-      "type" : 2
-    }, {
-      "test" : "let th = Number(getValue('tahun_operasi@$ROW$') ?? '0');\nlet nib = getValue('punya_nib@$ROW$');\nlet ju = Number(getValue('badan_usaha@$ROW$')?.[0]?.value ?? '');\n(nib?.[0]?.value == '2' && th>= 2018 &&\n['01','02','03','04','05','07','08','09','14'].includes(ju));\n",
-      "message" : "Usaha ini berdiri tahun 2018 atau setelahnya, seharusnya memiliki NIB (Nomor Induk Berusaha)",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "gaji",
-    "componentValidation" : [ "tk_dibayar@$ROW$", "gaji@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('gaji@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    }, {
-      "test" : "let tk_bayar = getValue('tk_dibayar@$ROW$');\nlet gaji = getValue('gaji@$ROW$');\n(gaji == 0 && tk_bayar>0 )",
-      "message" : "Wajib terisi > 0, karena jumlah pekerja dibayar>0",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "biaya_produksi",
-    "componentValidation" : [ "biaya_produksi@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('biaya_produksi@$ROW$');\n\nval !== 9999 && val < 100000;",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "biaya_pembelian",
-    "componentValidation" : [ "biaya_pembelian@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('biaya_pembelian@$ROW$');\n\nval !== 9999 && val < 100000;",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "operasional",
-    "componentValidation" : [ "operasional@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('operasional@$ROW$');\n\nval !== 9999 && val < 100000;",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "cek_output26f_pml",
-    "componentValidation" : [ "cek_output26f_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_output26f_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "nilai_pendapatan",
-    "componentValidation" : [ "nilai_pendapatan@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('nilai_pendapatan@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "pendapatan_lain",
-    "componentValidation" : [ "nilai_pendapatan@$ROW$", "pendapatan_lain@$ROW$", "gaji@$ROW$", "biaya_produksi@$ROW$", "biaya_pembelian@$ROW$", "operasional@$ROW$", "non_operasional@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('pendapatan_lain@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
-      "message" : "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
-      "type" : 2
-    }, {
-      "test" : "let nilai = getValue('nilai_pendapatan@$ROW$');\nlet lain = getValue('pendapatan_lain@$ROW$');\nlet a = getValue('gaji@$ROW$') ?? 0;\nlet b = getValue('biaya_produksi@$ROW$') ?? 0;\nlet c = getValue('biaya_pembelian@$ROW$') ?? 0;\nlet d = getValue('operasional@$ROW$') ?? 0;\nlet e = getValue('non_operasional@$ROW$') ?? 0;\n\nlet pengeluaran = (a !== 9999 ? a : 0) + \n             (b !== 9999 ? b : 0) + \n             (c !== 9999 ? c : 0) + \n             (d !== 9999 ? d : 0) + \n             (e !== 9999 ? e : 0);\n\n\n(nilai + lain) < pengeluaran\n",
-      "message" : "Apakah benar total pengeluaran (26f) lebih besar dari total pendapatan (27c)?",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "cek_input27c_pml",
-    "componentValidation" : [ "cek_input27c_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_input27c_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "pendapatan_online",
-    "componentValidation" : [ "pendapatan_online@$ROW$" ],
-    "validations" : [ {
-      "test" : "let persen = getValue('pendapatan_online@$ROW$');\n\npersen > 100;",
-      "message" : "Maksimal pendapatan dari online = 100%",
-      "type" : 2
-    }, {
-      "test" : "let persen = getValue('pendapatan_online@$ROW$');\nlet inet = getValue(\"internet@$ROW$\")?.[0]?.value;\n\n(persen < 0 && inet =='1');",
-      "message" : "Usaha ini tidak menggunakan internet (r16a=Ya). Isian 27d wajib kosong.",
-      "type" : 2
-    }, {
-      "test" : "let persen = getValue('pendapatan_online@$ROW$');\nlet inet = getValue(\"internet@$ROW$\")?.[0]?.value;\n\n(persen > 0 && inet =='2');",
-      "message" : "Usaha ini tidak menggunakan internet (r16a=Tidak). Isian 27d wajib diisi 0.",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "aset_usaha_thn",
-    "componentValidation" : [ "" ],
-    "validations" : [ {
-      "test" : "let luas = getValue(\"aset_usaha_thn@$ROW$\");\n\ninput?.length < 1",
-      "message" : "Jika tidak bersedia mengisi, maka isikan angka 9 sebanyak 4 kali",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "luas_tanah_thn",
-    "componentValidation" : [ "aset_tanah_thn@$ROW$", "luas_tanah_thn@$ROW$" ],
-    "validations" : [ {
-      "test" : "let luas = getValue(\"luas_tanah_thn@$ROW$\");\n\nluas?.length < 1",
-      "message" : "Jika tidak bersedia mengisi, maka isikan angka 9 sebanyak 4 kali.",
-      "type" : 2
-    }, {
-      "test" : "let aset_tanah = getValue('aset_tanah_thn@$ROW$') ?? 0;\nlet luas = getValue('luas_tanah_thn@$ROW$') ?? 0;\n\naset_tanah > 0 && luas == 0;",
-      "message" : "Jika luas tanah yang dikuasai (R28d) = 0, maka nilai aset tanah/bangunan dikuasai (R28a) > 0",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "cek_asetThn_pml",
-    "componentValidation" : [ "cek_asetThn_pml@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('cek_asetThn_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
-      "message" : "Harus dicek oleh PML",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "pribadi",
-    "componentValidation" : [ "pribadi@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('pribadi@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "non_profit",
-    "componentValidation" : [ "non_profit@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('non_profit@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "publik",
-    "componentValidation" : [ "publik@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('publik@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "non_publik",
-    "componentValidation" : [ "non_publik@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('non_publik@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "pemerintah",
-    "componentValidation" : [ "pemerintah@$ROW$", "badan_usaha@$ROW$", "pribadi@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('pemerintah@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    }, {
-      "test" : "let pem = getValue('pemerintah@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n(pem == 0 && bu == '06')",
-      "message" : "Modal Pemerintah (R29e) harus lebih dari 0, jika R11a terisi BUM Desa (6)",
-      "type" : 2
-    }, {
-      "test" : "let pem = getValue('pemerintah@$ROW$');\nlet pribadi = getValue('pribadi@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n((pem < pribadi ) && bu == '06');",
-      "message" : "Modal Pemerintah (R29e) harus lebih dari Modal Pribadi (R29a) , jika R11a terisi BUM Desa (6)",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "asing",
-    "componentValidation" : [ "pribadi@$ROW$", "non_profit@$ROW$", "publik@$ROW$", "non_publik@$ROW$", "pemerintah@$ROW$", "asing@$ROW$", "badan_usaha@$ROW$" ],
-    "validations" : [ {
-      "test" : "let val = getValue('asing@$ROW$');\n\nval < 0 || val > 100;\n",
-      "message" : "Rentang nilai antara 0-100",
-      "type" : 2
-    }, {
-      "test" : "let a = getValue('pribadi@$ROW$');\nlet b = getValue('non_profit@$ROW$');\nlet c = getValue('publik@$ROW$');\nlet d = getValue('non_publik@$ROW$');\nlet e = getValue('pemerintah@$ROW$');\nlet f = getValue('asing@$ROW$');\n\na+b+c+d+e+f !== 100;",
-      "message" : "Penjumlahan harus sama dengan 100%",
-      "type" : 2
-    }, {
-      "test" : "let c = getValue('publik@$ROW$');\nlet d = getValue('non_publik@$ROW$');\nlet f = getValue('asing@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n((c+d+f) < 50 && bu == '06')",
-      "message" : "Modal Asing (R29f) + Swasta (R29c) + Korporasi (R29d) harus kurang dari 50% , jika R11a terisi BUM Desa (6)",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "status_kepemilikan",
-    "componentValidation" : [ "jns_bangunan", "status_kepemilikan" ],
-    "validations" : [ {
-      "test" : "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet status = getValue('status_kepemilikan')?.[0]?.value ?? '';\n\njenis == '5' && status == '1';",
-      "message" : "Jika jenis bangunan adalah kos (rincian 5a = 5) , maka status kepemilikan (rincian 7a ) tidak boleh milik sendiri atau berkode 1",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "bukti_kepemilikan",
-    "componentValidation" : [ "jns_bangunan", "status_kepemilikan", "bukti_kepemilikan" ],
-    "validations" : [ {
-      "test" : "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet status = getValue('status_kepemilikan')?.[0]?.value ?? '';\nlet bukti = getValue('bukti_kepemilikan')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && status == '1' && bukti != '2';",
-      "message" : "Jika jenis bangunannya apartemen atau rumah susun dan statusnya milik sendiri, maka jenis bukti kepemilikan tanah bangunan harus sertifikat selain SHM",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jns_lantai",
-    "componentValidation" : [ "jns_bangunan", "jns_lantai" ],
-    "validations" : [ {
-      "test" : "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_lantai > '3';",
-      "message" : "Jika jenis bangunan (rincian 5a) adalah apartemen atau rumah susun, maka bahan lantai terluas (rincian 10a) seharusnya kode 1-3",
-      "type" : 2
-    } ]
-  }, {
-    "dataKey" : "jns_dinding",
-    "componentValidation" : [ "jns_bangunan", "jns_dinding", "jns_lantai" ],
-    "validations" : [ {
-      "test" : "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_dinding > '1';",
-      "message" : "Jika jenis bangunan (rincian 5a) apartemen atau rumah susun, maka bahan dinding terluas (rincian 11a) seharusnya kode 1",
-      "type" : 2
-    }, {
-      "test" : "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding > '1' && jns_lantai == '1';",
-      "message" : "Jika dinding selain tembok, maka lantai seharusnya bukan marmer/granit",
-      "type" : 1
-    }, {
-      "test" : "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding > '3' && jns_lantai < '3';",
-      "message" : "Jika dinding bukan tembok, plesteran anyaman bambu/kawat, atau kayu/papan/gipsum/GRC/calciboard maka lantai harusnya bukan marmer/granit atau keramik",
-      "type" : 1
-    }, {
-      "test" : "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding == '1' && (jns_lantai == '7' || jns_lantai == '9');",
-      "message" : "Jika dinding tembok, maka lantai seharusnya bukan bambu/lainnya",
-      "type" : 1
-    } ]
-  }, {
-    "dataKey" : "kondisi_dinding",
-    "componentValidation" : [ "jns_dinding" ],
-    "validations" : [ {
-      "test" : "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_dindind > '1';",
-      "message" : "",
-      "type" : 0
-    } ]
-  } ]
+  "version": "4.0.005",
+  "testFunctions": [
+    {
+      "dataKey": "kunjungan_2",
+      "componentValidation": [
+        "kunjungan_2",
+        "kode_bang",
+        "keberadaan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
+          "message": "Kunjungan II harus tersi jika Non respon",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "catatan_2",
+      "componentValidation": [
+        "kunjungan_2",
+        "kode_bang",
+        "keberadaan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
+          "message": "Catatan II harus terisi jika Non Respon",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kunjungan_3",
+      "componentValidation": [
+        "kunjungan_2",
+        "kode_bang",
+        "keberadaan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
+          "message": "Waktu Kunjungan III harus terisi jika Non Respon",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "catatan_3",
+      "componentValidation": [
+        "kunjungan_2",
+        "kode_bang",
+        "keberadaan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let kunjungan = getValue('kunjungan_2');\r\nlet bang = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet usaha = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\n\r\n(bang == '9' || usaha == '9') && !kunjungan\r\n",
+          "message": "Catatan III harus terisi jika Non Respon",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kodepos",
+      "componentValidation": [
+        "kodepos"
+      ],
+      "validations": [
+        {
+          "test": "let result = getValue('kodepos');\nlet regex = /^[0-9]+$/;\n\nif (result.length > 0 && result != undefined){\n    !regex.test(result)\n}",
+          "message": "Isian kodepos harus angka",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('kodepos');\n//let str = val ? val?.toString() : '';\n\nval.split('').every((char, _, arr) => char === arr[0]) && str != '99999'",
+          "message": "Apakah kodepos memiliki angka kembar?",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('kodepos');\nlet str = val ? val?.toString() : '';\nstr.length !== 5 && str != '99999' &&  str != '';",
+          "message": "Panjang kodepos 5 digit, jika responden tidak tahu isikan 99999",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "no_kk",
+      "componentValidation": [
+        "no_kk"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('no_kk');\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' ",
+          "message": "Apakah benar No KK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('no_kk')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' && str != '8888' ",
+          "message": "No KK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nik",
+      "componentValidation": [
+        "nik"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nik')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999' && str != '7777' ",
+          "message": "Apakah benar NIK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika tinggal bersama keluarga tetapi anggota keluarga belum memiliki NIK, 9999 untuk lainnya",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nik')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '8888' && str != '7777' &&  str != '';",
+          "message": "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_kk",
+      "componentValidation": [
+        "nama_kk"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nama_kk');\n!val || /^\\s+$|^-+$/.test(val);",
+          "message": "Nama Nama Kepala Keluarga (KK) tidak sesuai format. Contoh penulisan : SUPARMAN SETO",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nama_kk');\nval.length < 8;",
+          "message": "Nama Kepala Keluarga (KK) mengandung kurang dari 8 karakter",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_ak_lain",
+      "componentValidation": [
+        "nama_ak_lain"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nama_ak_lain');\n!val || /^\\s+$|^-+$/.test(val);",
+          "message": "Nama Anggota Keluarga Lainnya tidak sesuai format. Contoh penulisan : SUPARMAN SETO",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nama_ak_lain');\nval.length < 8;",
+          "message": "Nama Anggota Keluarga Lainnya mengandung kurang dari 8 karakter",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "alamat_klrg",
+      "componentValidation": [
+        "alamat_klrg"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('alamat_klrg');\nlength.val < 8;",
+          "message": "Alamat hanya mengandung kurang dari 8 karakter",
+          "type": 1
+        },
+        {
+          "test": "let val = getValue('alamat_klrg');\n!val || /^\\s+$|^-+$/.test(val);",
+          "message": "Alamat tidak sesuai format. Contoh penulisan : JALAN NAKULA INDAH 1 NO 98",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jalan_domisili",
+      "componentValidation": [
+        "jalan_domisili"
+      ],
+      "validations": [
+        {
+          "test": "let isi = getValue('jalan_domisili');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 10 && isi !== '-'",
+          "message": "\"Minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kode_bang",
+      "componentValidation": [
+        "kode_bang",
+        "kunjungan_3"
+      ],
+      "validations": [
+        {
+          "test": "let res = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet kunjungan3 = getValue('kunjungan_3') ?? '';\r\n\r\nres == '9' && kunjungan3 == 0;",
+          "message": "Kondisi nonrespon dapat dipilih jika sudah melakukan 3 kali kunjungan",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "geotag",
+      "componentValidation": [
+        "mode",
+        "geotag"
+      ],
+      "validations": [
+        {
+          "test": "let moda = getValue('mode')?.[0]?.value;\nlet geo = Number(getValue('geotag') ?? '0');\n\n(moda == 'CAPI' && geo == 0)",
+          "message": "Geotaging harus terisi",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jumlah_ak",
+      "componentValidation": [
+        "jumlah_ak"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('jumlah_ak') ?? 0;\nval < 1;",
+          "message": "Anggota Keluarga Minimal Berjumlah 1",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "usaha_lain",
+      "componentValidation": [
+        "jumlah_usaha_ditemukan",
+        "ec_ada_usaha"
+      ],
+      "validations": [
+        {
+          "test": "let jumlah_usaha = Number(getValue('jumlah_usaha_ditemukan') ?? '0');\n!getValue('ec_ada_usaha') && jumlah_usaha > 0;",
+          "message": "Jumlah Usaha Ditemukan diatas 0 tetapi keberadaan usaha di P semua terisi tidak",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nik_dtsen",
+      "componentValidation": [
+        "nik_dtsen@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let result = getValue('nik_dtsen@$ROW$');\nlet regex = /^[0-9]+$/;\n\nif (result.length > 0 && result != undefined){\n    !regex.test(result)\n}",
+          "message": "Isian NIK harus Angka",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nik_dtsen@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999'  && str != '7777' && str != '8888' ",
+          "message": "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nik_dtsen@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '7777' && str != '8888' &&  str != '';",
+          "message": "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tgl_bln_thn_lahir",
+      "componentValidation": [
+        "tgl_bln_thn_lahir@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "(function () {\r\n    var val = getValue('tgl_bln_thn_lahir@$ROW$');\r\n    if (!val) return false;\r\n\r\n    // parsing aman (hindari timezone issue)\r\n    var parts = val.split('-');\r\n    if (parts.length !== 3) return false;\r\n\r\n    var year = parseInt(parts[0], 10);\r\n    var month = parseInt(parts[1], 10) - 1;\r\n    var day = parseInt(parts[2], 10);\r\n\r\n    var inputDate = new Date(year, month, day);\r\n\r\n    // validasi tanggal real\r\n    if (\r\n        inputDate.getFullYear() !== year ||\r\n        inputDate.getMonth() !== month ||\r\n        inputDate.getDate() !== day\r\n    ) return false;\r\n\r\n    // normalize hari ini (00:00)\r\n    var today = new Date();\r\n    today.setHours(0,0,0,0);\r\n\r\n    // ? inti validasi\r\n    return inputDate <= today;\r\n})();",
+          "message": "Tanggal lahir tidak boleh melebihi hari ini",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_usaha_tambahan",
+      "componentValidation": [
+        "nama_usaha_tambahan"
+      ],
+      "validations": [
+        {
+          "test": "let isi = getValue('nama_usaha_tambahan');\n\nlet result = false\n\nfor (let i = 0; i < isi.length; i++) {\n    let usaha = isi[i].label\n    if (usaha.toLowerCase().includes('pt') && usaha.toLowerCase().startsWith('pt')) {\n        result = true\n        break;\n    }\n}\n\nresult",
+          "message": "Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_usaha_tambahan');\n\nlet result = false\n\nfor (let i = 0; i < isi.length; i++) {\n    let usaha = isi[i].label\n    if (usaha.toLowerCase().includes('cv') && usaha.toLowerCase().startsWith('cv')) {\n        result = true\n        break;\n    }\n}\n\nresult",
+          "message": "Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "keberadaan_usaha",
+      "componentValidation": [
+        "kode_bang",
+        "keberadaan_usaha@$ROW$",
+        "kunjungan_3"
+      ],
+      "validations": [
+        {
+          "test": "let res = getValue('kode_bang')?.[0]?.value ?? '';\r\nlet ada = getValue('keberadaan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kunjungan3 = getValue('kunjungan_3') ?? '';\r\n\r\nres !== '7' && ada == '9' && kunjungan3 == 0;",
+          "message": "Kondisi nonrespon dapat dipilih jika sudah melakukan 3 kali kunjungan",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_usaha_edit",
+      "componentValidation": [
+        "badan_usaha@$ROW$",
+        "nama_usaha_edit@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$');\nlet isi = getValue('nama_usaha_edit@$ROW$');\n\nres?.[0]?.value == '10' \n&& !isi?.toString().endsWith(',CV') \n&& !isi?.toString().endsWith(', CV');",
+          "message": "Status badan usaha adalah CV maka nama usaha harus diakhiri dengan ,CV",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_usaha_edit@$ROW$') ?? '';\n\nisi && isi?.toLowerCase().includes(\"cv\") && isi?.toLowerCase().startsWith(\"cv\")",
+          "message": "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV\"",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_usaha_edit@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"pt\") && isi?.toLowerCase().startsWith(\"pt\")",
+          "message": "Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_usaha_edit@$ROW$');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 8",
+          "message": " \"Minimal terisi 8 karakter\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_komersial",
+      "componentValidation": [
+        "nama_komersial@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nama_komersial@$ROW$')?? '';\nval === null || val === undefined || val === '';",
+          "message": "Jika tidak memiliki nama komersial, maka tuliskan kembali nama perusahaan pada pertanyaan 8a",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_komersial@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"cv\") && isi?.toLowerCase().startsWith(\"cv\")",
+          "message": "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan CV diletakkan setelah nama perusahaan. Contoh: RUMAH IKAN SEGAR, CV\"",
+          "type": 2
+        },
+        {
+          "test": "let isi = getValue('nama_komersial@$ROW$')?? '';\n\nisi && isi?.toLowerCase().includes(\"pt\") && isi?.toLowerCase().startsWith(\"cv\")",
+          "message": "\"Penulisan nama perusahaan kurang tepat. Untuk penulisan PT diletakkan setelah nama perusahaan. Contoh: RUMAH MAKAN AYAM SENANG, PT\"  ",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "rt",
+      "componentValidation": [
+        "rt@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('rt@$ROW$')?? '';\nlet minlength = val.length < 2 || val.length > 50\nval && minlength",
+          "message": "Wajib terisi minimal 2 karakter",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "rw",
+      "componentValidation": [
+        "rw@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('rw@$ROW$')?? '';\nlet minlength = val.length < 2 || val.length > 50\nval && minlength",
+          "message": "Wajib terisi minimal 2 karakter",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kode_area",
+      "componentValidation": [
+        "kode_area@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('kode_area@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nlet cek = 0;\n\nif(str.length > 0)\n{\n    if(!str.startsWith('0') && str != '')\n    cek = 1;\n}\n\ncek > 0;\n\n",
+          "message": "Kode area harus diawali angka 0",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('kode_area@$ROW$') ?? '';\nlet str = val.toString().trim();\nlet cek = 0;\n\nif ( str !== '' && str.split('').every((char, _, arr) => char === arr[0])) {\n    cek = 1;\n}\n\ncek > 0;",
+          "message": "Kode area tidak boleh berupa angka yang sama semua.",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('kode_area@$ROW$')?? '';\nlet cek = 0;\n\nif(str.length > 0)\n{\n    if(str.length < 3 && str.length < 4)\n    cek = 1;\n}\n\ncek > 0;",
+          "message": "Panjang minimal 3 atau maksimal 4.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "no_telp",
+      "componentValidation": [
+        "no_telp@$ROW$",
+        "kode_area@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let a = getValue('no_telp@$ROW$') ?? '';\n//!(a?.length == 7 || a?.length == 8); \n\nlet cek = 0;\n\nif(a?.length > 0)\n{\n    if(a?.length < 7 || a?.length > 8)\n    cek = 1;\n}\n\ncek > 0;\n",
+          "message": "  \"Nomor telepon harus berjumlah 7 s.d. 8 digit angka dan tidak berulang\"",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('no_telp@$ROW$')?? '';\n//let str = val ? val?.toString() : '';\nlet cek = 0;\n\nif (val !== '' && val.split('').every((char, _, arr) => char === arr[0])) {\n    cek = 1;\n}\n\ncek > 0;\n",
+          "message": "Nomor telepon tidak boleh berupa angka yang sama semua.",
+          "type": 2
+        },
+        {
+          "test": "let area = getValue('kode_area@$ROW$');\nlet telp = getValue('no_telp@$ROW$');\narea && !telp",
+          "message": "Kode area terisi, tetapi nomor telepon tidak terisi",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "eks",
+      "componentValidation": [
+        "eks@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = Number(getValue('eks@$ROW$'))?? '';\n\nif (val != '' && val != undefined) \n{val <= 0}",
+          "message": "Ekstensi harus terisi lebih dari 0",
+          "type": 2
+        },
+        {
+          "test": "let a = getValue('eks@$ROW$') ?? '';\n!(a?.length == 2 || a?.length == 4) && val != '' && val != undefined; ",
+          "message": "Panjang minimal 2 atau maksimal 4.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "hp",
+      "componentValidation": [
+        "hp@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('hp@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\n(!str.startsWith('08') || str.length < 10 || str.length > 13 || !(/^\\d+$/.test(str))) && str != '9999'  && str != '';",
+          "message": "Nomor HP/whatsapp harus diawali dengan angka 08, dengan jumlah angka 10-13 digit. Contoh: 081309876211. Jika tidak ada/tidak bersedia memberikan nomor HP/whatsapp, maka diisi angka 9 sebanyak 4 kali.",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('hp@$ROW$')?? '';\n//let str = val ? val?.toString() : '';\n\nval.split('').every((char, _, arr) => char === arr[0])",
+          "message": "Nomor HP/whatsapp tidak boleh berupa angka yang sama semua.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "email",
+      "componentValidation": [
+        "email@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let nilai = getValue('email@$ROW$'); \r\n//console.log('email');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi =\r\n  /^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i;\r\nlet web = getValue('email@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
+          "message": "Email tidak valid. Contoh penulisan: garuda@gmail.com",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "website",
+      "componentValidation": [
+        "website@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let nilai = getValue('website@$ROW$');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi = /[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)/; \r\nlet web = getValue('website@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
+          "message": "\"Homepage/website tidak sesuai format. Contoh penulisan: www.bps.go.id \"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_kawasan",
+      "componentValidation": [
+        "nama_kawasan@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let isi = getValue('nama_kawasan@$ROW$');\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 8",
+          "message": "Minimal terisi 3 karakter",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "alamat_usaha_utama",
+      "componentValidation": [
+        "alamat_usaha_utama@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let isi = getValue('alamat_usaha_utama@$ROW$')?? '';\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 10",
+          "message": " \"Minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "punya_nib",
+      "componentValidation": [
+        "punya_nib@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('punya_nib@$ROW$')?.[0]?.value;\nval == '2';",
+          "message": "Apakah perusahaan benar tidak memiliki Nomor Induk Berusaha (NIB)?",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "nib",
+      "componentValidation": [
+        "nib@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nib@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 13 && str != '9999' &&  str != '';",
+          "message": "Isian NIB harus numerik dan 13 digit. Isikan 9999 jika tidak bersedia menunjukkan NIB.",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nib@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nlet resneg = str.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0])\nresneg && str != '9999' &&  str != '';",
+          "message": "Apakah benar NIB berdigit sama semua?",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nib_lainnya",
+      "componentValidation": [
+        "nib_lainnya@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let isi = getValue('nib_lainnya@$ROW$')?? '';\nconst letterCount = (isi.match(/[a-zA-Z]/g) || []).length;\n\nletterCount < 3",
+          "message": "\"Wajib isi minimal 3 karakter\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "badan_usaha",
+      "componentValidation": [
+        "badan_usaha@$ROW$",
+        "kategori@$ROW$",
+        "nama_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('yayasan')) \n&& bu !== '02'",
+          "message": "Nama perusahaan mengandung Yayasan maka status badan usaha harus berkode 2. ",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('cv')) \n&& bu !== '06' && bu !== '07'",
+          "message": "Nama perusahaan mengandung CV maka status badan usaha harus berkode 6 atau 7. ",
+          "type": 2
+        },
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
+          "message": "Status badan usaha terisi Dana Pensiun, sehingga kategori lapangan usahanya selain F konstruksi.",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\nkat == '6530' && bu !== '04';",
+          "message": "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 4 (Dana Pensiun)\"  ",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('bum desa') || nama.toLowerCase().includes('badan usaha milik desa') || nama.toLowerCase().includes('bumdes')) \n&& bu !== '06'",
+          "message": "Nama perusahaan mengandung Bum Desa/Bumdes/Badan Usaha Milik Desa maka status badan usaha harus berkode 6. ",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('koperasi')) \n&& bu !== '03'",
+          "message": "Nama perusahaan mengandung Koperasi maka status badan usaha harus berkode 3. Nama usaha dan status badan usaha harus sesuai. Tuliskan status badan usaha melengkapi nama usaha.",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('dana pensiun')) \n&& bu !== '04'",
+          "message": " Nama perusahaan mengandung Dana Pensiun maka status badan usaha harus berkode 4. ",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && (nama.toLowerCase().includes('perum') || nama.toLowerCase().includes('perumda')) \n&& bu !== '05'\n",
+          "message": "Nama perusahaan mengandung Perum atau Perumda maka status badan usaha harus berkode 5. ",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\nlet nama = getValue('nama_usaha@$ROW$')?? '';\n\nnama && \n(nama.toLowerCase().includes('pt/nv') || \nnama.toLowerCase().includes('pt persero') || \nnama.toLowerCase().includes('pt tbk') || \nnama.toLowerCase().includes('pt persero tbk') || \nnama.toLowerCase().includes('perseroan daerah') || \nnama.toLowerCase().includes('perseroan perorangan')) \n&& bu !== '01' && bu !== '06'\n\n",
+          "message": "Nama perusahaan mengandung Perseroan (PT NV,  PT Persero, PT Tbk, PT PerseroTbk, Perseroan Daerah, Perseroan Perorangan) maka status badan usaha harus berkode 1 atau 6.",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\nkat == '64191' && kat == '64192' && bu !== '03';",
+          "message": "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 3 (Koperasi)\"",
+          "type": 2
+        },
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '09' && kategori == 'F';",
+          "message": "\"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "pengusaha",
+      "componentValidation": [
+        "pengusaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('pengusaha@$ROW$');\nlength.val < 8;",
+          "message": "\"Nama Pengusaha minimal 8 karakter\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "umur_pj",
+      "componentValidation": [
+        "umur_pj@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = Number(getValue('umur_pj@$ROW$') ?? '0');\nval < 10 || val > 99;",
+          "message": "Wajib terisi 10-99",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nik_pengusaha",
+      "componentValidation": [
+        "nik_pengusaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nik_pengusaha@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length > 0 && /^\\d+$/.test(str) && str.split('').every(char => char === str[0]) && str != '9999' && str != '9999999999999999' && str != '7777777777777777' && str != '8888888888888888' && str != '8888' && str != '7777'",
+          "message": "Apakah benar NIK berdigit sama semua? Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('nik_pengusaha@$ROW$')?? '';\nlet str = val ? val?.toString() : '';\nstr.length !== 16 && str != '9999' && str != '8888' && str != '7777' &&  str != '';",
+          "message": "NIK tidak boleh kosong. Isikan 7777 untuk KK/NIK lebih dr 16 digit, 8888 jika belum mempunyai NIK/KK, 9999 untuk lainnya",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "keg_utama",
+      "componentValidation": [
+        "keg_utama@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('keg_utama@$ROW$')?? '';\nstr.length < 15;",
+          "message": "Tuliskan kegiatan utama usaha dengan jelas dan lengkap.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jenis_kegiatan",
+      "componentValidation": [
+        "jenis_penjualan@$ROW$",
+        "kategori@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 2 || a == 3) && b != 'G' && b != 'I';",
+          "message": "Untuk selain kategori G dan I, isian rincian 13b seharusnya kode 1. menjual barang atau jasa sendiri",
+          "type": 2
+        },
+        {
+          "test": "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 1 || a == 3) && b == 'G';",
+          "message": "Untuk kategori G, isian rincian 13b seharusnya kode 2. menjual barang yang dibeli dari pihak lain",
+          "type": 2
+        },
+        {
+          "test": "let a = getValue('jenis_penjualan@$ROW$')?.[0]?.value;\nlet b = getValue('kategori@$ROW$') ?? '';\n\n(a == 1 || a == 2) && b == 'I';",
+          "message": "Untuk kategori I, isian rincian 13b seharusnya kode 3. Menjual barang dengan pelayanan",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "keg_jasa",
+      "componentValidation": [
+        "produk_sendiri@$ROW$",
+        "layanan_mamin@$ROW$",
+        "keg_penjualan@$ROW$",
+        "keg_jasa@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet mamin = getValue('layanan_mamin@$ROW$')?.[0]?.value;\nlet jual = getValue('keg_penjualan@$ROW$')?.[0]?.value;\nlet jasa = getValue('keg_jasa@$ROW$')?.[0]?.value;\n(produk == '2' && jual == '2' && jasa == '2')",
+          "message": "Periksa kembali rincian 13b1-13b4 Minimal terpilih satu dari rincian 13b1 s.d. 13b4 terisi YA",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "lokasi_usaha",
+      "componentValidation": [
+        "jenis_usaha@$ROW$",
+        "lokasi_usaha@$ROW$",
+        "produk_sendiri@$ROW$",
+        "keg_penjualan@$ROW$",
+        "layanan_mamin@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(jenis == '2' && lokasi !== '10')",
+          "message": "Jika R.9a diisi kode 2 (Usaha Keliling), maka R.13c diisi kode 10 (Usaha Keliling)",
+          "type": 2
+        },
+        {
+          "test": "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\nlet luar = lokasi == '01' || lokasi == '02' || lokasi == '06' || lokasi == '07' || lokasi == '08'\n\njenis =='1' && luar",
+          "message": "R.13c diisi kode lokasi 1 (Apotek), 2 (swalayan), 6 (Bar), 7 (Kelab malam, diskotek), 8 (Kafe), namun R.9a diisi kode 3",
+          "type": 1
+        },
+        {
+          "test": "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\n(kat !== 'I' ||kat !== 'G'  ) && (lokasi == '10' || lokasi == '11' ) ;",
+          "message": "Jika rincian 9c terisi 10-11, maka KBLI / Kategori yang HARUS diisi kategori G atau I",
+          "type": 2
+        },
+        {
+          "test": "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\nkat !== 'I' && (lokasi == '05' || lokasi == '06' || lokasi == '07' || lokasi == '08' || lokasi == '09'|| lokasi == '10' || lokasi == '11' ) ;",
+          "message": "Jika rincian c terisi 5-9, maka KBLI / Kategori yang HARUS diisi kategori I",
+          "type": 2
+        },
+        {
+          "test": "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\nlet pasar = lokasi == '02' || lokasi == '03' || lokasi == '05' || lokasi == '06' || lokasi == '07'\n\njenis =='1' && pasar",
+          "message": "R.13c d!iisi kode lokasi 2 (swalayan), 3 (los pasar), 5 (Kedai, stan, tenda), 6 (Bar), 7 (Kelab malam, diskotek), namun R.9a diisi kode 1 (Usaha di dalam bangunan tempat tinggal)",
+          "type": 2
+        },
+        {
+          "test": "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet mamin = getValue('layanan_mamin@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(mamin == '1' || produk == '1') && (lokasi == '01' || lokasi == '02' || lokasi == '03' || lokasi == '04')",
+          "message": "\"Usaha Makan Minum, maka lokasi hanya bisa diisi kode 5-11.\"",
+          "type": 2
+        },
+        {
+          "test": "let lokasi = getValue(\"lokasi_usaha@$ROW$\")?.[0]?.value;\r\nlet kat = getValue(\"kategori@$ROW$\");\r\n\r\nkat !== 'G' && (lokasi == '01' || lokasi == '02' || lokasi == '03' || lokasi == '04') ;",
+          "message": "Jika rincian 9c terisi 1-4, maka KBLI / Kategori yang HARUS diisi kategori G,",
+          "type": 2
+        },
+        {
+          "test": "let jenis = getValue('jenis_usaha@$ROW$')?.[0]?.value?? '';\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value?? '';\n\nlet keliling = jenis == '1' || jenis == '3' || jenis == '4' || jenis == '5'\n\nlokasi == '10' && keliling",
+          "message": "Jika R.9a diisi koe 1/3/4/5, maka R.13c TIDAK BOLEH diisi kode 10 (Usaha Keliling)",
+          "type": 2
+        },
+        {
+          "test": "let produk = getValue('produk_sendiri@$ROW$')?.[0]?.value;\nlet jual = getValue('keg_penjualan@$ROW$')?.[0]?.value;\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value;\n\n(jual == '2' && produk == '1') && (lokasi !== '05' || lokasi !== '06' || lokasi !== '07' || lokasi !== '08' || lokasi !== '09')",
+          "message": "Usaha perdagangan, maka lokasi hanya bisa diisi kode 1-4 dan 10-11.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "input",
+      "componentValidation": [
+        "input@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('input@$ROW$')?? '';\nstr.length < 15;",
+          "message": "Tuliskan input produksi usaha ini dengan jelas dan lengkap.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "proses",
+      "componentValidation": [
+        "proses@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('proses@$ROW$')?? '';\nstr.length < 15;",
+          "message": "Tuliskan bagaimana proses mengubah input menjadi produk (beserta alatnya) dengan jelas dan lengkap",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "produk",
+      "componentValidation": [
+        "produk@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('produk@$ROW$')?? '';\nstr.length < 15;",
+          "message": "Tuliskan produk utama usaha ini dengan jelas dan lengkap.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kbli_genai",
+      "componentValidation": [
+        "msg_error",
+        "badan_usaha@$ROW$",
+        "kategori@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\r\nlet kbli = getValue(\"kbli_akhir@$ROW$\")?.[0]?.value;\r\n\r\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
+          "message": "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
+          "type": 2
+        },
+        {
+          "test": "getValue('msg_error') ?? '' != '';",
+          "message": "&nbsp;",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\nlet kbli_koperasi = kat == '64191' || kat == '64192'\r\nlet bu_koperasi = bu == '03'\r\n\r\nlet kbli_koperasi_bu_bukan_koperasi = kbli_koperasi && !bu_koperasi\r\n\r\nkbli_koperasi_bu_bukan_koperasi",
+          "message": "KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 8 (Koperasi).\"",
+          "type": 2
+        },
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '09' && kategori == 'F';",
+          "message": "Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi",
+          "type": 2
+        },
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
+          "message": " \"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\nlet kbli_pensiun = kat?.toString().startsWith(\"6530\") ;\r\nlet bu_pensiun = bu == '04'\r\n\r\nlet kbli_pensiun_bu_bukan = kbli_pensiun && !bu_pensiun\r\nlet kbli_bukan_bu_pensiun = !kbli_pensiun && bu_pensiun\r\n\r\nkbli_pensiun_bu_bukan ",
+          "message": "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 4 (Dana Pensiun)\"  ",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "kbli",
+      "componentValidation": [
+        "badan_usaha@$ROW$",
+        "kategori@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let res = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\r\nlet kategori = getValue('kategori@$ROW$') ?? '';\r\n\r\nres == '04' && kategori == 'F';",
+          "message": " \"Status badan usaha terisi Persekutuan Perdata, sehingga kategori lapangan usahanya selain F konstruksi\"",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli@$ROW$\")?? '';\r\nlet kbli_pensiun = kat?.toString().startsWith(\"6530\") ;\r\nlet bu_pensiun = bu == '04'\r\n\r\nlet kbli_pensiun_bu_bukan = kbli_pensiun && !bu_pensiun\r\nlet kbli_bukan_bu_pensiun = !kbli_pensiun && bu_pensiun\r\n\r\nkbli_pensiun_bu_bukan ",
+          "message": "KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 14 (Dana Pensiun)",
+          "type": 2
+        },
+        {
+          "test": "let bu = getValue(\"badan_usaha@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli@$ROW$\")?? '';\r\nlet kbli_koperasi = kat == '64191' || kat == '64192'\r\nlet bu_koperasi = bu == '03'\r\n\r\nlet kbli_koperasi_bu_bukan_koperasi = kbli_koperasi && !bu_koperasi\r\nlet kbli_bukan_koperasi_bu_koperasi = !kbli_koperasi && bu_koperasi\r\n\r\nkbli_koperasi_bu_bukan_koperasi || kbli_bukan_koperasi_bu_koperasi",
+          "message": "\"KBLI dan status badan usaha tidak sesuai. Untuk KBLI ini, isian r11a status badan usaha harus berkode 3 (Koperasi)\"",
+          "type": 2
+        },
+        {
+          "test": "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\nlet kbli = getValue(\"kbli@$ROW$\")?.[0]?.value;\n\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
+          "message": "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_kbli_pml",
+      "componentValidation": [
+        "cek_kbli_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_kbli_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "klasifikasi",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55101'  && klas == '5');",
+          "message": "R13i terisi 5, tetapi R13g tidak terisi 55101",
+          "type": 2
+        },
+        {
+          "test": "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55102'  && klas == '4');",
+          "message": "R13i terisi 4, tetapi R13g tidak terisi 55102",
+          "type": 2
+        },
+        {
+          "test": "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55104'  && klas == '2');",
+          "message": "R13i terisi 2, tetapi R13g tidak terisi 55104",
+          "type": 2
+        },
+        {
+          "test": "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55105'  && klas == '1');",
+          "message": "R13i terisi 1, tetapi R13g tidak terisi 55105",
+          "type": 2
+        },
+        {
+          "test": "let klas = getValue(\"klasifikasi@$ROW$\")?.[0]?.value ?? '';\r\nlet kat = getValue(\"kbli_akhir@$ROW$\")?? '';\r\n\r\n(kat !== '55103'  && klas == '3');",
+          "message": "R13i terisi 3, tetapi R13g tidak terisi 55103",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jaringan",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let jaringan = getValue(\"jaringan@$ROW$\")?.[0]?.value;\r\nlet kbli = getValue(\"kbli_akhir@$ROW$\")?.[0]?.value;\r\n\r\nkbli == '70100' && (jaringan == '2' || jaringan == '4');",
+          "message": "Kode KBLI usaha ini 70100 (Aktivitas Kantor Pusat) sehingga jaringan usahanya adalah kantor pusat atau kantor perwakilan.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nama_kp",
+      "componentValidation": [
+        "nama_kp@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nama_kp@$ROW$')?? '';\nstr.length < 10;",
+          "message": " \"Panjang minimal 10 karakter\"",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "alamat_kp",
+      "componentValidation": [
+        "alamat_kp@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('alamat_kp@$ROW$')?? '';\nstr.length < 10;",
+          "message": "Panjang minimal terisi 10 huruf. Tuliskan alamat selengkapnya (Contoh: jalan, gang, nomor rumah, kavling, nama gedung, lantai kantor)",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "email_kp",
+      "componentValidation": [
+        "email_kp@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let nilai = getValue('email_kp@$ROW$'); \r\n//console.log('email');\r\nlet hasil = false;\r\nif (nilai !== '-' && nilai != '' && nilai != undefined){\r\nlet validasi =\r\n  /^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i;\r\nlet web = getValue('email_kp@$ROW$'); \r\nlet result = !validasi.test(web.toLowerCase()); \r\nhasil = result; }\r\nhasil;",
+          "message": "Email tidak valid. Contoh penulisan: garuda@gmail.com",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "internet",
+      "componentValidation": [
+        "internet@$ROW$",
+        "lokasi_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let inet = getValue('internet@$ROW$')?.[0]?.value ?? '';\nlet lokasi = getValue('lokasi_usaha@$ROW$')?.[0]?.value ?? '';\n(inet == '2' && lokasi =='11')",
+          "message": "Jika r13c=11 maka r16a wajib terisi 1",
+          "type": 2
+        },
+        {
+          "test": "let internet = getValue('internet@$ROW$');\n(internet?.[0]?.value == '2' );",
+          "message": "Apakah benar usaha ini TIDAK MENGGUNAKAN INTERNET dalam menjalankan usaha?",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "internet_lainnya",
+      "componentValidation": [
+        "internet_pesanan@$ROW$",
+        "internet_produksi@$ROW$",
+        "internet_distribusi@$ROW$",
+        "internet_beli@$ROW$",
+        "internet_promosi@$ROW$",
+        "internet_lainnya@$ROW$",
+        "internet@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let b1 = getValue('internet_pesanan@$ROW$')?.[0]?.value;\nlet b2 = getValue('internet_produksi@$ROW$')?.[0]?.value;\nlet b3 = getValue('internet_distribusi@$ROW$')?.[0]?.value;\nlet b4 = getValue('internet_beli@$ROW$')?.[0]?.value;\nlet b5 = getValue('internet_promosi@$ROW$')?.[0]?.value;\nlet b6 = getValue('internet_lainnya@$ROW$')?.[0]?.value;\nlet inet = getValue('internet@$ROW$')?.[0]?.value;\n\n(inet == '1' && (b1 == '2' && b2 == '2' && b3 == '2' && b4 == '2' && b5 == '2' && b5 == '2' && b6 == '2'))\n\n",
+          "message": "Salah satu dari 16b1 - 16b6 wajib terisi YA",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "sudah_halal",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let halal = getValue(\"halal@$ROW$\")?.[0]?.value;\nlet sudah = Number(getValue(\"sudah_halal@$ROW$\") ?? '0');\n\n(halal == '1' && sudah == 0)",
+          "message": "Isikan jumlah varian produk yang sudah memiliki sertifikat halal dari BPJPH",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "belum_halal",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let halal = getValue(\"halal@$ROW$\")?.[0]?.value;\nlet belum = Number(getValue(\"belum_halal@$ROW$\") ?? '0');\n\n(halal == '3' && belum == 0)",
+          "message": "Isikan jumlah varian produk yang belum memiliki sertifikat halal dari BPJPH",
+          "type": 2
+        },
+        {
+          "test": "let belum = Number(getValue(\"belum_halal@$ROW$\") ?? '0');\nlet sudah = Number(getValue(\"sudah_halal@$ROW$\") ?? '0');\n\n(belum + sudah) <1 ;",
+          "message": "r19b + r19c minimal 1",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "sudah_bpom",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let edar = getValue(\"izin_edar@$ROW$\")?.[0]?.value;\nlet sudah = Number(getValue(\"sudah_bpom@$ROW$\") ?? '0');\n\n(edar == '1' && sudah == 0)",
+          "message": "Isikan jumlah varian produk yang sudah memilikiizin edar dari BPOM",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "belum_bpom",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let bpom = getValue(\"izin_edar@$ROW$\")?.[0]?.value;\nlet belum = Number(getValue(\"belum_bpom@$ROW$\") ?? '0');\n\n(bpom == '3' && belum == 0)",
+          "message": "Isikan jumlah varian produk yang belum memiliki sertifikat izin edar BPOM",
+          "type": 2
+        },
+        {
+          "test": "let belum = Number(getValue(\"belum_bpom@$ROW$\") ?? '0');\nlet sudah = Number(getValue(\"sudah_bpom@$ROW$\") ?? '0');\n\n(belum + sudah) < 1 ;",
+          "message": "r20b+r20c minimal 1",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "peran_mbg",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet mamin = getValue(\"layanan_mamin@$ROW$\")?.[0]?.value;\n\n(mbg == '1' && mamin == '2')",
+          "message": "Jika R.13b2 (menyediakan layanan makan minum) = 2 (Tidak) atau tidak terisi maka R.22 TIDAK BOLEH terisi 1",
+          "type": 2
+        },
+        {
+          "test": "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet jasa = getValue(\"keg_jasa@$ROW$\")?.[0]?.value;\n\n(mbg == '3' && jasa == '2')",
+          "message": "Jika R13.b4 = 2 (Tidak) atau tidak terisi maka R.22 TIDAK BOLEH terisi 3",
+          "type": 2
+        },
+        {
+          "test": "let mbg = getValue(\"peran_mbg@$ROW$\")?.[0]?.value;\nlet mamin = getValue(\"layanan_mamin@$ROW$\")?.[0]?.value;\nlet produk = getValue(\"produk_sendiri@$ROW$\")?.[0]?.value;\n\n(mbg == '2' && (mamin == '2' && produk == '2'));",
+          "message": "Jika [ R13.b1 = 2 (Tidak) DAN R13.b3 = 2 (Tidak) ] maka R.22 TIDAK BOLEH terisi 2",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tk_laki",
+      "componentValidation": [
+        "tk_laki@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('tk_laki@$ROW$');\nval < 0 || val > 99999",
+          "message": "Jumlah pekerja antara 1-99.999. Minimal terisi 1 (pemilik usaha sendiri).",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tk_pr",
+      "componentValidation": [
+        "tk_pr@$ROW$",
+        "lk_pr@$ROW$",
+        "badan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let pr = getValue('tk_pr@$ROW$');\nlet lk = getValue('lk_pr@$ROW$');\nlet badan = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\n\nbadan == '03' && (pr+lk) < 3",
+          "message": "Jika status badan usaha adalah koperasi (r11a kode 3), jumlah tenaga kerja minimal terisi = 3 orang.",
+          "type": 2
+        },
+        {
+          "test": "let pr = getValue('tk_pr@$ROW$');\nval < 0 || val > 99999",
+          "message": "Jumlah pekerja antara 0-99.999. ",
+          "type": 2
+        },
+        {
+          "test": "let pr = getValue('tk_pr@$ROW$');\nlet lk = getValue('lk_pr@$ROW$');\n\n\n(pr+lk) < 1",
+          "message": "Minimal terisi 1 (pemilik usaha sendiri).",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_tk_jk_pml",
+      "componentValidation": [
+        "cek_tk_jk_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_tk_jk_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tk_dibayar",
+      "componentValidation": [
+        "tk_dibayar@$ROW$",
+        "badan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('tk_dibayar@$ROW$');\nlet badan = getValue('badan_usaha@$ROW$')?.[0]?.value ?? '';\n\nbadan == '03' && val < 3\n",
+          "message": " Jika status badan usaha adalah koperasi (r11a kode 8), jumlah tenaga kerja minimal terisi = 3 orang",
+          "type": 2
+        },
+        {
+          "test": "let val = getValue('tk_dibayar@$ROW$');\nval < 0 || val > 99999",
+          "message": "Jumlah pekerja dibayar antara 0- 99999",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tk_tdk_dibayar",
+      "componentValidation": [
+        "total_tk_jk@$ROW$",
+        "total_tk_bayar@$ROW$",
+        "tk_dibayar@$ROW$",
+        "tk_tdk_dibayar@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('tk_dibayar@$ROW$');\nval < 0 || val > 99999",
+          "message": "Jumlah pekerja dibayar antara 0- 99999",
+          "type": 2
+        },
+        {
+          "test": "let a = getValue('tk_dibayar@$ROW$');\nlet b = getValue('tk_tdk_dibayar@$ROW$');\nlet c = getValue('total_tk_bayar@$ROW$');\n\nc == 1 && a == 1 && b == 0 ;",
+          "message": "Jika total pekerja = 1, maka seharusnya pekerja dibayar = 0, pekerja tidak dibayar = 1",
+          "type": 2
+        },
+        {
+          "test": "let total1 = getValue('total_tk_jk@$ROW$');\nlet total2 = getValue('total_tk_bayar@$ROW$');\n\n(total1 !== total2)",
+          "message": "Total pekerja (a1+b1) harus sama dengan Total pekerja (a2+b2)",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_tk_bayar_pml",
+      "componentValidation": [
+        "cek_tk_bayar_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_tk_bayar_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "tahun_operasi",
+      "componentValidation": [
+        "tahun_operasi@$ROW$",
+        "punya_nib@$ROW$",
+        "badan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let th = Number(getValue('tahun_operasi@$ROW$') ?? '0');\nth < 1800 || th > 2026;",
+          "message": "Tahun mulai beroperasi harus diantara 1800 s.d 2026",
+          "type": 2
+        },
+        {
+          "test": "let th = Number(getValue('tahun_operasi@$ROW$') ?? '0');\nlet nib = getValue('punya_nib@$ROW$');\nlet ju = Number(getValue('badan_usaha@$ROW$')?.[0]?.value ?? '');\n(nib?.[0]?.value == '2' && th>= 2018 &&\n['01','02','03','04','05','07','08','09','14'].includes(ju));\n",
+          "message": "Usaha ini berdiri tahun 2018 atau setelahnya, seharusnya memiliki NIB (Nomor Induk Berusaha)",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "gaji",
+      "componentValidation": [
+        "tk_dibayar@$ROW$",
+        "gaji@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('gaji@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        },
+        {
+          "test": "let tk_bayar = getValue('tk_dibayar@$ROW$');\nlet gaji = getValue('gaji@$ROW$');\n(gaji == 0 && tk_bayar>0 )",
+          "message": "Wajib terisi > 0, karena jumlah pekerja dibayar>0",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "biaya_produksi",
+      "componentValidation": [
+        "biaya_produksi@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('biaya_produksi@$ROW$');\n\nval !== 9999 && val < 100000;",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "biaya_pembelian",
+      "componentValidation": [
+        "biaya_pembelian@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('biaya_pembelian@$ROW$');\n\nval !== 9999 && val < 100000;",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "operasional",
+      "componentValidation": [
+        "operasional@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('operasional@$ROW$');\n\nval !== 9999 && val < 100000;",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_output26f_pml",
+      "componentValidation": [
+        "cek_output26f_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_output26f_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "nilai_pendapatan",
+      "componentValidation": [
+        "nilai_pendapatan@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('nilai_pendapatan@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "pendapatan_lain",
+      "componentValidation": [
+        "nilai_pendapatan@$ROW$",
+        "pendapatan_lain@$ROW$",
+        "gaji@$ROW$",
+        "biaya_produksi@$ROW$",
+        "biaya_pembelian@$ROW$",
+        "operasional@$ROW$",
+        "non_operasional@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('pendapatan_lain@$ROW$');\n\nval !== 0 && val !== 9999 && val < 100000;\n",
+          "message": "Pastikan range sesuai. Nilai yang dibolehkan adalah nilai 0, 9999(jika tidak bersedia mengisi) dan minimum jika mengisi adalah 100.000",
+          "type": 2
+        },
+        {
+          "test": "let nilai = getValue('nilai_pendapatan@$ROW$');\nlet lain = getValue('pendapatan_lain@$ROW$');\nlet a = getValue('gaji@$ROW$') ?? 0;\nlet b = getValue('biaya_produksi@$ROW$') ?? 0;\nlet c = getValue('biaya_pembelian@$ROW$') ?? 0;\nlet d = getValue('operasional@$ROW$') ?? 0;\nlet e = getValue('non_operasional@$ROW$') ?? 0;\n\nlet pengeluaran = (a !== 9999 ? a : 0) + \n             (b !== 9999 ? b : 0) + \n             (c !== 9999 ? c : 0) + \n             (d !== 9999 ? d : 0) + \n             (e !== 9999 ? e : 0);\n\n\n(nilai + lain) < pengeluaran\n",
+          "message": "Apakah benar total pengeluaran (26f) lebih besar dari total pendapatan (27c)?",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_input27c_pml",
+      "componentValidation": [
+        "cek_input27c_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_input27c_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "pendapatan_online",
+      "componentValidation": [
+        "pendapatan_online@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let persen = getValue('pendapatan_online@$ROW$');\n\npersen > 100;",
+          "message": "Maksimal pendapatan dari online = 100%",
+          "type": 2
+        },
+        {
+          "test": "let persen = getValue('pendapatan_online@$ROW$');\nlet inet = getValue(\"internet@$ROW$\")?.[0]?.value;\n\n(persen < 0 && inet =='1');",
+          "message": "Usaha ini tidak menggunakan internet (r16a=Ya). Isian 27d wajib kosong.",
+          "type": 2
+        },
+        {
+          "test": "let persen = getValue('pendapatan_online@$ROW$');\nlet inet = getValue(\"internet@$ROW$\")?.[0]?.value;\n\n(persen > 0 && inet =='2');",
+          "message": "Usaha ini tidak menggunakan internet (r16a=Tidak). Isian 27d wajib diisi 0.",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "aset_usaha_thn",
+      "componentValidation": [
+        ""
+      ],
+      "validations": [
+        {
+          "test": "let luas = getValue(\"aset_usaha_thn@$ROW$\");\n\ninput?.length < 1",
+          "message": "Jika tidak bersedia mengisi, maka isikan angka 9 sebanyak 4 kali",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "luas_tanah_thn",
+      "componentValidation": [
+        "aset_tanah_thn@$ROW$",
+        "luas_tanah_thn@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let luas = getValue(\"luas_tanah_thn@$ROW$\");\n\nluas?.length < 1",
+          "message": "Jika tidak bersedia mengisi, maka isikan angka 9 sebanyak 4 kali.",
+          "type": 2
+        },
+        {
+          "test": "let aset_tanah = getValue('aset_tanah_thn@$ROW$') ?? 0;\nlet luas = getValue('luas_tanah_thn@$ROW$') ?? 0;\n\naset_tanah > 0 && luas == 0;",
+          "message": "Jika luas tanah yang dikuasai (R28d) = 0, maka nilai aset tanah/bangunan dikuasai (R28a) > 0",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "cek_asetThn_pml",
+      "componentValidation": [
+        "cek_asetThn_pml@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('cek_asetThn_pml@$ROW$');\nlet rolePetugas = getConfig().user?.role;\nlet role = rolePetugas == 'Pengawas';\n\nrole && (val == null || val == undefined);",
+          "message": "Harus dicek oleh PML",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "pribadi",
+      "componentValidation": [
+        "pribadi@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('pribadi@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "non_profit",
+      "componentValidation": [
+        "non_profit@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('non_profit@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "publik",
+      "componentValidation": [
+        "publik@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('publik@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "non_publik",
+      "componentValidation": [
+        "non_publik@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('non_publik@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "pemerintah",
+      "componentValidation": [
+        "pemerintah@$ROW$",
+        "badan_usaha@$ROW$",
+        "pribadi@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('pemerintah@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        },
+        {
+          "test": "let pem = getValue('pemerintah@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n(pem == 0 && bu == '06')",
+          "message": "Modal Pemerintah (R29e) harus lebih dari 0, jika R11a terisi BUM Desa (6)",
+          "type": 2
+        },
+        {
+          "test": "let pem = getValue('pemerintah@$ROW$');\nlet pribadi = getValue('pribadi@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n((pem < pribadi ) && bu == '06');",
+          "message": "Modal Pemerintah (R29e) harus lebih dari Modal Pribadi (R29a) , jika R11a terisi BUM Desa (6)",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "asing",
+      "componentValidation": [
+        "pribadi@$ROW$",
+        "non_profit@$ROW$",
+        "publik@$ROW$",
+        "non_publik@$ROW$",
+        "pemerintah@$ROW$",
+        "asing@$ROW$",
+        "badan_usaha@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('asing@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        },
+        {
+          "test": "let a = getValue('pribadi@$ROW$');\nlet b = getValue('non_profit@$ROW$');\nlet c = getValue('publik@$ROW$');\nlet d = getValue('non_publik@$ROW$');\nlet e = getValue('pemerintah@$ROW$');\nlet f = getValue('asing@$ROW$');\n\na+b+c+d+e+f !== 100;",
+          "message": "Penjumlahan harus sama dengan 100%",
+          "type": 2
+        },
+        {
+          "test": "let c = getValue('publik@$ROW$');\nlet d = getValue('non_publik@$ROW$');\nlet f = getValue('asing@$ROW$');\nlet bu = getValue('badan_usaha@$ROW$')?.[0]?.value;\n\n((c+d+f) < 50 && bu == '06')",
+          "message": "Modal Asing (R29f) + Swasta (R29c) + Korporasi (R29d) harus kurang dari 50% , jika R11a terisi BUM Desa (6)",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "status_kepemilikan",
+      "componentValidation": [
+        "jns_bangunan",
+        "status_kepemilikan"
+      ],
+      "validations": [
+        {
+          "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet status = getValue('status_kepemilikan')?.[0]?.value ?? '';\n\njenis == '5' && status == '1';",
+          "message": "Jika jenis bangunan adalah kos (rincian 5a = 5) , maka status kepemilikan (rincian 7a ) tidak boleh milik sendiri atau berkode 1",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "bukti_kepemilikan",
+      "componentValidation": [
+        "jns_bangunan",
+        "status_kepemilikan",
+        "bukti_kepemilikan"
+      ],
+      "validations": [
+        {
+          "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet status = getValue('status_kepemilikan')?.[0]?.value ?? '';\nlet bukti = getValue('bukti_kepemilikan')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && status == '1' && bukti != '2';",
+          "message": "Jika jenis bangunannya apartemen atau rumah susun dan statusnya milik sendiri, maka jenis bukti kepemilikan tanah bangunan harus sertifikat selain SHM",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_lantai",
+      "componentValidation": [
+        "jns_bangunan",
+        "jns_lantai"
+      ],
+      "validations": [
+        {
+          "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_lantai > '3';",
+          "message": "Jika jenis bangunan (rincian 5a) adalah apartemen atau rumah susun, maka bahan lantai terluas (rincian 10a) seharusnya kode 1-3",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_dinding",
+      "componentValidation": [
+        "jns_bangunan",
+        "jns_dinding",
+        "jns_lantai"
+      ],
+      "validations": [
+        {
+          "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_dinding > '1';",
+          "message": "Jika jenis bangunan (rincian 5a) apartemen atau rumah susun, maka bahan dinding terluas (rincian 11a) seharusnya kode 1",
+          "type": 2
+        },
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding > '1' && jns_lantai == '1';",
+          "message": "Jika dinding selain tembok, maka lantai seharusnya bukan marmer/granit",
+          "type": 1
+        },
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding > '3' && jns_lantai < '3';",
+          "message": "Jika dinding bukan tembok, plesteran anyaman bambu/kawat, atau kayu/papan/gipsum/GRC/calciboard maka lantai harusnya bukan marmer/granit atau keramik",
+          "type": 1
+        },
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\n\njns_dinding == '1' && (jns_lantai == '7' || jns_lantai == '9');",
+          "message": "Jika dinding tembok, maka lantai seharusnya bukan bambu/lainnya",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "kondisi_dinding",
+      "componentValidation": [
+        "jns_dinding"
+      ],
+      "validations": [
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_dindind > '1';",
+          "message": "",
+          "type": 0
+        }
+      ]
+    }
+  ]
 }

@@ -45,17 +45,24 @@ export const PropertyEditor = () => {
 
   const [localJSON, setLocalJSON] = useState('')
   const [jsonError, setJsonError] = useState<string | null>(null)
+  const lastUpdateFromEditorRef = React.useRef(false)
 
   useEffect(() => {
+    if (lastUpdateFromEditorRef.current) {
+      lastUpdateFromEditorRef.current = false;
+      return;
+    }
+
     if (sidebarMode === 'presets') {
       setLocalJSON(JSON.stringify(preset, null, 2))
     } else if (sidebarMode === 'responses') {
       setLocalJSON(JSON.stringify(response, null, 2))
     }
-  }, [sidebarMode]) // Only on mode switch to avoid overwrite while typing
+  }, [sidebarMode, preset, response]) // Sync aggressively with external changes
 
   const handleJSONChange = (val: string) => {
     setLocalJSON(val)
+    lastUpdateFromEditorRef.current = true;
     try {
       const parsed = JSON.parse(val)
       setJsonError(null)
@@ -63,6 +70,7 @@ export const PropertyEditor = () => {
       else if (sidebarMode === 'responses') setResponse(parsed)
     } catch (e: any) {
       setJsonError(e.message)
+      lastUpdateFromEditorRef.current = false;
     }
   }
 

@@ -2936,7 +2936,7 @@
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "expression": "getValue('tgl_bln_thn_lahir@$ROW$')",
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[2]",
                     "render": true,
                     "renderType": 1,
                     "enableRemark": false,
@@ -2949,88 +2949,14 @@
                   },
                   {
                     "label": "&nbsp;&nbsp; &nbsp; Bulan Lahir",
-                    "type": 27,
+                    "type": 4,
                     "dataKey": "bln_lahir",
                     "required": true,
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "options": [
-                      {
-                        "label": "JANUARI",
-                        "description": "",
-                        "value": "01",
-                        "open": false
-                      },
-                      {
-                        "label": "FEBRUARI",
-                        "description": "",
-                        "value": "02",
-                        "open": false
-                      },
-                      {
-                        "label": "MARET",
-                        "description": "",
-                        "value": "03",
-                        "open": false
-                      },
-                      {
-                        "label": "APRIL",
-                        "description": "",
-                        "value": "04",
-                        "open": false
-                      },
-                      {
-                        "label": "MEI",
-                        "description": "",
-                        "value": "05",
-                        "open": false
-                      },
-                      {
-                        "label": "JUNI",
-                        "description": "",
-                        "value": "06",
-                        "open": false
-                      },
-                      {
-                        "label": "JULI",
-                        "description": "",
-                        "value": "07",
-                        "open": false
-                      },
-                      {
-                        "label": "AGUSTUS",
-                        "description": "",
-                        "value": "08",
-                        "open": false
-                      },
-                      {
-                        "label": "SEPTEMBER",
-                        "description": "",
-                        "value": "09",
-                        "open": false
-                      },
-                      {
-                        "label": "OKTOBER",
-                        "description": "",
-                        "value": "10",
-                        "open": false
-                      },
-                      {
-                        "label": "NOVEMBER",
-                        "description": "",
-                        "value": "11",
-                        "open": false
-                      },
-                      {
-                        "label": "DESEMBER",
-                        "description": "",
-                        "value": "12",
-                        "open": false
-                      }
-                    ],
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[1]",
                     "enableRemark": false,
-                    "typeOption": 1,
                     "presetMaster": false,
                     "disableInput": false,
                     "disableInitial": false,
@@ -3040,12 +2966,13 @@
                   },
                   {
                     "label": "&nbsp;&nbsp; &nbsp; Tahun Lahir",
-                    "type": 25,
+                    "type": 4,
                     "dataKey": "thn_lahir",
                     "required": true,
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[0]",
                     "enableRemark": false,
                     "presetMaster": false,
                     "disableInput": false,

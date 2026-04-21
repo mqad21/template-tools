@@ -86,7 +86,13 @@ export const useStore = create<State>((set, get) => ({
   }),
   setValidation: (validation) => set({ validation }),
   setPreset: (preset) => set({ preset }),
-  setResponse: (response) => set({ response }),
+  setResponse: (response) => {
+    const { template } = get();
+    if (template?.id && response) {
+      localStorage.setItem(`fasih-preview-response-${template.id}`, JSON.stringify(response));
+    }
+    set({ response });
+  },
   setSelectedDataKey: (selectedDataKey) => set({ selectedDataKey }),
 
   updateComponent: (dataKey, updates) => {
@@ -190,17 +196,30 @@ export const useStore = create<State>((set, get) => ({
 
   loadSamples: async () => {
     try {
-      const [template, validation, preset, response] = await Promise.all([
+      const [template, validation, preset, fileResponse] = await Promise.all([
         fetch('/sample/template.json').then(res => res.json()),
         fetch('/sample/validation.json').then(res => res.json()),
         fetch('/sample/preset.json').then(res => res.json()),
         fetch('/sample/response.json').then(res => res.json()),
       ])
+      
+      let finalResponse = fileResponse;
+      if (template?.id) {
+        const cached = localStorage.getItem(`fasih-preview-response-${template.id}`);
+        if (cached) {
+          try {
+            finalResponse = JSON.parse(cached);
+          } catch (e) {
+            console.error('Failed to parse cached response:', e);
+          }
+        }
+      }
+
       set({ 
         template, 
         validation, 
         preset, 
-        response,
+        response: finalResponse,
         componentMap: buildComponentMap(template?.components)
       })
     } catch (error) {
