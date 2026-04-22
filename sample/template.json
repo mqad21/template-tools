@@ -2782,6 +2782,22 @@
                     "isEditableList": true
                   },
                   {
+                    "label": "\r\n<div style=\"font-weight: normal; border: 2px solid #7dd3fc; text-align: center; background-color: #e0f2fe; color: #0369a1; padding: 0.8em; border-radius: 0.5rem;\">\r\n    <b>INSTRUKSI PEMADANAN NIK:</b><br>\r\n    Silakan lakukan pengecekan NIK dengan menekan tombol <b>CEK NIK</b> di bawah ini.\r\n</div>",
+                    "type": 3,
+                    "dataKey": "banner_cek_nik_2",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
                     "label": "CEK NIK",
                     "type": 6,
                     "dataKey": "callnik_button",
@@ -2866,123 +2882,6 @@
                     "isEditableList": true
                   },
                   {
-                    "label": "29. Jenis Kelamin <span style=\"color:#0041C2\";font-weight: bold\">$NAME$</span>",
-                    "type": 26,
-                    "dataKey": "jk_dtsen",
-                    "required": true,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "options": [
-                      {
-                        "label": "1. Laki-laki",
-                        "description": "",
-                        "value": "1",
-                        "open": false
-                      },
-                      {
-                        "label": "2. Perempuan",
-                        "description": "",
-                        "value": "2",
-                        "open": false
-                      }
-                    ],
-                    "enableRemark": false,
-                    "typeOption": 1,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "29. Tanggal Lahir <span style=\"color:#0041C2\";font-weight: bold\">$NAME$</span>",
-                    "type": 11,
-                    "dataKey": "tgl_bln_thn_lahir",
-                    "required": true,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp; &nbsp; Tanggal Lahir",
-                    "type": 4,
-                    "dataKey": "tgl_lahir",
-                    "required": false,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[2]",
-                    "render": false,
-                    "renderType": 1,
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp; &nbsp; Bulan Lahir",
-                    "type": 4,
-                    "dataKey": "bln_lahir",
-                    "required": true,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[1]",
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp; &nbsp; Tahun Lahir",
-                    "type": 4,
-                    "dataKey": "thn_lahir",
-                    "required": true,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[0]",
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp; &nbsp; Umur",
-                    "type": 4,
-                    "dataKey": "umur",
-                    "required": false,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "expression": "var d = new Date();\r\nvar curYear = d.getFullYear();\r\nvar curMonth = d.getMonth() + 1;\r\nvar curDate = d.getDate();\r\n\r\n// Get values from the form\r\nlet vthnLahir = getValue('thn_lahir@$ROW$');\r\nlet vblnLahir = getValue('bln_lahir@$ROW$');\r\nlet vtglLahir = getValue('tgl_lahir@$ROW$');\r\n\r\n// Initialize variables\r\nlet thnLahir = vthnLahir ? Number(vthnLahir) : 0;\r\nlet blnLahir = vblnLahir ? Number(vblnLahir?.[0]?.value) : 0;\r\nlet tglLahir = vtglLahir ? Number(vtglLahir) : 0;\r\n\r\n// Function to calculate age\r\nfunction hitungUmur(tgl, bln, thn) {\r\n    // Mendapatkan tanggal hari ini\r\n    const hariIni = new Date();\r\n    \r\n    // Membuat tanggal lahir\r\n    const tanggalLahir = new Date(thn, bln - 1, tgl); // Bulan dikurangi 1 karena bulan dalam JavaScript dimulai dari 0\r\n    \r\n    // Menghitung perbedaan dalam milidetik\r\n    let bedaMs = hariIni - tanggalLahir;\r\n    \r\n    // Mengonversi milidetik menjadi tahun\r\n    const msPerYear = 1000 * 60 * 60 * 24 * 365.25; // Termasuk tahun kabisat\r\n    let umur = bedaMs / msPerYear;\r\n    \r\n    // Pembulatan ke bawah untuk mendapatkan umur dalam tahun\r\n    umur = Math.floor(umur);\r\n    \r\n    return umur;\r\n}\r\n\r\nblnLahir = blnLahir == 98 ? 1 : blnLahir\r\ntglLahir = tglLahir == 98 ? 1 : tglLahir\r\n\r\n// Handle special cases for day and month\r\nlet age=0;\r\n\r\nif (tglLahir && blnLahir && tglLahir) {\r\n    age = hitungUmur(tglLahir,blnLahir,thnLahir);\r\n}\r\nage.toString();\r\n",
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
                     "label": "27. a. Keberadaan anggota keluarga",
                     "type": 26,
                     "dataKey": "keberadaan_dtsen",
@@ -3036,6 +2935,198 @@
                     ],
                     "enableRemark": false,
                     "typeOption": 1,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "29. Jenis Kelamin <span style=\"color:#0041C2\";font-weight: bold\">$NAME$</span>",
+                    "type": 26,
+                    "dataKey": "jk_dtsen",
+                    "required": true,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "options": [
+                      {
+                        "label": "1. Laki-laki",
+                        "description": "",
+                        "value": "1",
+                        "open": false
+                      },
+                      {
+                        "label": "2. Perempuan",
+                        "description": "",
+                        "value": "2",
+                        "open": false
+                      }
+                    ],
+                    "enableRemark": false,
+                    "typeOption": 1,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "30. Tanggal Lahir <span style=\"color:#0041C2\";font-weight: bold\">$NAME$</span>",
+                    "type": 3,
+                    "dataKey": "tgl_bln_thn_lahir",
+                    "required": true,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "&nbsp;&nbsp; &nbsp; Tanggal Lahir",
+                    "type": 25,
+                    "dataKey": "tgl_lahir",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[2]",
+                    "inputMode": "numeric",
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "&nbsp;&nbsp; &nbsp; Bulan Lahir",
+                    "type": 27,
+                    "dataKey": "bln_lahir",
+                    "required": true,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[1]",
+                    "options": [
+                      {
+                        "label": "JANUARI",
+                        "description": "",
+                        "value": "01",
+                        "open": false
+                      },
+                      {
+                        "label": "FEBRUARI",
+                        "description": "",
+                        "value": "02",
+                        "open": false
+                      },
+                      {
+                        "label": "MARET",
+                        "description": "",
+                        "value": "03",
+                        "open": false
+                      },
+                      {
+                        "label": "APRIL",
+                        "description": "",
+                        "value": "04",
+                        "open": false
+                      },
+                      {
+                        "label": "MEI",
+                        "description": "",
+                        "value": "05",
+                        "open": false
+                      },
+                      {
+                        "label": "JUNI",
+                        "description": "",
+                        "value": "06",
+                        "open": false
+                      },
+                      {
+                        "label": "JULI",
+                        "description": "",
+                        "value": "07",
+                        "open": false
+                      },
+                      {
+                        "label": "AGUSTUS",
+                        "description": "",
+                        "value": "08",
+                        "open": false
+                      },
+                      {
+                        "label": "SEPTEMBER",
+                        "description": "",
+                        "value": "09",
+                        "open": false
+                      },
+                      {
+                        "label": "OKTOBER",
+                        "description": "",
+                        "value": "10",
+                        "open": false
+                      },
+                      {
+                        "label": "NOVEMBER",
+                        "description": "",
+                        "value": "11",
+                        "open": false
+                      },
+                      {
+                        "label": "DESEMBER",
+                        "description": "",
+                        "value": "12",
+                        "open": false
+                      }
+                    ],
+                    "enableRemark": false,
+                    "typeOption": 1,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "&nbsp;&nbsp; &nbsp; Tahun Lahir",
+                    "type": 25,
+                    "dataKey": "thn_lahir",
+                    "required": true,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "expression": "let value = getValue('tgl_bln_thn_lahir@$ROW$') ?? ''\r\nvalue.split(\"-\")?.[0]",
+                    "inputMode": "numeric",
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "&nbsp;&nbsp; &nbsp; Umur",
+                    "type": 4,
+                    "dataKey": "umur",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "expression": "var d = new Date();\r\nvar curYear = d.getFullYear();\r\nvar curMonth = d.getMonth() + 1;\r\nvar curDate = d.getDate();\r\n\r\n// Get values from the form\r\nlet vthnLahir = getValue('thn_lahir@$ROW$');\r\nlet vblnLahir = getValue('bln_lahir@$ROW$');\r\nlet vtglLahir = getValue('tgl_lahir@$ROW$');\r\n\r\n// Initialize variables\r\nlet thnLahir = vthnLahir ? Number(vthnLahir) : 0;\r\nlet blnLahir = vblnLahir ? Number(vblnLahir?.[0]?.value) : 0;\r\nlet tglLahir = vtglLahir ? Number(vtglLahir) : 0;\r\n\r\n// Function to calculate age\r\nfunction hitungUmur(tgl, bln, thn) {\r\n    // Mendapatkan tanggal hari ini\r\n    const hariIni = new Date();\r\n    \r\n    // Membuat tanggal lahir\r\n    const tanggalLahir = new Date(thn, bln - 1, tgl); // Bulan dikurangi 1 karena bulan dalam JavaScript dimulai dari 0\r\n    \r\n    // Menghitung perbedaan dalam milidetik\r\n    let bedaMs = hariIni - tanggalLahir;\r\n    \r\n    // Mengonversi milidetik menjadi tahun\r\n    const msPerYear = 1000 * 60 * 60 * 24 * 365.25; // Termasuk tahun kabisat\r\n    let umur = bedaMs / msPerYear;\r\n    \r\n    // Pembulatan ke bawah untuk mendapatkan umur dalam tahun\r\n    umur = Math.floor(umur);\r\n    \r\n    return umur;\r\n}\r\n\r\nblnLahir = blnLahir == 98 ? 1 : blnLahir\r\ntglLahir = tglLahir == 98 ? 1 : tglLahir\r\n\r\n// Handle special cases for day and month\r\nlet age=0;\r\n\r\nif (tglLahir && blnLahir && tglLahir) {\r\n    age = hitungUmur(tglLahir,blnLahir,thnLahir);\r\n}\r\nage.toString();\r\n",
+                    "enableRemark": false,
                     "presetMaster": false,
                     "disableInput": false,
                     "disableInitial": false,
@@ -4826,6 +4917,22 @@
                     "isEditableList": true
                   },
                   {
+                    "label": "\r\n<div style=\"font-weight: normal; border: 2px solid #7dd3fc; text-align: center; background-color: #e0f2fe; color: #0369a1; padding: 0.8em; border-radius: 0.5rem;\">\r\n    <b>INSTRUKSI PEMADANAN NIK:</b><br>\r\n    Silakan lakukan pengecekan NIK dengan menekan tombol <b>CEK NIK</b> di bawah ini.\r\n</div>",
+                    "type": 3,
+                    "dataKey": "banner_pemadanan_nik",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
                     "label": "CEK NIK",
                     "type": 6,
                     "dataKey": "callnik_button_l",
@@ -4838,6 +4945,303 @@
                     "componentEnable": [
                       "ec_usaha_respons@$ROW$",
                       "ec_non_keluarga"
+                    ],
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daftar Kantor Cabang",
+                    "type": 2,
+                    "dataKey": "kp_nested",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "components": [
+                      [
+                        {
+                          "label": "\n<div class=\"font-normal border-2 text-center\" style=\"background-color:hsl(24 100% 56%);color:white;padding: 0.8em 0.8em 0.8em 0.8em; font-size:13px;border-color:#FF8C00;border-top-left-radius: 0.5rem;\n    border-top-right-radius: 0.5rem;\n    border-bottom-right-radius: 0.5rem;\n    border-bottom-left-radius: 0.5rem;\"><b>KETERANGAN KANTOR CABANG/UNIT DI BAWAH KENDALI KANTOR PUSAT\n</b></div>  ",
+                          "type": 3,
+                          "dataKey": "kp_head",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "<b>Lengkapi informasi kantor pusat dan kantor cabang/unit di bawah kendali kantor pusat</b>",
+                          "type": 3,
+                          "dataKey": "kp_ket",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Nama Kantor/\nUnit",
+                          "type": 25,
+                          "dataKey": "kp_unit",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Jenis Unit",
+                          "type": 26,
+                          "dataKey": "kp_jenis",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "options": [
+                            {
+                              "label": "1. Kantor Cabang",
+                              "description": "",
+                              "value": "1",
+                              "open": false
+                            },
+                            {
+                              "label": "2. Kantor Perwakilan",
+                              "description": "",
+                              "value": "2",
+                              "open": false
+                            },
+                            {
+                              "label": "3. Pabrik",
+                              "description": "",
+                              "value": "3",
+                              "open": false
+                            },
+                            {
+                              "label": "4. Unit Pembantu/Penunjang",
+                              "description": "",
+                              "value": "4",
+                              "open": false
+                            }
+                          ],
+                          "enableRemark": false,
+                          "typeOption": 1,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Provinsi",
+                          "type": 27,
+                          "dataKey": "kp_prov",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "sourceSelect": [
+                            {
+                              "id": "0d125691-ff77-4236-9418-489b47b389b9",
+                              "version": "1",
+                              "tableName": "mfd23smt2_prov",
+                              "value": "kdprov",
+                              "desc": "namaprov",
+                              "fullDesc": "",
+                              "parentCondition": []
+                            }
+                          ],
+                          "enableRemark": false,
+                          "typeOption": 2,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Kabupaten",
+                          "type": 27,
+                          "dataKey": "kp_kab",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "sourceSelect": [
+                            {
+                              "id": "3638e399-c252-4e37-bd01-9535129130dd",
+                              "version": "1",
+                              "tableName": "mfd23smt2_kab",
+                              "value": "kdprovkab",
+                              "desc": "namakab",
+                              "fullDesc": "",
+                              "parentCondition": [
+                                {
+                                  "key": "kdprov",
+                                  "value": "kp_prov@$ROW1$"
+                                }
+                              ]
+                            }
+                          ],
+                          "enableRemark": false,
+                          "typeOption": 2,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Apakah perusahaan ini memproduksi barang/jasa yang ramah lingkungan?",
+                          "type": 26,
+                          "dataKey": "kp_produksi_lingkungan",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "options": [
+                            {
+                              "label": "1. Ya, Seluruhnya",
+                              "description": "",
+                              "value": "1",
+                              "open": false
+                            },
+                            {
+                              "label": "2. Ya, Sebagian",
+                              "description": "",
+                              "value": "2",
+                              "open": false
+                            },
+                            {
+                              "label": "3. Tidak Sama Sekali",
+                              "description": "",
+                              "value": "3",
+                              "open": false
+                            }
+                          ],
+                          "enableRemark": false,
+                          "typeOption": 1,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Apakah perusahaan ini mengeluarkan biaya perlindungan lingkungan dan/atau pembelian barang dan jasa yang ramah lingkungan",
+                          "type": 26,
+                          "dataKey": "kp_perlindungan_lingkungan",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "options": [
+                            {
+                              "label": "1. Ya",
+                              "description": "",
+                              "value": "1",
+                              "open": false
+                            },
+                            {
+                              "label": "2. Tidak",
+                              "description": "",
+                              "value": "2",
+                              "open": false
+                            }
+                          ],
+                          "enableRemark": false,
+                          "typeOption": 1,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Tenaga Kerja (per 31 Desember 2025) (orang)",
+                          "type": 28,
+                          "dataKey": "kp_tk",
+                          "required": false,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Pengeluaran Tahun 2025 (Rupiah)",
+                          "type": 20,
+                          "dataKey": "kp_total_pengeluaran",
+                          "required": true,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "currency": "IDR",
+                          "separatorFormat": "id-ID",
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        },
+                        {
+                          "label": "Pendapatan Tahun 2025 (Rupiah)",
+                          "type": 20,
+                          "dataKey": "kp_total_aset",
+                          "required": true,
+                          "disablePaste": false,
+                          "tabular": false,
+                          "encrypted": false,
+                          "currency": "IDR",
+                          "enableRemark": false,
+                          "presetMaster": false,
+                          "disableInput": false,
+                          "disableInitial": false,
+                          "isCapital": false,
+                          "isEditable": false,
+                          "isEditableList": true
+                        }
+                      ]
+                    ],
+                    "sourceQuestion": "jumlah_kc@$ROW$",
+                    "enableCondition": "getValue('ec_usaha_respons@$ROW$') \n&& ['2'].includes(getValue('jaringan@$ROW$')?.[0]?.value);",
+                    "componentEnable": [
+                      "ec_usaha_respons@$ROW$",
+                      "jaringan@$ROW$"
                     ],
                     "enableRemark": false,
                     "presetMaster": false,
@@ -8149,6 +8553,32 @@
                     "isEditableList": true
                   },
                   {
+                    "label": "&nbsp;&nbsp;<b><font color=\"#0000b3\">\nCek Rincian Pengeluaran di satu bulan terakhir (Diisi oleh PML)\n<font></b>",
+                    "type": 26,
+                    "dataKey": "cek_output30f_pml",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "options": [
+                      {
+                        "label": "Sudah dicek",
+                        "description": "",
+                        "value": "1",
+                        "open": false
+                      }
+                    ],
+                    "readOnlyCondition": "let rolePetugas = getConfig().user?.role;\nlet role = rolePetugas !== 'Pengawas';\nrole;",
+                    "enableRemark": false,
+                    "typeOption": 1,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
                     "label": "<b>30. f. Total pengeluaran (a+b+c+d+e)</b>",
                     "type": 4,
                     "dataKey": "total_pengeluaran_bln",
@@ -8171,32 +8601,6 @@
                       "ec_usaha_bulan@$ROW$"
                     ],
                     "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp;<b><font color=\"#0000b3\">\nCek Rincian Pengeluaran di satu bulan terakhir (Diisi oleh PML)\n<font></b>",
-                    "type": 26,
-                    "dataKey": "cek_output30f_pml",
-                    "required": false,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "options": [
-                      {
-                        "label": "Sudah dicek",
-                        "description": "",
-                        "value": "1",
-                        "open": false
-                      }
-                    ],
-                    "readOnlyCondition": "let rolePetugas = getConfig().user?.role;\nlet role = rolePetugas !== 'Pengawas';\nrole;",
-                    "enableRemark": false,
-                    "typeOption": 1,
                     "presetMaster": false,
                     "disableInput": false,
                     "disableInitial": false,
@@ -8819,303 +9223,6 @@
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "enableCondition": "getValue('ec_usaha_respons@$ROW$') \n&& ['2'].includes(getValue('jaringan@$ROW$')?.[0]?.value);",
-                    "componentEnable": [
-                      "ec_usaha_respons@$ROW$",
-                      "jaringan@$ROW$"
-                    ],
-                    "enableRemark": false,
-                    "presetMaster": false,
-                    "disableInput": false,
-                    "disableInitial": false,
-                    "isCapital": false,
-                    "isEditable": false,
-                    "isEditableList": true
-                  },
-                  {
-                    "label": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daftar Kantor Cabang",
-                    "type": 2,
-                    "dataKey": "kp_nested",
-                    "required": false,
-                    "disablePaste": false,
-                    "tabular": false,
-                    "encrypted": false,
-                    "components": [
-                      [
-                        {
-                          "label": "\n<div class=\"font-normal border-2 text-center\" style=\"background-color:hsl(24 100% 56%);color:white;padding: 0.8em 0.8em 0.8em 0.8em; font-size:13px;border-color:#FF8C00;border-top-left-radius: 0.5rem;\n    border-top-right-radius: 0.5rem;\n    border-bottom-right-radius: 0.5rem;\n    border-bottom-left-radius: 0.5rem;\"><b>KETERANGAN KANTOR CABANG/UNIT DI BAWAH KENDALI KANTOR PUSAT\n</b></div>  ",
-                          "type": 3,
-                          "dataKey": "kp_head",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "<b>Lengkapi informasi kantor pusat dan kantor cabang/unit di bawah kendali kantor pusat</b>",
-                          "type": 3,
-                          "dataKey": "kp_ket",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Nama Kantor/\nUnit",
-                          "type": 25,
-                          "dataKey": "kp_unit",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Jenis Unit",
-                          "type": 26,
-                          "dataKey": "kp_jenis",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "options": [
-                            {
-                              "label": "1. Kantor Cabang",
-                              "description": "",
-                              "value": "1",
-                              "open": false
-                            },
-                            {
-                              "label": "2. Kantor Perwakilan",
-                              "description": "",
-                              "value": "2",
-                              "open": false
-                            },
-                            {
-                              "label": "3. Pabrik",
-                              "description": "",
-                              "value": "3",
-                              "open": false
-                            },
-                            {
-                              "label": "4. Unit Pembantu/Penunjang",
-                              "description": "",
-                              "value": "4",
-                              "open": false
-                            }
-                          ],
-                          "enableRemark": false,
-                          "typeOption": 1,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Provinsi",
-                          "type": 27,
-                          "dataKey": "kp_prov",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "sourceSelect": [
-                            {
-                              "id": "0d125691-ff77-4236-9418-489b47b389b9",
-                              "version": "1",
-                              "tableName": "mfd23smt2_prov",
-                              "value": "kdprov",
-                              "desc": "namaprov",
-                              "fullDesc": "",
-                              "parentCondition": []
-                            }
-                          ],
-                          "enableRemark": false,
-                          "typeOption": 2,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Kabupaten",
-                          "type": 27,
-                          "dataKey": "kp_kab",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "sourceSelect": [
-                            {
-                              "id": "3638e399-c252-4e37-bd01-9535129130dd",
-                              "version": "1",
-                              "tableName": "mfd23smt2_kab",
-                              "value": "kdprovkab",
-                              "desc": "namakab",
-                              "fullDesc": "",
-                              "parentCondition": [
-                                {
-                                  "key": "kdprov",
-                                  "value": "kp_prov@$ROW1$"
-                                }
-                              ]
-                            }
-                          ],
-                          "enableRemark": false,
-                          "typeOption": 2,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Apakah perusahaan ini memproduksi barang/jasa yang ramah lingkungan?",
-                          "type": 26,
-                          "dataKey": "kp_produksi_lingkungan",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "options": [
-                            {
-                              "label": "1. Ya, Seluruhnya",
-                              "description": "",
-                              "value": "1",
-                              "open": false
-                            },
-                            {
-                              "label": "2. Ya, Sebagian",
-                              "description": "",
-                              "value": "2",
-                              "open": false
-                            },
-                            {
-                              "label": "3. Tidak Sama Sekali",
-                              "description": "",
-                              "value": "3",
-                              "open": false
-                            }
-                          ],
-                          "enableRemark": false,
-                          "typeOption": 1,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Apakah perusahaan ini mengeluarkan biaya perlindungan lingkungan dan/atau pembelian barang dan jasa yang ramah lingkungan",
-                          "type": 26,
-                          "dataKey": "kp_perlindungan_lingkungan",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "options": [
-                            {
-                              "label": "1. Ya",
-                              "description": "",
-                              "value": "1",
-                              "open": false
-                            },
-                            {
-                              "label": "2. Tidak",
-                              "description": "",
-                              "value": "2",
-                              "open": false
-                            }
-                          ],
-                          "enableRemark": false,
-                          "typeOption": 1,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Tenaga Kerja (per 31 Desember 2025) (orang)",
-                          "type": 28,
-                          "dataKey": "kp_tk",
-                          "required": false,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Pengeluaran Tahun 2025 (Rupiah)",
-                          "type": 20,
-                          "dataKey": "kp_total_pengeluaran",
-                          "required": true,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "currency": "IDR",
-                          "separatorFormat": "id-ID",
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        },
-                        {
-                          "label": "Pendapatan Tahun 2025 (Rupiah)",
-                          "type": 20,
-                          "dataKey": "kp_total_aset",
-                          "required": true,
-                          "disablePaste": false,
-                          "tabular": false,
-                          "encrypted": false,
-                          "currency": "IDR",
-                          "enableRemark": false,
-                          "presetMaster": false,
-                          "disableInput": false,
-                          "disableInitial": false,
-                          "isCapital": false,
-                          "isEditable": false,
-                          "isEditableList": true
-                        }
-                      ]
-                    ],
-                    "sourceQuestion": "jumlah_kc@$ROW$",
                     "enableCondition": "getValue('ec_usaha_respons@$ROW$') \n&& ['2'].includes(getValue('jaringan@$ROW$')?.[0]?.value);",
                     "componentEnable": [
                       "ec_usaha_respons@$ROW$",
@@ -11416,13 +11523,18 @@
                   },
                   {
                     "label": "&nbsp;&nbsp; &nbsp; Tanggal Lahir",
-                    "type": 11,
+                    "type": 4,
                     "dataKey": "tgl_lahir_var",
                     "required": true,
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
                     "expression": "let a = getValue('tgl_lahir@$ROW$') ?? '';\na;",
+                    "componentVar": [
+                      "tgl_lahir@$ROW$"
+                    ],
+                    "render": true,
+                    "renderType": 1,
                     "enableCondition": "getValue('ec_art_dtsen@$ROW$');",
                     "componentEnable": [
                       "ec_art_dtsen@$ROW$"
@@ -11443,7 +11555,7 @@
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "expression": "let a = getValue('bln_lahir@$ROW$')?.[0]?.label ?? '';\na;",
+                    "expression": "let a = getValue('bln_lahir@$ROW$') ?? '';\r\na;",
                     "render": true,
                     "renderType": 1,
                     "enableCondition": "getValue('ec_art_dtsen@$ROW$');",

@@ -3,7 +3,8 @@ import { Sidebar } from './components/Sidebar'
 import { PropertyEditor } from './components/PropertyEditor'
 import { FormPreview } from './components/FormPreview'
 import { useStore } from './store/useStore'
-import { Activity } from 'lucide-react'
+import { Activity, RefreshCw } from 'lucide-react'
+import { SyncDialog } from './components/SyncDialog'
 
 function App() {
   const { loadSamples, template } = useStore()
@@ -11,6 +12,7 @@ function App() {
   const [previewWidth, setPreviewWidth] = React.useState(450)
   const isResizingSidebar = React.useRef(false)
   const isResizingPreview = React.useRef(false)
+  const [isSyncOpen, setIsSyncOpen] = React.useState(false)
 
   useEffect(() => {
     loadSamples()
@@ -80,6 +82,14 @@ function App() {
               <span className="text-[10px] opacity-70 italic">Local Workspace</span>
             </div>
           </div>
+
+          <button 
+            onClick={() => setIsSyncOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg transition-all font-bold text-xs"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Sync from Server
+          </button>
         </div>
       </header>
 
@@ -134,6 +144,11 @@ function App() {
           © 2024 Badan Pusat Statistik
         </div>
       </footer>
+
+      <SyncDialog 
+        isOpen={isSyncOpen}
+        onClose={() => setIsSyncOpen(false)}
+      />
     </div>
   )
 }

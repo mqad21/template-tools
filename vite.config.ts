@@ -47,6 +47,42 @@ export default defineConfig({
                 res.end(JSON.stringify({ error: err.message }))
               }
             })
+          } else if (req.method === 'GET' && req.url.startsWith('/api/proxy')) {
+            const url = new URL(req.url, `http://${req.headers.host}`).searchParams.get('url')
+            if (!url) {
+              res.statusCode = 400
+              res.end(JSON.stringify({ error: 'Missing url parameter' }))
+              return
+            }
+
+            const token = req.headers['authorization']
+            
+            fetch(url, {
+              method: 'GET',
+              headers: {
+                'Authorization': token || '',
+                'Accept': '*/*'
+              }
+            })
+            .then(remoteRes => {
+              res.statusCode = remoteRes.status
+              return remoteRes.text()
+            })
+            .then(text => {
+              try {
+                // Try to parse as JSON to send a clean object
+                const data = JSON.parse(text)
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify(data))
+              } catch (e) {
+                // If not JSON, just send the raw text (which might be the "blob" content)
+                res.end(text)
+              }
+            })
+            .catch(err => {
+              res.statusCode = 500
+              res.end(JSON.stringify({ error: err.message }))
+            })
           } else {
             next()
           }

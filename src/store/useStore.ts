@@ -42,6 +42,7 @@ interface State {
   updateResponseEntry: (dataKey: string, answer: any) => void
   loadSamples: () => Promise<void>
   saveToDisk: () => Promise<void>
+  syncFromServer: (token: string, templateId: string) => Promise<void>
 }
 
 const buildComponentMap = (components: any): Record<string, Component> => {
@@ -240,6 +241,77 @@ export const useStore = create<State>((set, get) => ({
       console.log('Saved to disk successfully')
     } catch (error) {
       console.error('Save to disk failed:', error)
+    }
+  },
+
+  syncFromServer: async (token: string, templateId: string) => {
+    try {
+      const baseUrl = 'https://fasih-survey.bps.go.id/designer/api/template/develop'
+      
+      const fetchThroughProxy = async (targetUrl: string) => {
+        const res = await fetch(`/api/proxy?url=${encodeURIComponent(targetUrl)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          throw new Error(errData.error || `Proxy fetch failed: ${res.statusText}`)
+        }
+
+        const contentType = res.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          return res.json()
+        } else {
+          // It's a "blob" or raw text
+          const text = await res.text()
+          try {
+            return JSON.parse(text)
+          } catch (e) {
+            throw new Error('Received invalid data format from server (not a valid JSON)')
+          }
+        }
+      }
+
+      console.log('Fetching from BPS API...')
+      const [template, validation] = await Promise.all([
+        fetchThroughProxy(`${baseUrl}/file/${templateId}`),
+        fetchThroughProxy(`${baseUrl}/file-validation/${templateId}`)
+      ])
+
+      // Validation check: ensure we didn't receive an error object with status 200
+      if (template && template.success === false && template.message) {
+        throw new Error(`Server returned error: ${template.message}`)
+      }
+
+      // Basic structure validation
+      if (!template || typeof template !== 'object') {
+        throw new Error('Fetched template is invalid or empty')
+      }
+      
+      if (!template.id && !template.components) {
+        throw new Error('Fetched data does not appear to be a valid template')
+      }
+
+      console.log('Sending to local save API...')
+      // Save the fetched data to local disk using existing saveToDisk logic but with new data
+      const saveRes = await fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template, validation })
+      })
+
+      if (!saveRes.ok) {
+        const saveErr = await saveRes.json().catch(() => ({}))
+        throw new Error(saveErr.error || 'Failed to save synchronized data to disk')
+      }
+      
+      // Reload the local state
+      await get().loadSamples()
+      
+      console.log('Synchronized from server correctly')
+    } catch (error: any) {
+      console.error('Sync from server failed:', error)
+      throw error
     }
   }
 }))

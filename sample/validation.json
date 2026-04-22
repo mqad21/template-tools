@@ -1617,13 +1617,35 @@
       "dataKey": "jns_atap",
       "componentValidation": [
         "jns_bangunan",
-        "jns_atap"
+        "jns_atap",
+        "jns_lantai",
+        "jns_dinding"
       ],
       "validations": [
         {
           "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\n(jenis == '5' || jenis == '3') && atap > '1';",
           "message": "Jika apartemen atau rumah susun, maka bahan atap terluas seharusnya kode 1",
           "type": 2
+        },
+        {
+          "test": "let jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\njns_lantai > '5' && atap == '1';",
+          "message": "Jika atap beton maka lantai seharusnya bukan semen/bata merah, bambu, tanah, atau lainnya",
+          "type": 1
+        },
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\njns_dinding == 1 && atap > '4';",
+          "message": "Jika dinding tembok maka atap seharusnya beton, genteng, seng, dan asbes",
+          "type": 1
+        },
+        {
+          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\njns_dinding > 1 && atap == '1';",
+          "message": "Jika atap beton, dinding tidak boleh selain tembok",
+          "type": 2
+        },
+        {
+          "test": "let jns_lantai = getValue('jns_lantai')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\njns_lantai == 1 && atap > '4';",
+          "message": "Jika atap selain beton, genteng, seng, dan asbes maka seharusnya lantai bukan marmer/granit ",
+          "type": 1
         }
       ]
     }
