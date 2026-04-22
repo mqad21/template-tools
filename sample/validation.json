@@ -279,6 +279,31 @@
       ]
     },
     {
+      "dataKey": "tgl_lahir",
+      "componentValidation": [
+        "tgl_lahir@$ROW$",
+        "bln_lahir@$ROW$",
+        "thn_lahir@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "(function () {\r\n    var rawTgl = getValue('tgl_lahir@$ROW$');\r\n\r\n    if (!rawTgl || rawTgl === \"98\") return false;\r\n\r\n    return rawTgl !== rawTgl.trim();\r\n})();",
+          "message": "Tanggal Lahir tidak boleh mengandung spasi",
+          "type": 2
+        },
+        {
+          "test": "(function () {\r\n    var rawTgl = getValue('tgl_lahir@$ROW$');\r\n\r\n    if (!rawTgl) return false;\r\n\r\n    // allow 98 sebagai special case\r\n    if (rawTgl === \"98\") return false;\r\n\r\n    return !/^[1-9][0-9]?$/.test(rawTgl);\r\n})();",
+          "message": "Tanggal harus berupa angka yang valid (1–31 atau 98 untuk tidak diketahui)",
+          "type": 2
+        },
+        {
+          "test": "(function () {\r\n    var rawTgl = getValue('tgl_lahir@$ROW$');\r\n    var rawBln = getValue('bln_lahir@$ROW$')?.[0]?.value;\r\n    var rawThn = getValue('thn_lahir@$ROW$');\r\n\r\n    // skip kalau kosong atau sentinel 98\r\n    if (!rawTgl || rawTgl === \"98\" || !rawBln || !rawThn) {\r\n        return false;\r\n    }\r\n\r\n    var tgl = parseInt(rawTgl);\r\n    var bln = parseInt(rawBln);\r\n    var thn = parseInt(rawThn);\r\n\r\n    var maxDay = new Date(thn, bln, 0).getDate();\r\n\r\n    return !(tgl >= 1 && tgl <= maxDay);\r\n})();",
+          "message": "Tanggal tidak valid untuk bulan yang dipilih",
+          "type": 2
+        }
+      ]
+    },
+    {
       "dataKey": "nama_usaha_tambahan",
       "componentValidation": [
         "nama_usaha_tambahan"
