@@ -716,7 +716,7 @@
                 "is_usaha",
                 "ada_bang_usaha"
               ],
-              "render": true,
+              "render": false,
               "renderType": 1,
               "enableRemark": false,
               "presetMaster": false,
@@ -1058,6 +1058,22 @@
                   "value": "getValue('ket_editable')"
                 }
               ],
+              "isCapital": false,
+              "isEditable": false,
+              "isEditableList": true
+            },
+            {
+              "label": "\n<div style=\"font-weight: normal; border: 2px solid #7dd3fc; text-align: center; background-color: #e0f2fe; color: #0369a1; padding: 0.8em; border-radius: 0.5rem;\">\n    <b>INSTRUKSI PEMADANAN NIK:</b><br>\n    Silakan lakukan pengecekan NIK dengan menekan tombol <b>CEK NIK</b> di bawah ini.\n</div>",
+              "type": 3,
+              "dataKey": "banner_pemadanan_nik",
+              "required": false,
+              "disablePaste": false,
+              "tabular": false,
+              "encrypted": false,
+              "enableRemark": false,
+              "presetMaster": false,
+              "disableInput": false,
+              "disableInitial": false,
               "isCapital": false,
               "isEditable": false,
               "isEditableList": true
@@ -4919,7 +4935,7 @@
                   {
                     "label": "\r\n<div style=\"font-weight: normal; border: 2px solid #7dd3fc; text-align: center; background-color: #e0f2fe; color: #0369a1; padding: 0.8em; border-radius: 0.5rem;\">\r\n    <b>INSTRUKSI PEMADANAN NIK:</b><br>\r\n    Silakan lakukan pengecekan NIK dengan menekan tombol <b>CEK NIK</b> di bawah ini.\r\n</div>",
                     "type": 3,
-                    "dataKey": "banner_pemadanan_nik",
+                    "dataKey": "banner_pemadanan_nik_2",
                     "required": false,
                     "disablePaste": false,
                     "tabular": false,
