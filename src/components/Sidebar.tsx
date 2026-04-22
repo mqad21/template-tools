@@ -6,7 +6,7 @@ import {
   Calendar, Clock as ClockIcon, Image, File, MapPin,
   CheckCircle2, Radio as RadioIcon, ToggleLeft,
   Menu, FileDigit, Code2, PenLine, Star,
-  Database, ClipboardList
+  Database, ClipboardList, FileJson, ShieldCheck
 } from 'lucide-react'
 import { cn, stripHtml } from '../lib/utils'
 
@@ -285,6 +285,8 @@ export const Sidebar = () => {
       <div className="flex border-b bg-muted/30">
         {[
           { id: 'components', icon: Layers, label: 'Tree' },
+          { id: 'template', icon: FileJson, label: 'Template' },
+          { id: 'validation', icon: ShieldCheck, label: 'Validation' },
           { id: 'presets', icon: Database, label: 'Presets' },
           { id: 'responses', icon: ClipboardList, label: 'Response' },
         ].map((tab) => (
@@ -384,11 +386,16 @@ export const Sidebar = () => {
             <div className="p-2 space-y-4">
               <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-2">
                 <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground mb-4">
-                  {sidebarMode === 'presets' ? <Database className="w-6 h-6" /> : <ClipboardList className="w-6 h-6" />}
+                  {sidebarMode === 'template' ? <FileJson className="w-6 h-6" /> : sidebarMode === 'validation' ? <ShieldCheck className="w-6 h-6" /> : sidebarMode === 'presets' ? <Database className="w-6 h-6" /> : <ClipboardList className="w-6 h-6" />}
                 </div>
                 <h3 className="text-sm font-bold capitalize">{sidebarMode} Editor</h3>
                 <p className="text-[10px] text-muted-foreground leading-relaxed">
-                  You are now in full JSON editing mode. The middle panel shows the complete {sidebarMode.slice(0,-1)} structure.
+                  {sidebarMode === 'template' 
+                    ? "You are now editing the entire template structure. Be careful with the JSON syntax."
+                    : sidebarMode === 'validation'
+                    ? "You are now editing the validation rules. This is where you define logical tests and error messages."
+                    : `You are now in full JSON editing mode. The middle panel shows the complete ${sidebarMode.slice(0,-1)} structure.`
+                  }
                 </p>
                 <div className="pt-2">
                   <div className="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-1.5">

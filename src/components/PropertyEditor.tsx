@@ -17,6 +17,9 @@ export const PropertyEditor = () => {
     updateResponseEntry,
     setPreset,
     setResponse,
+    setTemplate,
+    setValidation,
+    saveToDisk,
     componentMap
   } = useStore()
 
@@ -57,20 +60,47 @@ export const PropertyEditor = () => {
       setLocalJSON(JSON.stringify(preset, null, 2))
     } else if (sidebarMode === 'responses') {
       setLocalJSON(JSON.stringify(response, null, 2))
+    } else if (sidebarMode === 'template') {
+      setLocalJSON(JSON.stringify(template, null, 2))
+    } else if (sidebarMode === 'validation') {
+      setLocalJSON(JSON.stringify(validation, null, 2))
     }
-  }, [sidebarMode, preset, response]) // Sync aggressively with external changes
+  }, [sidebarMode, preset, response, template, validation]) // Sync aggressively with external changes
+
+  // Debounced update logic
+  useEffect(() => {
+    if (!lastUpdateFromEditorRef.current) return;
+    
+    const timer = setTimeout(() => {
+      try {
+        const parsed = JSON.parse(localJSON)
+        setJsonError(null)
+        if (sidebarMode === 'presets') setPreset(parsed)
+        else if (sidebarMode === 'responses') setResponse(parsed)
+        else if (sidebarMode === 'template') setTemplate(parsed)
+        else if (sidebarMode === 'validation') setValidation(parsed)
+        
+        // Persist to disk
+        saveToDisk()
+      } catch (e: any) {
+        setJsonError(e.message)
+      } finally {
+        lastUpdateFromEditorRef.current = false;
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localJSON, sidebarMode, setPreset, setResponse, setTemplate, setValidation, saveToDisk]);
 
   const handleJSONChange = (val: string) => {
     setLocalJSON(val)
     lastUpdateFromEditorRef.current = true;
+    // Validation-only parsing to show errors immediately without updating store
     try {
-      const parsed = JSON.parse(val)
+      JSON.parse(val)
       setJsonError(null)
-      if (sidebarMode === 'presets') setPreset(parsed)
-      else if (sidebarMode === 'responses') setResponse(parsed)
     } catch (e: any) {
       setJsonError(e.message)
-      lastUpdateFromEditorRef.current = false;
     }
   }
 
@@ -112,7 +142,14 @@ export const PropertyEditor = () => {
             Real-time update enabled
           </div>
           <div className="w-px h-3 bg-zinc-800" />
-          <div>JSON Schema valid for Fasih Engine v2.0</div>
+          <div className="flex-1">JSON Schema valid for Fasih Engine v2.0</div>
+          <button 
+            onClick={() => saveToDisk()}
+            className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded transition-colors"
+          >
+            <Save className="w-3 h-3" />
+            FORCE SAVE
+          </button>
         </div>
       </div>
     )
@@ -133,6 +170,7 @@ export const PropertyEditor = () => {
     const updated = { ...localComponent, [key]: value }
     setLocalComponent(updated)
     updateComponent(selectedDataKey, updated)
+    saveToDisk()
   }
 
   const handleUpdateValidation = (index: number, key: string, value: any) => {
@@ -142,6 +180,7 @@ export const PropertyEditor = () => {
     const updated = { ...localValidation, validations: updatedValidations }
     setLocalValidation(updated)
     updateValidation(selectedDataKey, updated)
+    saveToDisk()
   }
 
   const addValidation = () => {
@@ -152,6 +191,7 @@ export const PropertyEditor = () => {
     }
     setLocalValidation(updated)
     updateValidation(selectedDataKey, updated)
+    saveToDisk()
   }
 
   return (

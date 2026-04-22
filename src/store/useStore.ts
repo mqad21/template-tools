@@ -25,12 +25,12 @@ interface State {
   validation: any
   preset: any
   response: any
-  sidebarMode: 'components' | 'presets' | 'responses'
+  sidebarMode: 'components' | 'presets' | 'responses' | 'template' | 'validation'
   selectedDataKey: string | null
   componentMap: Record<string, Component>
   
   // Actions
-  setSidebarMode: (mode: 'components' | 'presets' | 'responses') => void
+  setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
   setTemplate: (template: any) => void
   setValidation: (validation: any) => void
   setPreset: (preset: any) => void
@@ -41,6 +41,7 @@ interface State {
   updatePresetEntry: (dataKey: string, answer: any) => void
   updateResponseEntry: (dataKey: string, answer: any) => void
   loadSamples: () => Promise<void>
+  saveToDisk: () => Promise<void>
 }
 
 const buildComponentMap = (components: any): Record<string, Component> => {
@@ -224,6 +225,21 @@ export const useStore = create<State>((set, get) => ({
       })
     } catch (error) {
       console.error('Failed to load samples:', error)
+    }
+  },
+
+  saveToDisk: async () => {
+    const { template, validation, response, preset } = get()
+    try {
+      const res = await fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template, validation, response, preset })
+      })
+      if (!res.ok) throw new Error('Failed to save')
+      console.log('Saved to disk successfully')
+    } catch (error) {
+      console.error('Save to disk failed:', error)
     }
   }
 }))

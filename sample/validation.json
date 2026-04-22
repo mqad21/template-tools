@@ -266,6 +266,19 @@
       ]
     },
     {
+      "dataKey": "tgl_bln_thn_lahir",
+      "componentValidation": [
+        "tgl_bln_thn_lahir@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "(function () {\r\n    var val = getValue('tgl_bln_thn_lahir@$ROW$');\r\n    if (!val) return false;\r\n\r\n    // parsing aman (hindari timezone issue)\r\n    var parts = val.split('-');\r\n    if (parts.length !== 3) return false;\r\n\r\n    var year = parseInt(parts[0], 10);\r\n    var month = parseInt(parts[1], 10) - 1;\r\n    var day = parseInt(parts[2], 10);\r\n\r\n    var inputDate = new Date(year, month, day);\r\n\r\n    // validasi tanggal real\r\n    if (\r\n        inputDate.getFullYear() !== year ||\r\n        inputDate.getMonth() !== month ||\r\n        inputDate.getDate() !== day\r\n    ) return false;\r\n\r\n    // normalize hari ini (00:00)\r\n    var today = new Date();\r\n    today.setHours(0,0,0,0);\r\n\r\n    // ? inti validasi\r\n    return inputDate > today;\r\n})();",
+          "message": "Tanggal lahir tidak boleh melebihi hari ini",
+          "type": 2
+        }
+      ]
+    },
+    {
       "dataKey": "nama_usaha_tambahan",
       "componentValidation": [
         "nama_usaha_tambahan"
@@ -1601,15 +1614,16 @@
       ]
     },
     {
-      "dataKey": "kondisi_dinding",
+      "dataKey": "jns_atap",
       "componentValidation": [
-        "jns_dinding"
+        "jns_bangunan",
+        "jns_atap"
       ],
       "validations": [
         {
-          "test": "let jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\nlet jns_dinding = getValue('jns_dinding')?.[0]?.value ?? '';\n\n(jenis =='2' || jenis == '3') && jns_dindind > '1';",
-          "message": "",
-          "type": 0
+          "test": "let jenis = getValue('jns_bangunan')?.[0]?.value ?? '';\nlet atap = getValue('jns_atap')?.[0]?.value ?? '';\n\n(jenis == '5' || jenis == '3') && atap > '1';",
+          "message": "Jika apartemen atau rumah susun, maka bahan atap terluas seharusnya kode 1",
+          "type": 2
         }
       ]
     }
