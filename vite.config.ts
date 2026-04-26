@@ -13,35 +13,40 @@ export default defineConfig({
           if (req.method === 'POST' && req.url === '/api/save') {
             let body = ''
             req.on('data', chunk => { body += chunk })
-            req.on('end', () => {
+            req.on('end', async () => {
               try {
-                const { template, validation, response, preset } = JSON.parse(body)
+                const data = JSON.parse(body)
+                const { template, validation, response, preset } = data
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
                 
-                // Save to sample and public/sample
-                if (template) {
-                  fs.writeFileSync('./sample/template.json', JSON.stringify(template, null, 2))
-                  fs.writeFileSync('./public/sample/template.json', JSON.stringify(template, null, 2))
-                  if (!fs.existsSync('./history')) fs.mkdirSync('./history')
-                  fs.writeFileSync(`./history/template-${timestamp}.json`, JSON.stringify(template, null, 2))
+                const writeTasks: Promise<void>[] = []
+                
+                // Helper to save a file to multiple locations
+                const saveJson = (name: string, content: any, includeHistory = false) => {
+                  if (!content) return
+                  const json = JSON.stringify(content, null, 2)
+                  writeTasks.push(fs.promises.writeFile(`./sample/${name}.json`, json))
+                  writeTasks.push(fs.promises.writeFile(`./public/sample/${name}.json`, json))
+                  if (includeHistory) {
+                    writeTasks.push(fs.promises.writeFile(`./history/${name}-${timestamp}.json`, json))
+                  }
                 }
-                if (validation) {
-                  fs.writeFileSync('./sample/validation.json', JSON.stringify(validation, null, 2))
-                  fs.writeFileSync('./public/sample/validation.json', JSON.stringify(validation, null, 2))
-                  if (!fs.existsSync('./history')) fs.mkdirSync('./history')
-                  fs.writeFileSync(`./history/validation-${timestamp}.json`, JSON.stringify(validation, null, 2))
+
+                // Ensure history dir exists asynchronously
+                if (!fs.existsSync('./history')) {
+                  await fs.promises.mkdir('./history', { recursive: true })
                 }
-                if (response) {
-                  fs.writeFileSync('./sample/response.json', JSON.stringify(response, null, 2))
-                  fs.writeFileSync('./public/sample/response.json', JSON.stringify(response, null, 2))
-                }
-                if (preset) {
-                  fs.writeFileSync('./sample/preset.json', JSON.stringify(preset, null, 2))
-                  fs.writeFileSync('./public/sample/preset.json', JSON.stringify(preset, null, 2))
-                }
+
+                saveJson('template', template, true)
+                saveJson('validation', validation, true)
+                saveJson('response', response)
+                saveJson('preset', preset)
+                
+                await Promise.all(writeTasks)
                 
                 res.statusCode = 200
                 res.end(JSON.stringify({ status: 'ok' }))
+              } catch (err) {
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))

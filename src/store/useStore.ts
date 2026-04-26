@@ -72,6 +72,25 @@ const buildComponentMap = (components: any): Record<string, Component> => {
   return map
 }
 
+// Background sync worker initialization
+let syncWorker: Worker | null = null;
+if (typeof window !== 'undefined') {
+  try {
+    syncWorker = new Worker(new URL('./syncWorker.ts', import.meta.url), { type: 'module' });
+    syncWorker.onmessage = (e) => {
+      if (e.data.type === 'SAVE_SUCCESS') {
+        console.log('Background sync: Saved to disk successfully');
+      } else if (e.data.type === 'SAVE_ERROR') {
+        console.error('Background sync failed:', e.data.error);
+      }
+    };
+  } catch (e) {
+    console.error('Failed to initialize sync worker:', e);
+  }
+}
+
+let saveDebounceTimer: any = null;
+
 export const useStore = create<State>((set, get) => ({
   sidebarMode: 'components',
   template: null,
@@ -231,17 +250,17 @@ export const useStore = create<State>((set, get) => ({
 
   saveToDisk: async () => {
     const { template, validation, response, preset } = get()
-    try {
-      const res = await fetch('/api/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ template, validation, response, preset })
-      })
-      if (!res.ok) throw new Error('Failed to save')
-      console.log('Saved to disk successfully')
-    } catch (error) {
-      console.error('Save to disk failed:', error)
-    }
+    
+    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
+    
+    saveDebounceTimer = setTimeout(() => {
+      if (syncWorker) {
+        syncWorker.postMessage({
+          type: 'SAVE_TO_DISK',
+          data: { template, validation, response, preset }
+        });
+      }
+    }, 2000); // Wait for 2s of idle after a change to trigger background sync
   },
 
   syncFromServer: async (token: string, templateId: string) => {

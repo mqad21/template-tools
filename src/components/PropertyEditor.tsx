@@ -56,6 +56,8 @@ export const PropertyEditor = () => {
       return;
     }
 
+    if (sidebarMode === 'components') return;
+
     if (sidebarMode === 'presets') {
       setLocalJSON(JSON.stringify(preset, null, 2))
     } else if (sidebarMode === 'responses') {
@@ -165,21 +167,27 @@ export const PropertyEditor = () => {
     )
   }
 
-  const handleUpdateComponent = (key: string, value: any) => {
+  const handleLocalComponentChange = (key: string, value: any) => {
     if (!localComponent) return
-    const updated = { ...localComponent, [key]: value }
-    setLocalComponent(updated)
-    updateComponent(selectedDataKey, updated)
+    setLocalComponent({ ...localComponent, [key]: value })
+  }
+
+  const commitComponentUpdate = () => {
+    if (!localComponent || !selectedDataKey) return
+    updateComponent(selectedDataKey, localComponent)
     saveToDisk()
   }
 
-  const handleUpdateValidation = (index: number, key: string, value: any) => {
+  const handleLocalValidationChange = (index: number, key: string, value: any) => {
     if (!localValidation) return
     const updatedValidations = [...localValidation.validations]
     updatedValidations[index] = { ...updatedValidations[index], [key]: value }
-    const updated = { ...localValidation, validations: updatedValidations }
-    setLocalValidation(updated)
-    updateValidation(selectedDataKey, updated)
+    setLocalValidation({ ...localValidation, validations: updatedValidations })
+  }
+
+  const commitValidationUpdate = () => {
+    if (!localValidation || !selectedDataKey) return
+    updateValidation(selectedDataKey, localValidation)
     saveToDisk()
   }
 
@@ -216,7 +224,8 @@ export const PropertyEditor = () => {
               <textarea
                 className="w-full min-h-[80px] p-2 text-sm bg-muted/30 border rounded-md focus:ring-1 focus:ring-primary outline-none"
                 value={localComponent?.label || ''}
-                onChange={(e) => handleUpdateComponent('label', e.target.value)}
+                onChange={(e) => handleLocalComponentChange('label', e.target.value)}
+                onBlur={commitComponentUpdate}
               />
             </div>
             <div className="space-y-1.5">
@@ -253,7 +262,8 @@ export const PropertyEditor = () => {
                     )}
                     value={String(localComponent?.[field] || '')}
                     placeholder={`// Enter ${field} value/script...`}
-                    onChange={(e) => handleUpdateComponent(field, e.target.value)}
+                    onChange={(e) => handleLocalComponentChange(field, e.target.value)}
+                    onBlur={commitComponentUpdate}
                   />
                   <div className="absolute right-2 top-2 p-1 bg-zinc-800 text-zinc-400 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     <Code className="w-3 h-3" />
@@ -289,7 +299,8 @@ export const PropertyEditor = () => {
                     <textarea
                       className="w-full min-h-[100px] p-3 text-sm font-mono bg-zinc-950 text-zinc-200 border border-zinc-800 rounded-md focus:ring-1 focus:ring-primary outline-none"
                       value={rule.test}
-                      onChange={(e) => handleUpdateValidation(idx, 'test', e.target.value)}
+                      onChange={(e) => handleLocalValidationChange(idx, 'test', e.target.value)}
+                      onBlur={commitValidationUpdate}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -299,7 +310,8 @@ export const PropertyEditor = () => {
                         type="text"
                         className="w-full p-2 text-sm bg-background border rounded-md focus:ring-1 focus:ring-primary outline-none"
                         value={rule.message}
-                        onChange={(e) => handleUpdateValidation(idx, 'message', e.target.value)}
+                        onChange={(e) => handleLocalValidationChange(idx, 'message', e.target.value)}
+                        onBlur={commitValidationUpdate}
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -307,7 +319,8 @@ export const PropertyEditor = () => {
                       <select
                         className="w-full p-2 text-sm bg-background border rounded-md focus:ring-1 focus:ring-primary outline-none"
                         value={rule.type}
-                        onChange={(e) => handleUpdateValidation(idx, 'type', parseInt(e.target.value))}
+                        onChange={(e) => handleLocalValidationChange(idx, 'type', parseInt(e.target.value))}
+                        onBlur={commitValidationUpdate}
                       >
                         <option value={1}>Warning (1)</option>
                         <option value={2}>Error (2)</option>

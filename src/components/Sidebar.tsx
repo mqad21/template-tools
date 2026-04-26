@@ -70,12 +70,10 @@ const TYPE_ICONS: Record<number, any> = {
 
 const ComponentTreeItem = React.memo(({ 
   comp, 
-  depth = 0, 
-  searchTerm
+  depth = 0
 }: { 
   comp: Component, 
-  depth?: number, 
-  searchTerm: string
+  depth?: number
 }) => {
   const isSelected = useStore(state => state.selectedDataKey === comp.dataKey)
   const selectedDataKey = useStore(state => state.selectedDataKey)
@@ -223,7 +221,6 @@ const ComponentTreeItem = React.memo(({
                         key={child.dataKey || `${gIdx}-${cIdx}`} 
                         comp={child} 
                         depth={depth + 1} 
-                        searchTerm={searchTerm}
                       />
                     )
                   ))}
@@ -238,9 +235,27 @@ const ComponentTreeItem = React.memo(({
 })
 
 export const Sidebar = () => {
-  const { template, preset, response, sidebarMode, setSidebarMode, selectedDataKey, setSelectedDataKey } = useStore()
+  const { 
+    template, 
+    preset, 
+    response, 
+    sidebarMode, 
+    setSidebarMode, 
+    selectedDataKey, 
+    setSelectedDataKey,
+    componentMap
+  } = useStore()
   
   const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+    }, 200)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
   const searchRef = React.useRef<HTMLDivElement>(null)
 
   const dataList = useMemo(() => {
@@ -250,11 +265,23 @@ export const Sidebar = () => {
   }, [sidebarMode, preset, response])
 
   const filteredData = useMemo(() => {
-    if (!searchTerm) return dataList
+    const lowerSearch = debouncedSearchTerm.toLowerCase()
+    if (!lowerSearch) return dataList
     return dataList.filter((item: any) => 
-      item.dataKey.toLowerCase().includes(searchTerm.toLowerCase())
+      item.dataKey.toLowerCase().includes(lowerSearch)
     )
-  }, [dataList, searchTerm])
+  }, [dataList, debouncedSearchTerm])
+
+  const searchResults = useMemo(() => {
+    if (sidebarMode !== 'components' || debouncedSearchTerm.length < 2) return []
+    const lowerSearch = debouncedSearchTerm.toLowerCase()
+    return Object.values(componentMap)
+      .filter(c => 
+        (c.label && c.label.toLowerCase().includes(lowerSearch)) || 
+        (c.dataKey && c.dataKey.toLowerCase().includes(lowerSearch))
+      )
+      .slice(0, 50)
+  }, [debouncedSearchTerm, componentMap, sidebarMode])
 
   // Handle click outside to close search results
   useEffect(() => {
@@ -329,13 +356,9 @@ export const Sidebar = () => {
           {sidebarMode === 'components' && searchTerm.length >= 2 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-card border rounded-md shadow-xl z-50 max-h-[400px] overflow-y-auto custom-scrollbar animate-in slide-in-from-top-2 duration-200">
               <div className="p-1">
-                {Object.values(useStore.getState().componentMap)
-                  .filter(c => 
-                    c.label?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                    c.dataKey?.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .slice(0, 50)
-                  .map((result) => (
+                {searchResults.length === 0 && debouncedSearchTerm === searchTerm ? (
+                  <div className="p-4 text-center text-xs text-muted-foreground">No components found</div>
+                ) : searchResults.map((result) => (
                     <button
                       key={result.dataKey}
                       className="w-full flex flex-col items-start px-3 py-2 hover:bg-primary/5 rounded-sm transition-colors text-left border-b border-border/20 last:border-0 group/item"
@@ -375,7 +398,6 @@ export const Sidebar = () => {
                       <ComponentTreeItem
                         key={comp.dataKey || `${idx}-${cIdx}`}
                         comp={comp}
-                        searchTerm={searchTerm}
                       />
                     )
                   ))}

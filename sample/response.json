@@ -4,39 +4,39 @@
   "answers": [
     {
       "dataKey": "mulai",
-      "answer": "2026-04-22T11:52:07"
+      "answer": "2026-04-26T05:46:06"
     },
     {
       "dataKey": "kunjungan_1",
-      "answer": "2026-04-22T11:52:10"
+      "answer": "2026-04-26T05:46:11"
     },
     {
       "dataKey": "ec_mulai",
       "answer": false,
-      "updatedAt": 1776839067762,
-      "createdAt": 1776839067762
+      "updatedAt": 1777213267950,
+      "createdAt": 1777213267950
     },
     {
       "dataKey": "mode",
       "answer": "CAPI",
-      "updatedAt": 1776839067762,
-      "createdAt": 1776839067607
+      "updatedAt": 1777213267948,
+      "createdAt": 1777213263283
     },
     {
       "dataKey": "prov",
-      "answer": "Prov. Lampung"
+      "answer": "[31] DKI JAKARTA"
     },
     {
       "dataKey": "kab",
-      "answer": "Kab. Mesuji"
+      "answer": "[72] JAKARTA TIMUR"
     },
     {
       "dataKey": "kec",
-      "answer": "000"
+      "answer": "[060] JATINEGARA"
     },
     {
       "dataKey": "desa",
-      "answer": "000"
+      "answer": "[001] BIDARA CINA"
     },
     {
       "dataKey": "klas_desa",
@@ -44,11 +44,11 @@
     },
     {
       "dataKey": "kode_sls",
-      "answer": "0432"
+      "answer": "0111"
     },
     {
       "dataKey": "nama_sls",
-      "answer": "SLS_0432"
+      "answer": "RT 010 RW 009"
     },
     {
       "dataKey": "ubah_sls",
@@ -64,70 +64,102 @@
     {
       "dataKey": "sudah",
       "answer": true,
-      "updatedAt": 1776839067762,
-      "createdAt": 1776839067611
+      "updatedAt": 1777213267947,
+      "createdAt": 1777213263288
     },
     {
       "dataKey": "tahun_survei",
       "answer": 2026,
-      "updatedAt": 1776839067760,
-      "createdAt": 1776839067611
+      "updatedAt": 1777213267872,
+      "createdAt": 1777213263289
     },
     {
       "dataKey": "tahun_lalu",
       "answer": 2025,
-      "updatedAt": 1776839067760,
-      "createdAt": 1776839067760
+      "updatedAt": 1777213267934,
+      "createdAt": 1777213267873
     },
     {
       "dataKey": "var_desa",
-      "answer": "roab0000",
-      "updatedAt": 1776839067759,
-      "createdAt": 1776839067759
+      "answer": "3172060001",
+      "updatedAt": 1777213267872,
+      "createdAt": 1777213267872
     },
     {
       "dataKey": "is_keluarga",
-      "answer": "1"
+      "answer": 1
+    },
+    {
+      "dataKey": "nik_anggta_lain_prelist",
+      "answer": 3401026810980001
     },
     {
       "dataKey": "is_usaha",
-      "answer": 1,
-      "updatedAt": 1776839067742,
-      "createdAt": 1776839067614
+      "answer": 1
     },
     {
       "dataKey": "is_prelist",
-      "answer": 1,
-      "updatedAt": 1776839067727,
-      "createdAt": 1776839067614
+      "answer": 1
     },
     {
       "dataKey": "ec_non_keluarga",
-      "answer": true,
-      "updatedAt": 1776839067778,
-      "createdAt": 1776839067728
+      "answer": false,
+      "updatedAt": 1777213269393,
+      "createdAt": 1777213267811
     },
     {
       "dataKey": "ket_editable",
       "answer": "Perbaiki jika terdapat kesalahan penulisan",
-      "updatedAt": 1776839067741,
-      "createdAt": 1776839067727
+      "updatedAt": 1777213267809,
+      "createdAt": 1777213267809
     },
     {
       "dataKey": "ub",
       "answer": "",
-      "updatedAt": 1776839067733,
-      "createdAt": 1776839067726
+      "updatedAt": 1777213268951,
+      "createdAt": 1777213265988
+    },
+    {
+      "dataKey": "jns_usaha",
+      "answer": "keluarga"
+    },
+    {
+      "dataKey": "nik_prelist",
+      "answer": 1271202112990001
     },
     {
       "dataKey": "nama_principal",
-      "answer": " / ",
-      "updatedAt": 1776839067759,
-      "createdAt": 1776839067729
+      "answer": "MUHAMMAD QADRI / LAILA AZZAMAH IBDA NAFISA",
+      "updatedAt": 1777213268102,
+      "createdAt": 1777213267865
     },
     {
       "dataKey": "nama_usaha_bang",
-      "answer": "Maula Azka Fatihah, A.Md.Stat."
+      "answer": "Qadri"
+    },
+    {
+      "dataKey": "no_kk",
+      "answer": 3175073010230012
+    },
+    {
+      "dataKey": "nik",
+      "answer": "1271202112990005"
+    },
+    {
+      "dataKey": "nama_kk",
+      "answer": "MUHAMMAD QADRI"
+    },
+    {
+      "dataKey": "nama_ak_lain",
+      "answer": "LAILA AZZAMAH IBDA NAFISA"
+    },
+    {
+      "dataKey": "alamat_klrg",
+      "answer": "JALAN H.HASBI NO.9 "
+    },
+    {
+      "dataKey": "jumlah_usaha_prelist",
+      "answer": 0
     },
     {
       "dataKey": "kode_keberedaan_keluarga",
@@ -145,8 +177,8 @@
           "label": "1. Ditemukan"
         }
       ],
-      "updatedAt": 1776839067759,
-      "createdAt": 1776839067759
+      "updatedAt": 1777213267864,
+      "createdAt": 1777213267864
     },
     {
       "dataKey": "kode_keluarga_new",
@@ -172,8 +204,8 @@
           "label": "5. Tidak dapat ditemui sampai akhir pendataan"
         }
       ],
-      "updatedAt": 1776839067751,
-      "createdAt": 1776839067751
+      "updatedAt": 1777213267846,
+      "createdAt": 1777213267846
     },
     {
       "dataKey": "kode_bangunan_new",
@@ -195,8 +227,8 @@
           "label": "4. Ganda"
         }
       ],
-      "updatedAt": 1776839067744,
-      "createdAt": 1776839067742
+      "updatedAt": 1777213267810,
+      "createdAt": 1777213267810
     },
     {
       "dataKey": "ada_keluarga",
@@ -207,8 +239,8 @@
           "open": false
         }
       ],
-      "updatedAt": 1776839067779,
-      "createdAt": 1776839067751
+      "updatedAt": 1777213269399,
+      "createdAt": 1777213267846
     },
     {
       "dataKey": "ada_bang_usaha",
@@ -219,26 +251,57 @@
           "open": false
         }
       ],
-      "updatedAt": 1776839067778,
-      "createdAt": 1776839067742
+      "updatedAt": 1777213269393,
+      "createdAt": 1777213267811
+    },
+    {
+      "dataKey": "alamat_prelist",
+      "answer": "JALAN H.HASBI NO.9 "
+    },
+    {
+      "dataKey": "domisili",
+      "answer": [
+        {
+          "label": "1. Ya Sesuai KK",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "jalan_domisili",
+      "answer": "Jalan Statistik 1, KSPB"
+    },
+    {
+      "dataKey": "nomor_domisili",
+      "answer": "No. B/8"
     },
     {
       "dataKey": "ec_keluarga",
       "answer": true,
-      "updatedAt": 1776839067779,
-      "createdAt": 1776839067729
+      "updatedAt": 1777213269400,
+      "createdAt": 1777213267818
     },
     {
       "dataKey": "no_keluarga_terbesar",
       "answer": null,
-      "updatedAt": 1776839067725,
-      "createdAt": 1776839067630
+      "updatedAt": 1777213265984,
+      "createdAt": 1777213263321
+    },
+    {
+      "dataKey": "no_keluarga",
+      "answer": 1
     },
     {
       "dataKey": "no_bangunan_terbesar",
       "answer": null,
-      "updatedAt": 1776839067725,
-      "createdAt": 1776839067631
+      "updatedAt": 1777213265983,
+      "createdAt": 1777213263327
+    },
+    {
+      "dataKey": "no_bang",
+      "answer": 1
     },
     {
       "dataKey": "kode_bang",
@@ -249,8 +312,8 @@
           "open": false
         }
       ],
-      "updatedAt": 1776839067779,
-      "createdAt": 1776839067729
+      "updatedAt": 1777213269400,
+      "createdAt": 1777213267818
     },
     {
       "dataKey": "pilihan_kode_bang",
@@ -268,12 +331,45 @@
           "label": "9. Non Respon"
         }
       ],
-      "updatedAt": 1776839067779,
-      "createdAt": 1776839067729
+      "updatedAt": 1777213269400,
+      "createdAt": 1777213267818
+    },
+    {
+      "dataKey": "geotag",
+      "answer": [
+        {
+          "label": "https://maps.google.com/maps?q=-6.2413905511828105,106.9090061519712",
+          "value": {
+            "latitude": -6.2413905511828105,
+            "longitude": 106.9090061519712,
+            "accuracy": 103
+          }
+        },
+        {
+          "label": "map",
+          "value": "https://maps.google.com/maps?q=-6.2413905511828105,106.9090061519712"
+        },
+        {
+          "label": "latitude",
+          "value": -6.2413905511828105
+        },
+        {
+          "label": "longitude",
+          "value": 106.9090061519712
+        },
+        {
+          "label": "accuracy",
+          "value": 103
+        }
+      ]
+    },
+    {
+      "dataKey": "jumlah_ak_kk",
+      "answer": 2
     },
     {
       "dataKey": "jumlah_ak",
-      "answer": 1
+      "answer": 5
     },
     {
       "dataKey": "usaha_kos",
@@ -309,10 +405,109 @@
       ]
     },
     {
+      "dataKey": "usaha_konstruksi",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "usaha_lain",
+      "answer": [
+        {
+          "label": "1. Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "tanaman_pangan",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "hortikultura",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "perkebunan",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "peternakan",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "kehutanan",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "perikanan",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "jasa_pertanian",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
       "dataKey": "jumlah_usaha_ditemukan",
-      "answer": "0",
-      "updatedAt": 1776839067741,
-      "createdAt": 1776839067711
+      "answer": "3",
+      "updatedAt": 1777213269383,
+      "createdAt": 1777213265854
     },
     {
       "dataKey": "list_kbli_mbg",
@@ -412,14 +607,39 @@
         86102,
         86901
       ],
-      "updatedAt": 1776839067725,
-      "createdAt": 1776839067640
+      "updatedAt": 1777213265982,
+      "createdAt": 1777213263349
     },
     {
       "dataKey": "usaha_gabung",
-      "answer": [],
-      "updatedAt": 1776839067740,
-      "createdAt": 1776839067710
+      "answer": [
+        {
+          "value": 1001,
+          "label": "Ayam Ungkap Aleela",
+          "is_prelist": "0",
+          "nousaha": 1,
+          "id_pmss": "",
+          "idsbr": ""
+        },
+        {
+          "value": 1002,
+          "label": "Aleela Solutions",
+          "is_prelist": "0",
+          "nousaha": 2,
+          "id_pmss": "",
+          "idsbr": ""
+        },
+        {
+          "value": 3001,
+          "label": "Tambal Ban",
+          "is_prelist": "0",
+          "nousaha": 3,
+          "id_pmss": "",
+          "idsbr": ""
+        }
+      ],
+      "updatedAt": 1777213268955,
+      "createdAt": 1777213265830
     },
     {
       "dataKey": "list_kbli_halal",
@@ -770,14 +990,14 @@
         46902,
         46491
       ],
-      "updatedAt": 1776839067710,
-      "createdAt": 1776839067641
+      "updatedAt": 1777213265829,
+      "createdAt": 1777213263358
     },
     {
       "dataKey": "list_kbli_sekolah",
       "answer": "85111,85112,85121,85122,85143,85144,85152,85153,85154,85155,85161,85162,85163,85210,85220,85230,85240,85251,85252,85261,85262,85263,85270",
-      "updatedAt": 1776839067710,
-      "createdAt": 1776839067641
+      "updatedAt": 1777213265829,
+      "createdAt": 1777213263359
     },
     {
       "dataKey": "list_kbli_bpom",
@@ -877,29 +1097,54 @@
         10739,
         10413
       ],
-      "updatedAt": 1776839067709,
-      "createdAt": 1776839067642
+      "updatedAt": 1777213265829,
+      "createdAt": 1777213263360
     },
     {
       "dataKey": "ec_ada_usaha",
       "answer": true,
-      "updatedAt": 1776839067710,
-      "createdAt": 1776839067710
+      "updatedAt": 1777213265829,
+      "createdAt": 1777213265829
     },
     {
-      "dataKey": "status_pegawai",
-      "answer": "PNS"
+      "dataKey": "list_individu_dtsen_prelist",
+      "answer": [
+        {
+          "value": 1,
+          "nama_ak": "MUHAMMAD QADRI",
+          "is_prelist": 1
+        },
+        {
+          "value": 2,
+          "nama_ak": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": 1
+        }
+      ]
+    },
+    {
+      "dataKey": "label_usaha",
+      "answer": "\n    <ul style=\"list-style-type: disc; padding-left: 20px; margin: 0;\">\n      <li>Usaha Online</li><li>Usaha Lainnya</li>\n    </ul>\n  ",
+      "updatedAt": 1777213267820,
+      "createdAt": 1777213265826
     },
     {
       "dataKey": "tambah_dtsen",
       "answer": [
         {
-          "label": "lastId#1",
+          "label": "lastId#4",
           "value": "0"
         },
         {
-          "value": 1,
-          "label": "andri"
+          "value": 2,
+          "label": "PRABOWO SUBIANTO"
+        },
+        {
+          "value": 3,
+          "label": "GIBRAN RAKABUMING RAKA"
+        },
+        {
+          "value": 4,
+          "label": "ANAK TIGA"
         }
       ]
     },
@@ -907,141 +1152,1998 @@
       "dataKey": "gabung_dtsen",
       "answer": [
         {
-          "value": 101,
-          "label": "andri",
-          "is_prelist": "0"
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1
+        },
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1",
+          "no_urut": 2
+        },
+        {
+          "value": 102,
+          "label": "PRABOWO SUBIANTO",
+          "is_prelist": "0",
+          "no_urut": 3
+        },
+        {
+          "value": 103,
+          "label": "GIBRAN RAKABUMING RAKA",
+          "is_prelist": "0",
+          "no_urut": 4
+        },
+        {
+          "value": 104,
+          "label": "ANAK TIGA",
+          "is_prelist": "0",
+          "no_urut": 5
         }
       ],
-      "updatedAt": 1776839067714,
-      "createdAt": 1776839067714
+      "updatedAt": 1777213268136,
+      "createdAt": 1777213265988
     },
     {
       "dataKey": "art_pengusaha",
-      "answer": [],
-      "updatedAt": 1776839067725,
-      "createdAt": 1776839067697
-    },
-    {
-      "dataKey": "no_urut_kk#101",
-      "answer": 101,
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067694
-    },
-    {
-      "dataKey": "nama_dtsen#101",
-      "answer": "andri",
-      "updatedAt": 1776839067721,
-      "createdAt": 1776839067695
-    },
-    {
-      "dataKey": "tgl_lahir#101",
-      "answer": "012"
-    },
-    {
-      "dataKey": "bln_lahir#101",
       "answer": [
         {
-          "label": "SEPTEMBER",
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1,
+          "umur": "26",
+          "nik": "1271202112990005",
+          "jk": [
+            {
+              "value": "1",
+              "label": "Laki-laki"
+            }
+          ]
+        },
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1",
+          "no_urut": 2,
+          "umur": "27",
+          "nik": 3401026810980001,
+          "jk": [
+            {
+              "label": "2. Perempuan",
+              "description": "",
+              "value": "2",
+              "open": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": 1777213268268,
+      "createdAt": 1777213266114
+    },
+    {
+      "dataKey": "no_urut_kk#1",
+      "answer": 1,
+      "updatedAt": 1777213265632,
+      "createdAt": 1777213265193
+    },
+    {
+      "dataKey": "nama_dtsen#1",
+      "answer": "MUHAMMAD QADRI",
+      "updatedAt": 1777213268281,
+      "createdAt": 1777213265195
+    },
+    {
+      "dataKey": "nik_dtsen#1",
+      "answer": "1271202112990005"
+    },
+    {
+      "dataKey": "ec_anggota_keluarga#1",
+      "answer": true,
+      "updatedAt": 1777213265783,
+      "createdAt": 1777213265195
+    },
+    {
+      "dataKey": "hubungan#1",
+      "answer": [
+        {
+          "label": "Kepala Keluarga",
           "description": "",
-          "value": "09",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265824,
+      "createdAt": 1777213265200
+    },
+    {
+      "dataKey": "keberadaan_dtsen#1",
+      "answer": [
+        {
+          "label": "1. Tinggal di rumah/tempat tinggal ini",
+          "description": "",
+          "value": "1",
           "open": false
         }
       ]
     },
     {
-      "dataKey": "thn_lahir#101",
-      "answer": "1999"
+      "dataKey": "status_kawin#1",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kawin/nikah"
+        }
+      ],
+      "updatedAt": 1777213265825,
+      "createdAt": 1777213265202
     },
     {
-      "dataKey": "umur#101",
+      "dataKey": "jk_dtsen#1",
+      "answer": [
+        {
+          "value": "1",
+          "label": "Laki-laki"
+        }
+      ]
+    },
+    {
+      "dataKey": "tgl_lahir#1",
+      "answer": 21
+    },
+    {
+      "dataKey": "bln_lahir#1",
+      "answer": [
+        {
+          "value": "12",
+          "label": "Desember"
+        }
+      ]
+    },
+    {
+      "dataKey": "thn_lahir#1",
+      "answer": 1999
+    },
+    {
+      "dataKey": "umur#1",
       "answer": "26",
-      "updatedAt": 1776839067699,
-      "createdAt": 1776839067696
+      "updatedAt": 1777213265625,
+      "createdAt": 1777213265196
     },
     {
-      "dataKey": "label_usaha#101",
-      "answer": "\n    <ul style=\"list-style-type: disc; padding-left: 20px; margin: 0;\">\n      <li>Usaha Online</li>\n    </ul>\n  ",
-      "updatedAt": 1776839067730,
-      "createdAt": 1776839067697
+      "dataKey": "art_ada_usaha#1",
+      "answer": [
+        {
+          "label": "Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "no_urut_kk#2",
+      "answer": 2,
+      "updatedAt": 1777213265622,
+      "createdAt": 1777213265219
+    },
+    {
+      "dataKey": "nama_dtsen#2",
+      "answer": "LAILA AZZAMAH IBDA NAFISA",
+      "updatedAt": 1777213268401,
+      "createdAt": 1777213265220
+    },
+    {
+      "dataKey": "nik_dtsen#2",
+      "answer": 3401026810980001
+    },
+    {
+      "dataKey": "ec_anggota_keluarga#2",
+      "answer": true,
+      "updatedAt": 1777213265730,
+      "createdAt": 1777213265221
+    },
+    {
+      "dataKey": "hubungan#2",
+      "answer": [
+        {
+          "label": "Istri/Suami",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265782,
+      "createdAt": 1777213265225
+    },
+    {
+      "dataKey": "keberadaan_dtsen#2",
+      "answer": [
+        {
+          "label": "1. Tinggal di rumah/tempat tinggal ini",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "alamat_dn#2",
+      "answer": [
+        {
+          "label": "1. Sesuai KK dan KTP",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "status_kawin#2",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kawin/nikah"
+        }
+      ],
+      "updatedAt": 1777213265783,
+      "createdAt": 1777213265227
+    },
+    {
+      "dataKey": "jk_dtsen#2",
+      "answer": [
+        {
+          "label": "2. Perempuan",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "tgl_lahir#2",
+      "answer": 28
+    },
+    {
+      "dataKey": "bln_lahir#2",
+      "answer": [
+        {
+          "value": "10",
+          "label": "Oktober"
+        }
+      ]
+    },
+    {
+      "dataKey": "thn_lahir#2",
+      "answer": 1998
+    },
+    {
+      "dataKey": "umur#2",
+      "answer": "27",
+      "updatedAt": 1777213265619,
+      "createdAt": 1777213265222
+    },
+    {
+      "dataKey": "art_ada_usaha#2",
+      "answer": [
+        {
+          "label": "Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "no_urut_kk#102",
+      "answer": 3,
+      "updatedAt": 1777213265616,
+      "createdAt": 1777213265243
+    },
+    {
+      "dataKey": "nama_dtsen#102",
+      "answer": "PRABOWO SUBIANTO",
+      "updatedAt": 1777213268550,
+      "createdAt": 1777213265245
+    },
+    {
+      "dataKey": "nik_dtsen#102",
+      "answer": "1271206101100001"
+    },
+    {
+      "dataKey": "ec_anggota_keluarga#102",
+      "answer": true,
+      "updatedAt": 1777213265689,
+      "createdAt": 1777213265245
+    },
+    {
+      "dataKey": "hubungan#102",
+      "answer": [
+        {
+          "label": "Anak",
+          "description": "",
+          "value": "3",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265729,
+      "createdAt": 1777213265249
+    },
+    {
+      "dataKey": "keberadaan_dtsen#102",
+      "answer": [
+        {
+          "label": "1. Tinggal di rumah/tempat tinggal ini",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "status_kawin#102",
+      "answer": [
+        {
+          "label": "1. Belum kawin",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265730,
+      "createdAt": 1777213265251
+    },
+    {
+      "dataKey": "jk_dtsen#102",
+      "answer": [
+        {
+          "label": "2. Perempuan",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "tgl_lahir#102",
+      "answer": "21"
+    },
+    {
+      "dataKey": "bln_lahir#102",
+      "answer": [
+        {
+          "label": "01 - JANUARI",
+          "description": "",
+          "value": "01",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "thn_lahir#102",
+      "answer": "2010"
+    },
+    {
+      "dataKey": "umur#102",
+      "answer": "16",
+      "updatedAt": 1777213265614,
+      "createdAt": 1777213265246
+    },
+    {
+      "dataKey": "no_urut_kk#103",
+      "answer": 4,
+      "updatedAt": 1777213265612,
+      "createdAt": 1777213265269
+    },
+    {
+      "dataKey": "nama_dtsen#103",
+      "answer": "GIBRAN RAKABUMING RAKA",
+      "updatedAt": 1777213268695,
+      "createdAt": 1777213265271
+    },
+    {
+      "dataKey": "nik_dtsen#103",
+      "answer": "1271202112250001"
+    },
+    {
+      "dataKey": "ec_anggota_keluarga#103",
+      "answer": true,
+      "updatedAt": 1777213265658,
+      "createdAt": 1777213265271
+    },
+    {
+      "dataKey": "hubungan#103",
+      "answer": [
+        {
+          "label": "Anak",
+          "description": "",
+          "value": "3",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265687,
+      "createdAt": 1777213265275
+    },
+    {
+      "dataKey": "keberadaan_dtsen#103",
+      "answer": [
+        {
+          "label": "1. Tinggal di rumah/tempat tinggal ini",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "alamat_dn#103",
+      "answer": [
+        {
+          "label": "1. Sesuai KK dan KTP",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "status_kawin#103",
+      "answer": [
+        {
+          "label": "1. Belum kawin",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265688,
+      "createdAt": 1777213265277
+    },
+    {
+      "dataKey": "jk_dtsen#103",
+      "answer": [
+        {
+          "label": "1. Laki-laki",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "tgl_lahir#103",
+      "answer": "21"
+    },
+    {
+      "dataKey": "bln_lahir#103",
+      "answer": [
+        {
+          "label": "12 - DESEMBER",
+          "description": "",
+          "value": "12",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "thn_lahir#103",
+      "answer": "2000"
+    },
+    {
+      "dataKey": "umur#103",
+      "answer": "25",
+      "updatedAt": 1777213265610,
+      "createdAt": 1777213265272
+    },
+    {
+      "dataKey": "art_ada_usaha#103",
+      "answer": [
+        {
+          "label": "Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "no_urut_kk#104",
+      "answer": 5,
+      "updatedAt": 1777213265608,
+      "createdAt": 1777213265295
+    },
+    {
+      "dataKey": "nama_dtsen#104",
+      "answer": "ANAK TIGA",
+      "updatedAt": 1777213268823,
+      "createdAt": 1777213265297
+    },
+    {
+      "dataKey": "ec_anggota_keluarga#104",
+      "answer": true,
+      "updatedAt": 1777213265634,
+      "createdAt": 1777213265297
+    },
+    {
+      "dataKey": "keberadaan_dtsen#104",
+      "answer": [
+        {
+          "label": "1. Tinggal di rumah/tempat tinggal ini",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "umur#104",
+      "answer": "",
+      "updatedAt": 1777213265606,
+      "createdAt": 1777213265298
     },
     {
       "dataKey": "nama_usaha_tambahan",
       "answer": [
         {
-          "label": "lastId#0",
+          "label": "lastId#1",
           "value": "0"
+        },
+        {
+          "value": 1,
+          "label": "Tambal Ban"
         }
       ]
     },
     {
-      "dataKey": "dtsen_nama_kk",
+      "dataKey": "prov_l#1001",
+      "answer": "[31] DKI JAKARTA",
+      "updatedAt": 1777213267872,
+      "createdAt": 1777213263919
+    },
+    {
+      "dataKey": "kab_l#1001",
+      "answer": "[72] JAKARTA TIMUR",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213263919
+    },
+    {
+      "dataKey": "kec_l#1001",
+      "answer": "[060] JATINEGARA",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213263920
+    },
+    {
+      "dataKey": "desa_l#1001",
+      "answer": "[001] BIDARA CINA",
+      "updatedAt": 1777213267870,
+      "createdAt": 1777213263920
+    },
+    {
+      "dataKey": "kodesls_l#1001",
+      "answer": "0111",
+      "updatedAt": 1777213265605,
+      "createdAt": 1777213263920
+    },
+    {
+      "dataKey": "sls_l#1001",
+      "answer": "RT 010 RW 009",
+      "updatedAt": 1777213265605,
+      "createdAt": 1777213263920
+    },
+    {
+      "dataKey": "no_bang_l#1001",
+      "answer": 1,
+      "updatedAt": 1777213265605,
+      "createdAt": 1777213263921
+    },
+    {
+      "dataKey": "no_usaha#1001",
+      "answer": 1,
+      "updatedAt": 1777213268957,
+      "createdAt": 1777213263921
+    },
+    {
+      "dataKey": "ec_mulai_L#1001",
+      "answer": true,
+      "updatedAt": 1777213265605,
+      "createdAt": 1777213263921
+    },
+    {
+      "dataKey": "nama_usaha#1001",
+      "answer": "Ayam Ungkap Aleela",
+      "updatedAt": 1777213268958,
+      "createdAt": 1777213263921
+    },
+    {
+      "dataKey": "keberadaan_usaha#1001",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213269345,
+      "createdAt": 1777213263938
+    },
+    {
+      "dataKey": "nama_usaha_edit#1001",
+      "answer": "Ayam Ungkap Aleela"
+    },
+    {
+      "dataKey": "is_prelist2#1001",
+      "answer": "0",
+      "updatedAt": 1777213268963,
+      "createdAt": 1777213263933
+    },
+    {
+      "dataKey": "id_pmss#1001",
       "answer": "",
-      "updatedAt": 1776839067725,
-      "createdAt": 1776839067725
+      "updatedAt": 1777213268967,
+      "createdAt": 1777213263937
+    },
+    {
+      "dataKey": "idsbr_l#1001",
+      "answer": "",
+      "updatedAt": 1777213268968,
+      "createdAt": 1777213263937
+    },
+    {
+      "dataKey": "kode_keberadaan_usaha#1001",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru"
+        },
+        {
+          "value": "9",
+          "label": "9. Non Respon"
+        }
+      ],
+      "updatedAt": 1777213269099,
+      "createdAt": 1777213263938
+    },
+    {
+      "dataKey": "nama_komersial#1001",
+      "answer": "Ayam Ungkap Aleela"
+    },
+    {
+      "dataKey": "alamat_usaha#1001",
+      "answer": "Jalan Statistik 1, KSPB No. B/8",
+      "updatedAt": 1777213265604,
+      "createdAt": 1777213264051
+    },
+    {
+      "dataKey": "kode_pos#1001",
+      "answer": "",
+      "updatedAt": 1777213265604,
+      "createdAt": 1777213264051
+    },
+    {
+      "dataKey": "ec_usaha_respons#1001",
+      "answer": true,
+      "updatedAt": 1777213269346,
+      "createdAt": 1777213263939
+    },
+    {
+      "dataKey": "pengusaha_var#1001",
+      "answer": [
+        {
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1,
+          "umur": "26",
+          "nik": "1271202112990005",
+          "jk": [
+            {
+              "value": "1",
+              "label": "Laki-laki"
+            }
+          ]
+        }
+      ],
+      "updatedAt": 1777213269342,
+      "createdAt": 1777213264327
+    },
+    {
+      "dataKey": "jk_var#1001",
+      "answer": "Laki-laki",
+      "updatedAt": 1777213269344,
+      "createdAt": 1777213264103
+    },
+    {
+      "dataKey": "umur_pj_var#1001",
+      "answer": "26",
+      "updatedAt": 1777213269344,
+      "createdAt": 1777213264104
+    },
+    {
+      "dataKey": "nik_pengusaha_var#1001",
+      "answer": "1271202112990005",
+      "updatedAt": 1777213269345,
+      "createdAt": 1777213264104
+    },
+    {
+      "dataKey": "var_kbli#1001",
+      "answer": [
+        {
+          "value": "999999",
+          "label": "Pilih dari Master KBLI",
+          "open": false,
+          "description": ""
+        }
+      ],
+      "updatedAt": 1777213265531,
+      "createdAt": 1777213264106
+    },
+    {
+      "dataKey": "kategori#1001",
+      "answer": "",
+      "updatedAt": 1777213265498,
+      "createdAt": 1777213264112
+    },
+    {
+      "dataKey": "msg_error_kategori#1001",
+      "answer": "",
+      "updatedAt": 1777213268965,
+      "createdAt": 1777213263931
+    },
+    {
+      "dataKey": "var_hiden_pml#1001",
+      "answer": "{\"locale\":\"id\",\"formMode\":1,\"initialMode\":2,\"template\":{\"id\":\"2230fffc-5799-4c8a-a585-12ac286c5bf9\",\"version\":\"4.0.013\",\"title\":\"SENSUS EKONOMI 2026 (Rollout)\",\"acronym\":\"SE2026\",\"description\":\"SENSUS EKONOMI 2026 Rollout\"},\"validation\":{\"version\":\"4.0.013\"},\"response\":{\"createdAt\":\"2026-04-21T06:56:30.538Z\",\"createdBy\":\"Maula Azka Fatihah A.Md.Stat.\"},\"user\":{\"username\":\"tester\",\"role\":\"Developer\"}}",
+      "updatedAt": 1777213265497,
+      "createdAt": 1777213263857
+    },
+    {
+      "dataKey": "jaringan#1001",
+      "answer": [
+        {
+          "label": "6. Unit pembantu/penunjang",
+          "description": "",
+          "value": "6",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "ec_usaha_lanjutan#1001",
+      "answer": true,
+      "updatedAt": 1777213269346,
+      "createdAt": 1777213263940
+    },
+    {
+      "dataKey": "total_tk_jk#1001",
+      "answer": 0,
+      "updatedAt": 1777213265496,
+      "createdAt": 1777213264203
+    },
+    {
+      "dataKey": "total_tk_bayar#1001",
+      "answer": 0,
+      "updatedAt": 1777213265495,
+      "createdAt": 1777213264205
+    },
+    {
+      "dataKey": "ec_usaha_bulan#1001",
+      "answer": false,
+      "updatedAt": 1777213269346,
+      "createdAt": 1777213263940
+    },
+    {
+      "dataKey": "ec_usaha_tahun#1001",
+      "answer": false,
+      "updatedAt": 1777213269354,
+      "createdAt": 1777213263985
+    },
+    {
+      "dataKey": "var_narasi#1001",
+      "answer": "",
+      "updatedAt": 1777213265520,
+      "createdAt": 1777213264128
+    },
+    {
+      "dataKey": "prov_l#1002",
+      "answer": "[31] DKI JAKARTA",
+      "updatedAt": 1777213267872,
+      "createdAt": 1777213264485
+    },
+    {
+      "dataKey": "kab_l#1002",
+      "answer": "[72] JAKARTA TIMUR",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213264486
+    },
+    {
+      "dataKey": "kec_l#1002",
+      "answer": "[060] JATINEGARA",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213264486
+    },
+    {
+      "dataKey": "desa_l#1002",
+      "answer": "[001] BIDARA CINA",
+      "updatedAt": 1777213267870,
+      "createdAt": 1777213264486
+    },
+    {
+      "dataKey": "kodesls_l#1002",
+      "answer": "0111",
+      "updatedAt": 1777213265488,
+      "createdAt": 1777213264487
+    },
+    {
+      "dataKey": "sls_l#1002",
+      "answer": "RT 010 RW 009",
+      "updatedAt": 1777213265488,
+      "createdAt": 1777213264487
+    },
+    {
+      "dataKey": "no_bang_l#1002",
+      "answer": 1,
+      "updatedAt": 1777213265487,
+      "createdAt": 1777213264487
+    },
+    {
+      "dataKey": "no_usaha#1002",
+      "answer": 2,
+      "updatedAt": 1777213269009,
+      "createdAt": 1777213264487
+    },
+    {
+      "dataKey": "ec_mulai_L#1002",
+      "answer": true,
+      "updatedAt": 1777213265482,
+      "createdAt": 1777213264487
+    },
+    {
+      "dataKey": "nama_usaha#1002",
+      "answer": "Aleela Solutions",
+      "updatedAt": 1777213269009,
+      "createdAt": 1777213264488
+    },
+    {
+      "dataKey": "keberadaan_usaha#1002",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213269300,
+      "createdAt": 1777213264499
+    },
+    {
+      "dataKey": "nama_usaha_edit#1002",
+      "answer": "Aleela Solutions"
+    },
+    {
+      "dataKey": "is_prelist2#1002",
+      "answer": "0",
+      "updatedAt": 1777213269016,
+      "createdAt": 1777213264496
+    },
+    {
+      "dataKey": "id_pmss#1002",
+      "answer": "",
+      "updatedAt": 1777213269020,
+      "createdAt": 1777213264498
+    },
+    {
+      "dataKey": "idsbr_l#1002",
+      "answer": "",
+      "updatedAt": 1777213269020,
+      "createdAt": 1777213264498
+    },
+    {
+      "dataKey": "kode_keberadaan_usaha#1002",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru"
+        },
+        {
+          "value": "9",
+          "label": "9. Non Respon"
+        }
+      ],
+      "updatedAt": 1777213269136,
+      "createdAt": 1777213264498
+    },
+    {
+      "dataKey": "nama_komersial#1002",
+      "answer": "Aleela Solutions"
+    },
+    {
+      "dataKey": "alamat_usaha#1002",
+      "answer": "Jalan Statistik 1, KSPB No. B/8",
+      "updatedAt": 1777213265486,
+      "createdAt": 1777213264579
+    },
+    {
+      "dataKey": "kode_pos#1002",
+      "answer": "",
+      "updatedAt": 1777213265485,
+      "createdAt": 1777213264579
+    },
+    {
+      "dataKey": "jenis_kawasan#1002",
+      "answer": [
+        {
+          "label": "2. Kawasan Industri (KI) ",
+          "description": "",
+          "value": "02",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "ec_usaha_respons#1002",
+      "answer": true,
+      "updatedAt": 1777213269301,
+      "createdAt": 1777213264499
+    },
+    {
+      "dataKey": "pengusaha_var#1002",
+      "answer": [
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1",
+          "no_urut": 2,
+          "umur": "27",
+          "nik": 3401026810980001,
+          "jk": [
+            {
+              "label": "2. Perempuan",
+              "description": "",
+              "value": "2",
+              "open": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": 1777213269340,
+      "createdAt": 1777213264722
+    },
+    {
+      "dataKey": "jk_var#1002",
+      "answer": "2. Perempuan",
+      "updatedAt": 1777213269341,
+      "createdAt": 1777213264602
+    },
+    {
+      "dataKey": "umur_pj_var#1002",
+      "answer": "27",
+      "updatedAt": 1777213269342,
+      "createdAt": 1777213264603
+    },
+    {
+      "dataKey": "nik_pengusaha_var#1002",
+      "answer": 3401026810980001,
+      "updatedAt": 1777213269342,
+      "createdAt": 1777213264603
+    },
+    {
+      "dataKey": "var_kbli#1002",
+      "answer": [
+        {
+          "value": "999999",
+          "label": "Pilih dari Master KBLI",
+          "open": false,
+          "description": ""
+        }
+      ],
+      "updatedAt": 1777213265421,
+      "createdAt": 1777213264603
+    },
+    {
+      "dataKey": "kategori#1002",
+      "answer": "",
+      "updatedAt": 1777213265395,
+      "createdAt": 1777213264607
+    },
+    {
+      "dataKey": "msg_error_kategori#1002",
+      "answer": "",
+      "updatedAt": 1777213269017,
+      "createdAt": 1777213264493
+    },
+    {
+      "dataKey": "var_hiden_pml#1002",
+      "answer": "{\"locale\":\"id\",\"formMode\":1,\"initialMode\":2,\"template\":{\"id\":\"2230fffc-5799-4c8a-a585-12ac286c5bf9\",\"version\":\"4.0.013\",\"title\":\"SENSUS EKONOMI 2026 (Rollout)\",\"acronym\":\"SE2026\",\"description\":\"SENSUS EKONOMI 2026 Rollout\"},\"validation\":{\"version\":\"4.0.013\"},\"response\":{\"createdAt\":\"2026-04-21T06:56:30.538Z\",\"createdBy\":\"Maula Azka Fatihah A.Md.Stat.\"},\"user\":{\"username\":\"tester\",\"role\":\"Developer\"}}",
+      "updatedAt": 1777213265394,
+      "createdAt": 1777213264419
+    },
+    {
+      "dataKey": "ec_usaha_lanjutan#1002",
+      "answer": false,
+      "updatedAt": 1777213269301,
+      "createdAt": 1777213264500
+    },
+    {
+      "dataKey": "ec_usaha_bulan#1002",
+      "answer": false,
+      "updatedAt": 1777213269301,
+      "createdAt": 1777213264500
+    },
+    {
+      "dataKey": "ec_usaha_tahun#1002",
+      "answer": false,
+      "updatedAt": 1777213269306,
+      "createdAt": 1777213264521
+    },
+    {
+      "dataKey": "var_narasi#1002",
+      "answer": "",
+      "updatedAt": 1777213265416,
+      "createdAt": 1777213264623
+    },
+    {
+      "dataKey": "prov_l#3001",
+      "answer": "[31] DKI JAKARTA",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "kab_l#3001",
+      "answer": "[72] JAKARTA TIMUR",
+      "updatedAt": 1777213267871,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "kec_l#3001",
+      "answer": "[060] JATINEGARA",
+      "updatedAt": 1777213267870,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "desa_l#3001",
+      "answer": "[001] BIDARA CINA",
+      "updatedAt": 1777213267870,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "kodesls_l#3001",
+      "answer": "0111",
+      "updatedAt": 1777213265488,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "sls_l#3001",
+      "answer": "RT 010 RW 009",
+      "updatedAt": 1777213265487,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "no_bang_l#3001",
+      "answer": 1,
+      "updatedAt": 1777213265486,
+      "createdAt": 1777213264837
+    },
+    {
+      "dataKey": "no_usaha#3001",
+      "answer": 3,
+      "updatedAt": 1777213269058,
+      "createdAt": 1777213264838
+    },
+    {
+      "dataKey": "ec_mulai_L#3001",
+      "answer": true,
+      "updatedAt": 1777213265385,
+      "createdAt": 1777213264838
+    },
+    {
+      "dataKey": "nama_usaha#3001",
+      "answer": "Tambal Ban",
+      "updatedAt": 1777213269058,
+      "createdAt": 1777213264838
+    },
+    {
+      "dataKey": "keberadaan_usaha#3001",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213269230,
+      "createdAt": 1777213264850
+    },
+    {
+      "dataKey": "is_prelist2#3001",
+      "answer": "0",
+      "updatedAt": 1777213269062,
+      "createdAt": 1777213264846
+    },
+    {
+      "dataKey": "id_pmss#3001",
+      "answer": "",
+      "updatedAt": 1777213269067,
+      "createdAt": 1777213264849
+    },
+    {
+      "dataKey": "idsbr_l#3001",
+      "answer": "",
+      "updatedAt": 1777213269067,
+      "createdAt": 1777213264850
+    },
+    {
+      "dataKey": "kode_keberadaan_usaha#3001",
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. Baru"
+        },
+        {
+          "value": "9",
+          "label": "9. Non Respon"
+        }
+      ],
+      "updatedAt": 1777213269169,
+      "createdAt": 1777213264850
+    },
+    {
+      "dataKey": "alamat_usaha#3001",
+      "answer": "Jalan Statistik 1, KSPB No. B/8",
+      "updatedAt": 1777213265485,
+      "createdAt": 1777213264929
+    },
+    {
+      "dataKey": "kode_pos#3001",
+      "answer": "",
+      "updatedAt": 1777213265484,
+      "createdAt": 1777213264929
+    },
+    {
+      "dataKey": "ec_usaha_respons#3001",
+      "answer": true,
+      "updatedAt": 1777213269231,
+      "createdAt": 1777213264850
+    },
+    {
+      "dataKey": "pengusaha_var#3001",
+      "answer": [
+        {
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1,
+          "umur": "26",
+          "nik": "1271202112990005",
+          "jk": [
+            {
+              "value": "1",
+              "label": "Laki-laki"
+            }
+          ],
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213269339,
+      "createdAt": 1777213265163
+    },
+    {
+      "dataKey": "jk_var#3001",
+      "answer": "Laki-laki",
+      "updatedAt": 1777213269340,
+      "createdAt": 1777213264950
+    },
+    {
+      "dataKey": "umur_pj_var#3001",
+      "answer": "26",
+      "updatedAt": 1777213269340,
+      "createdAt": 1777213264950
+    },
+    {
+      "dataKey": "nik_pengusaha_var#3001",
+      "answer": "1271202112990005",
+      "updatedAt": 1777213269340,
+      "createdAt": 1777213264951
+    },
+    {
+      "dataKey": "var_kbli#3001",
+      "answer": [
+        {
+          "value": "999999",
+          "label": "Pilih dari Master KBLI",
+          "open": false,
+          "description": ""
+        }
+      ],
+      "updatedAt": 1777213265323,
+      "createdAt": 1777213264951
+    },
+    {
+      "dataKey": "kategori#3001",
+      "answer": "",
+      "updatedAt": 1777213265309,
+      "createdAt": 1777213264954
+    },
+    {
+      "dataKey": "msg_error_kategori#3001",
+      "answer": "",
+      "updatedAt": 1777213269064,
+      "createdAt": 1777213264842
+    },
+    {
+      "dataKey": "var_hiden_pml#3001",
+      "answer": "{\"locale\":\"id\",\"formMode\":1,\"initialMode\":2,\"template\":{\"id\":\"2230fffc-5799-4c8a-a585-12ac286c5bf9\",\"version\":\"4.0.013\",\"title\":\"SENSUS EKONOMI 2026 (Rollout)\",\"acronym\":\"SE2026\",\"description\":\"SENSUS EKONOMI 2026 Rollout\"},\"validation\":{\"version\":\"4.0.013\"},\"response\":{\"createdAt\":\"2026-04-21T06:56:30.538Z\",\"createdBy\":\"Maula Azka Fatihah A.Md.Stat.\"},\"user\":{\"username\":\"tester\",\"role\":\"Developer\"}}",
+      "updatedAt": 1777213265309,
+      "createdAt": 1777213264789
+    },
+    {
+      "dataKey": "ec_usaha_lanjutan#3001",
+      "answer": false,
+      "updatedAt": 1777213269231,
+      "createdAt": 1777213264850
+    },
+    {
+      "dataKey": "ec_usaha_bulan#3001",
+      "answer": false,
+      "updatedAt": 1777213269231,
+      "createdAt": 1777213264851
+    },
+    {
+      "dataKey": "ec_usaha_tahun#3001",
+      "answer": false,
+      "updatedAt": 1777213269261,
+      "createdAt": 1777213264871
+    },
+    {
+      "dataKey": "var_narasi#3001",
+      "answer": "",
+      "updatedAt": 1777213265317,
+      "createdAt": 1777213264968
+    },
+    {
+      "dataKey": "dtsen_nama_kk",
+      "answer": "MUHAMMAD QADRI",
+      "updatedAt": 1777213265984,
+      "createdAt": 1777213265984
     },
     {
       "dataKey": "nik_kk",
-      "answer": "",
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067700
+      "answer": "1271202112990005",
+      "updatedAt": 1777213265633,
+      "createdAt": 1777213265633
+    },
+    {
+      "dataKey": "dtsen_no_kk",
+      "answer": 3175073010230012,
+      "updatedAt": 1777213265633,
+      "createdAt": 1777213265633
     },
     {
       "dataKey": "jml_kk",
-      "answer": 1,
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067700
+      "answer": 5,
+      "updatedAt": 1777213265633,
+      "createdAt": 1777213265633
     },
     {
       "dataKey": "jml_kk_update",
-      "answer": 0,
-      "updatedAt": 1776839067724,
-      "createdAt": 1776839067716
+      "answer": 5,
+      "updatedAt": 1777213268276,
+      "createdAt": 1777213266121
     },
     {
       "dataKey": "gabung_dtsen_var",
       "answer": [
         {
-          "value": 101,
-          "label": "andri",
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1"
+        },
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1"
+        },
+        {
+          "value": 102,
+          "label": "PRABOWO SUBIANTO",
+          "is_prelist": "0"
+        },
+        {
+          "value": 103,
+          "label": "GIBRAN RAKABUMING RAKA",
+          "is_prelist": "0"
+        },
+        {
+          "value": 104,
+          "label": "ANAK TIGA",
           "is_prelist": "0"
         }
       ],
-      "updatedAt": 1776839067708,
-      "createdAt": 1776839067708
+      "updatedAt": 1777213265826,
+      "createdAt": 1777213265826
     },
     {
-      "dataKey": "no_urut_kk_var#101",
-      "answer": 101,
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067670
+      "dataKey": "gabung_dtsen_2",
+      "answer": [
+        {
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1
+        },
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1",
+          "no_urut": 2
+        },
+        {
+          "value": 102,
+          "label": "PRABOWO SUBIANTO",
+          "is_prelist": "0",
+          "no_urut": 3
+        },
+        {
+          "value": 103,
+          "label": "GIBRAN RAKABUMING RAKA",
+          "is_prelist": "0",
+          "no_urut": 4
+        },
+        {
+          "value": 104,
+          "label": "ANAK TIGA",
+          "is_prelist": "0",
+          "no_urut": 5
+        }
+      ],
+      "updatedAt": 1777213268276,
+      "createdAt": 1777213266122
     },
     {
-      "dataKey": "nama_dtsen_var#101",
-      "answer": "andri",
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067670
+      "dataKey": "no_urut_kk_var#1",
+      "answer": 1,
+      "updatedAt": 1777213265632,
+      "createdAt": 1777213263451
     },
     {
-      "dataKey": "nik_dtsen_var#101",
-      "answer": "",
-      "updatedAt": 1776839067698,
-      "createdAt": 1776839067670
+      "dataKey": "nama_dtsen_var#1",
+      "answer": "MUHAMMAD QADRI",
+      "updatedAt": 1777213265632,
+      "createdAt": 1777213263451
     },
     {
-      "dataKey": "ec_art_dtsen#101",
-      "answer": false,
-      "updatedAt": 1776839067703,
-      "createdAt": 1776839067670
+      "dataKey": "ec_art_dtsen#1",
+      "answer": true,
+      "updatedAt": 1777213265793,
+      "createdAt": 1777213263451
     },
     {
-      "dataKey": "ec_art_pendapatan#101",
-      "answer": false,
-      "updatedAt": 1776839067700,
-      "createdAt": 1776839067674
+      "dataKey": "ec_art_pendapatan#1",
+      "answer": true,
+      "updatedAt": 1777213265784,
+      "createdAt": 1777213263477
+    },
+    {
+      "dataKey": "sekolah#1",
+      "answer": [
+        {
+          "label": "2. Tidak bersekolah lagi",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265794,
+      "createdAt": 1777213263452
+    },
+    {
+      "dataKey": "ijazah_prelist#1",
+      "answer": [
+        {
+          "label": "5. D4/S1/Profesi",
+          "description": "",
+          "value": "05",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "ijazah#1",
+      "answer": [
+        {
+          "label": "5. D4/S1/Profesi",
+          "description": "",
+          "value": "05",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265795,
+      "createdAt": 1777213263452
+    },
+    {
+      "dataKey": "profesi#1",
+      "answer": [
+        {
+          "label": "002. Ahli Sejarah dan Cagar budaya",
+          "value": "002"
+        }
+      ],
+      "updatedAt": 1777213265799,
+      "createdAt": 1777213263457
+    },
+    {
+      "dataKey": "pendapatan_pekerjaan#1",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265786,
+      "createdAt": 1777213263494
+    },
+    {
+      "dataKey": "pendapatan_usaha#1",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265790,
+      "createdAt": 1777213263501
+    },
+    {
+      "dataKey": "no_urut_kk_var#2",
+      "answer": 2,
+      "updatedAt": 1777213265623,
+      "createdAt": 1777213263539
+    },
+    {
+      "dataKey": "nama_dtsen_var#2",
+      "answer": "LAILA AZZAMAH IBDA NAFISA",
+      "updatedAt": 1777213265622,
+      "createdAt": 1777213263540
+    },
+    {
+      "dataKey": "ec_art_dtsen#2",
+      "answer": true,
+      "updatedAt": 1777213265761,
+      "createdAt": 1777213263540
+    },
+    {
+      "dataKey": "ec_art_pendapatan#2",
+      "answer": true,
+      "updatedAt": 1777213265731,
+      "createdAt": 1777213263554
+    },
+    {
+      "dataKey": "sekolah#2",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Tidak bersekolah lagi"
+        }
+      ],
+      "updatedAt": 1777213265761,
+      "createdAt": 1777213263541
+    },
+    {
+      "dataKey": "ijazah_prelist#2",
+      "answer": [
+        {
+          "label": "3. SMA/sederajat",
+          "description": "",
+          "value": "03",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "ijazah#2",
+      "answer": [
+        {
+          "label": "4. D1/D2/D3",
+          "description": "",
+          "value": "04",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265762,
+      "createdAt": 1777213263541
+    },
+    {
+      "dataKey": "profesi#2",
+      "answer": [
+        {
+          "label": "004. Analis Keuangan",
+          "value": "004"
+        }
+      ],
+      "updatedAt": 1777213265765,
+      "createdAt": 1777213263544
+    },
+    {
+      "dataKey": "status_kerja#2",
+      "answer": [
+        {
+          "label": "5. Pekerja bebas",
+          "description": "",
+          "value": "5",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265767,
+      "createdAt": 1777213263545
+    },
+    {
+      "dataKey": "pendapatan_pekerjaan#2",
+      "answer": [
+        {
+          "label": "1. Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265733,
+      "createdAt": 1777213263563
+    },
+    {
+      "dataKey": "pend_gaji#2",
+      "answer": 10000,
+      "updatedAt": 1777213265734,
+      "createdAt": 1777213263563
+    },
+    {
+      "dataKey": "pend_tunjangan#2",
+      "answer": 10000,
+      "updatedAt": 1777213265738,
+      "createdAt": 1777213263564
+    },
+    {
+      "dataKey": "pend_uangmkn#2",
+      "answer": 0,
+      "updatedAt": 1777213265743,
+      "createdAt": 1777213263565
+    },
+    {
+      "dataKey": "pend_honor#2",
+      "answer": 0,
+      "updatedAt": 1777213265746,
+      "createdAt": 1777213263566
+    },
+    {
+      "dataKey": "pend_lembur#2",
+      "answer": 0,
+      "updatedAt": 1777213265750,
+      "createdAt": 1777213263554
+    },
+    {
+      "dataKey": "pend_lainnya#2",
+      "answer": 0,
+      "updatedAt": 1777213265753,
+      "createdAt": 1777213263557
+    },
+    {
+      "dataKey": "nilai_pend_pekerjaan#2",
+      "answer": "Rp 20.000,00",
+      "updatedAt": 1777213265754,
+      "createdAt": 1777213263555
+    },
+    {
+      "dataKey": "pendapatan_usaha#2",
+      "answer": [
+        {
+          "label": "1. Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265757,
+      "createdAt": 1777213263568
+    },
+    {
+      "dataKey": "pend_usaha#2",
+      "answer": 10000,
+      "updatedAt": 1777213265758,
+      "createdAt": 1777213263560
+    },
+    {
+      "dataKey": "pend_usaha_lain#2",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265759,
+      "createdAt": 1777213263569
+    },
+    {
+      "dataKey": "no_urut_kk_var#102",
+      "answer": 3,
+      "updatedAt": 1777213265617,
+      "createdAt": 1777213263602
+    },
+    {
+      "dataKey": "nama_dtsen_var#102",
+      "answer": "PRABOWO SUBIANTO",
+      "updatedAt": 1777213265617,
+      "createdAt": 1777213263602
+    },
+    {
+      "dataKey": "ec_art_dtsen#102",
+      "answer": true,
+      "updatedAt": 1777213265698,
+      "createdAt": 1777213263602
+    },
+    {
+      "dataKey": "ec_art_pendapatan#102",
+      "answer": true,
+      "updatedAt": 1777213265690,
+      "createdAt": 1777213263628
+    },
+    {
+      "dataKey": "sekolah#102",
+      "answer": [
+        {
+          "label": "0. Tidak/belum pernah sekolah",
+          "description": "",
+          "value": "9",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265699,
+      "createdAt": 1777213263603
+    },
+    {
+      "dataKey": "ijazah_prelist#102",
+      "answer": [
+        {
+          "label": "3. SMA/sederajat",
+          "description": "",
+          "value": "103",
+          "open": false
+        }
+      ]
+    },
+    {
+      "dataKey": "profesi#102",
+      "answer": [
+        {
+          "label": "001. Agen Tenaga Kerja",
+          "value": "001"
+        }
+      ],
+      "updatedAt": 1777213265701,
+      "createdAt": 1777213263608
+    },
+    {
+      "dataKey": "status_kerja#102",
+      "answer": [
+        {
+          "label": "4. ASN/TNI/Polri/BUMN/BUMD/pejabat negara/kades",
+          "description": "",
+          "value": "4",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265705,
+      "createdAt": 1777213263609
+    },
+    {
+      "dataKey": "dis_fisik#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265709,
+      "createdAt": 1777213263610
+    },
+    {
+      "dataKey": "dis_mental#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265709,
+      "createdAt": 1777213263611
+    },
+    {
+      "dataKey": "dis_intelek#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265710,
+      "createdAt": 1777213263611
+    },
+    {
+      "dataKey": "dis_netra#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265711,
+      "createdAt": 1777213263612
+    },
+    {
+      "dataKey": "dis_rungu#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265711,
+      "createdAt": 1777213263613
+    },
+    {
+      "dataKey": "dis_wicara#102",
+      "answer": [
+        {
+          "label": "2. Tidak",
+          "description": "",
+          "value": "2",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265712,
+      "createdAt": 1777213263613
+    },
+    {
+      "dataKey": "sakit_hipertensi#102",
+      "answer": [
+        {
+          "label": "3. Tidak Tahu",
+          "description": "",
+          "value": "3",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265713,
+      "createdAt": 1777213263614
+    },
+    {
+      "dataKey": "sakit_rematik#102",
+      "answer": [
+        {
+          "label": "3. Tidak Tahu",
+          "description": "",
+          "value": "3",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265715,
+      "createdAt": 1777213263615
+    },
+    {
+      "dataKey": "sakit_stroke#102",
+      "answer": [
+        {
+          "label": "1. Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265723,
+      "createdAt": 1777213263616
+    },
+    {
+      "dataKey": "sakit_alzheimer#102",
+      "answer": [
+        {
+          "label": "1. Ya",
+          "description": "",
+          "value": "1",
+          "open": false
+        }
+      ],
+      "updatedAt": 1777213265727,
+      "createdAt": 1777213263628
+    },
+    {
+      "dataKey": "no_urut_kk_var#103",
+      "answer": 4,
+      "updatedAt": 1777213265612,
+      "createdAt": 1777213263675
+    },
+    {
+      "dataKey": "nama_dtsen_var#103",
+      "answer": "GIBRAN RAKABUMING RAKA",
+      "updatedAt": 1777213265612,
+      "createdAt": 1777213263675
+    },
+    {
+      "dataKey": "ec_art_dtsen#103",
+      "answer": true,
+      "updatedAt": 1777213265665,
+      "createdAt": 1777213263675
+    },
+    {
+      "dataKey": "ec_art_pendapatan#103",
+      "answer": true,
+      "updatedAt": 1777213265659,
+      "createdAt": 1777213263690
+    },
+    {
+      "dataKey": "ijazah_prelist#103",
+      "answer": "anjing"
+    },
+    {
+      "dataKey": "profesi#103",
+      "answer": [
+        {
+          "label": "141. Presiden",
+          "value": "141"
+        }
+      ],
+      "updatedAt": 1777213265667,
+      "createdAt": 1777213263680
+    },
+    {
+      "dataKey": "no_urut_kk_var#104",
+      "answer": 5,
+      "updatedAt": 1777213265609,
+      "createdAt": 1777213263742
+    },
+    {
+      "dataKey": "nama_dtsen_var#104",
+      "answer": "ANAK TIGA",
+      "updatedAt": 1777213265608,
+      "createdAt": 1777213263742
+    },
+    {
+      "dataKey": "ec_art_dtsen#104",
+      "answer": true,
+      "updatedAt": 1777213265638,
+      "createdAt": 1777213263742
+    },
+    {
+      "dataKey": "ec_art_pendapatan#104",
+      "answer": true,
+      "updatedAt": 1777213265636,
+      "createdAt": 1777213263756
+    },
+    {
+      "dataKey": "ijazah_prelist#104",
+      "answer": "anjing"
+    },
+    {
+      "dataKey": "status_kepemilikan",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kontrak/sewa"
+        }
+      ]
+    },
+    {
+      "dataKey": "luas_lantai",
+      "answer": 13
+    },
+    {
+      "dataKey": "jns_lantai",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Keramik"
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_dinding",
+      "answer": [
+        {
+          "value": "1",
+          "label": "Tembok"
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_atap",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Genteng"
+        }
+      ]
+    },
+    {
+      "dataKey": "jumlah_kulkas",
+      "answer": 0
+    },
+    {
+      "dataKey": "jumlah_ac",
+      "answer": 0
+    },
+    {
+      "dataKey": "jumlah_emas",
+      "answer": 0
+    },
+    {
+      "dataKey": "jumlah_laptop",
+      "answer": 1
+    },
+    {
+      "dataKey": "jumlah_motor",
+      "answer": 0
+    },
+    {
+      "dataKey": "jumlah_mobil",
+      "answer": 0
+    },
+    {
+      "dataKey": "catatan",
+      "answer": "Anak KOS"
+    },
+    {
+      "dataKey": "id_keluarga",
+      "answer": 3175073010230012
+    },
+    {
+      "dataKey": "id_regsosek",
+      "answer": "9C885778-8D28-4436-941D-1B00F98B265D"
     },
     {
       "dataKey": "ak_info",
       "answer": [
+        {
+          "value": 1,
+          "label": "MUHAMMAD QADRI",
+          "is_prelist": "1",
+          "no_urut": 1
+        },
+        {
+          "value": 2,
+          "label": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": "1",
+          "no_urut": 2
+        },
+        {
+          "value": 102,
+          "label": "PRABOWO SUBIANTO",
+          "is_prelist": "0",
+          "no_urut": 3
+        },
+        {
+          "value": 103,
+          "label": "GIBRAN RAKABUMING RAKA",
+          "is_prelist": "0",
+          "no_urut": 4
+        },
+        {
+          "value": 104,
+          "label": "ANAK TIGA",
+          "is_prelist": "0",
+          "no_urut": 5
+        },
         {
           "value": "99",
           "label": "Lainnya"
@@ -1051,13 +3153,13 @@
           "label": "Pemilik Usaha"
         }
       ],
-      "updatedAt": 1776839067724,
-      "createdAt": 1776839067717
+      "updatedAt": 1777213268280,
+      "createdAt": 1777213266125
     }
   ],
-  "templateVersion": "4.0.005",
-  "validationVersion": "4.0.005",
-  "updatedAt": "2026-04-22T06:24:27.824Z",
+  "templateVersion": "4.0.013",
+  "validationVersion": "4.0.013",
+  "updatedAt": "2026-04-26T14:21:09.536Z",
   "updatedBy": "tester",
   "createdAt": "2026-04-21T06:56:30.538Z",
   "createdBy": "Maula Azka Fatihah A.Md.Stat.",

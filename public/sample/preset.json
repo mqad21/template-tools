@@ -1,70 +1,26 @@
 {
-  "description": "internal_rollout_se2026",
-  "dataKey": "internal_rollout_se2026",
+  "dataKey": "fasih-uploader",
+  "description": "fasih-uploader",
   "predata": [
     {
-      "dataKey": "level_1",
-      "answer": "18"
-    },
-    {
-      "dataKey": "level_2",
-      "answer": "11"
-    },
-    {
-      "dataKey": "level_3",
-      "answer": "000"
-    },
-    {
-      "dataKey": "level_4",
-      "answer": "000"
-    },
-    {
-      "dataKey": "level_5",
-      "answer": "0432"
-    },
-    {
-      "dataKey": "level_6",
-      "answer": "00"
-    },
-    {
-      "dataKey": "cawi_identifier",
-      "answer": ""
-    },
-    {
-      "dataKey": "lat",
-      "answer": ""
-    },
-    {
-      "dataKey": "long",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_sample",
-      "answer": "PRIMARY"
-    },
-    {
-      "dataKey": "strata",
-      "answer": ""
-    },
-    {
       "dataKey": "email",
-      "answer": "maulaazka.f@bps.go.id"
+      "answer": "muhammad.qadri@bps.go.id"
     },
     {
       "dataKey": "prov",
-      "answer": "Prov. Lampung"
+      "answer": "[31] DKI JAKARTA"
     },
     {
       "dataKey": "kab",
-      "answer": "Kab. Mesuji"
+      "answer": "[72] JAKARTA TIMUR"
     },
     {
       "dataKey": "kec",
-      "answer": "000"
+      "answer": "[060] JATINEGARA"
     },
     {
       "dataKey": "desa",
-      "answer": "000"
+      "answer": "[001] BIDARA CINA"
     },
     {
       "dataKey": "klas_desa",
@@ -72,743 +28,384 @@
     },
     {
       "dataKey": "kode_sls",
-      "answer": "0432"
+      "answer": "0111"
     },
     {
       "dataKey": "nama_sls",
-      "answer": "SLS_0432"
+      "answer": "RT 010 RW 009"
     },
     {
       "dataKey": "nik",
-      "answer": ""
+      "answer": 1271202112990001
     },
     {
       "dataKey": "no_kk",
-      "answer": ""
+      "answer": 3175073010230012
     },
     {
       "dataKey": "nama_principal",
-      "answer": "Maula Azka Fatihah, A.Md.Stat."
-    },
-    {
-      "dataKey": "nama_usaha_bang",
-      "answer": "Maula Azka Fatihah, A.Md.Stat."
+      "answer": "MUHAMMAD QADRI"
     },
     {
       "dataKey": "nama_kk",
-      "answer": ""
+      "answer": "MUHAMMAD QADRI"
     },
     {
       "dataKey": "nama_ak_lain",
-      "answer": ""
+      "answer": "LAILA AZZAMAH IBDA NAFISA"
     },
     {
       "dataKey": "alamat_klrg",
-      "answer": ""
+      "answer": "JALAN H.HASBI NO.9 "
     },
     {
       "dataKey": "alamat_prelist",
-      "answer": ""
+      "answer": "JALAN H.HASBI NO.9 "
     },
     {
       "dataKey": "jns_usaha",
-      "answer": ""
+      "answer": "keluarga"
     },
     {
       "dataKey": "jumlah_usaha_prelist",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama_usaha_prelist",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "is_prelist",
-      "answer": "1"
+      "answer": 1
     },
     {
       "dataKey": "is_keluarga",
-      "answer": "1"
+      "answer": 1
     },
     {
       "dataKey": "is_usaha",
-      "answer": ""
-    },
-    {
-      "dataKey": "is_cawi",
-      "answer": ""
-    },
-    {
-      "dataKey": "idsbr",
-      "answer": ""
-    },
-    {
-      "dataKey": "id_l1_umkm",
-      "answer": ""
-    },
-    {
-      "dataKey": "id_l2_umkm",
-      "answer": ""
+      "answer": 1
     },
     {
       "dataKey": "nik_prelist",
-      "answer": ""
+      "answer": 1271202112990001
     },
     {
       "dataKey": "id_keluarga",
-      "answer": ""
+      "answer": 3175073010230012
     },
     {
       "dataKey": "nomor_kartu_keluarga",
-      "answer": ""
+      "answer": 3175073010230012
     },
     {
       "dataKey": "jml_usaha_keluarga",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama_usaha#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama_komersial#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "email#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "website#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "no_telp#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "hp#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "hp#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "jenis_usaha#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "pengusaha#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_pengusaha#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "keg_utama#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "produk#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "kategori#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "tahun_operasi#1",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama_usaha#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama_komersial#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "email#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "website#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "no_telp#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "hp#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "jenis_usaha#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "pengusaha#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_pengusaha#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "keg_utama#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "produk#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "kategori#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "tahun_operasi#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "id_l1",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "id_regsosek",
-      "answer": ""
+      "answer": "9C885778-8D28-4436-941D-1B00F98B265D"
     },
     {
-      "dataKey": "idunik_pmss",
-      "answer": ""
+      "dataKey": "idunik_PMSS",
+      "answer": "D4335A0E-6FB4-4467-8508-811590A2034E"
     },
     {
       "dataKey": "dtsen_nama_kk",
-      "answer": ""
+      "answer": "MUHAMMAD QADRI"
     },
     {
       "dataKey": "nik_kk",
-      "answer": ""
+      "answer": 1271202112990001
     },
     {
       "dataKey": "dtsen_no_kk",
-      "answer": ""
-    },
-    {
-      "dataKey": "jenis_pekerjaan",
-      "answer": ""
+      "answer": 3175073010230012
     },
     {
       "dataKey": "belum_kawin",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "kawin",
-      "answer": ""
+      "answer": 2
     },
     {
       "dataKey": "cerai_hidup",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "cerai_mati",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "tidak_punya_ijazah",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "sd",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "smp",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "sma",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "pt",
-      "answer": ""
-    },
-    {
-      "dataKey": "air_minum",
-      "answer": ""
+      "answer": 2
     },
     {
       "dataKey": "daya_terpasang",
-      "answer": ""
-    },
-    {
-      "dataKey": "id_pln",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "2. 900 watt"
+        }
+      ]
     },
     {
       "dataKey": "jumlah_tabung",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_kulkas",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_ac",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_tv",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_emas",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_laptop",
-      "answer": ""
+      "answer": 1
     },
     {
       "dataKey": "jumlah_motor",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_mobil",
-      "answer": ""
+      "answer": 0
     },
     {
       "dataKey": "jumlah_ak_kk",
-      "answer": ""
+      "answer": 2
     },
     {
       "dataKey": "nik_anggta_lain_prelist",
-      "answer": ""
+      "answer": 3401026810980001
+    },
+    {
+      "dataKey": "status_kepemilikan",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kontrak/sewa"
+        }
+      ]
+    },
+    {
+      "dataKey": "luas_lantai",
+      "answer": 13
+    },
+    {
+      "dataKey": "jns_lantai",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Keramik"
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_dinding",
+      "answer": [
+        {
+          "value": "1",
+          "label": "Tembok"
+        }
+      ]
+    },
+    {
+      "dataKey": "jns_atap",
+      "answer": [
+        {
+          "value": "2",
+          "label": "Genteng"
+        }
+      ]
+    },
+    {
+      "dataKey": "bahan_bakar_utama_memasak",
+      "answer": [
+        {
+          "value": "4",
+          "label": "Arang"
+        }
+      ]
     },
     {
       "dataKey": "nik_dtsen#1",
-      "answer": ""
+      "answer": 1271202112990001
     },
     {
       "dataKey": "nama#1",
-      "answer": ""
+      "answer": "MUHAMMAD QADRI"
     },
     {
       "dataKey": "jk_dtsen#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "1",
+          "label": "Laki-laki"
+        }
+      ]
     },
     {
       "dataKey": "tgl_lahir#1",
-      "answer": ""
+      "answer": 21
     },
     {
       "dataKey": "bln_lahir#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "12",
+          "label": "Desember"
+        }
+      ]
     },
     {
       "dataKey": "thn_lahir#1",
-      "answer": ""
+      "answer": 1999
     },
     {
       "dataKey": "status_kawin#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kawin/nikah"
+        }
+      ]
     },
     {
       "dataKey": "hubungan#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "1",
+          "label": "Kepala keluarga"
+        }
+      ]
     },
     {
       "dataKey": "sekolah#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Tidak bersekolah lagi"
+        }
+      ]
     },
     {
       "dataKey": "ijazah#1",
-      "answer": ""
+      "answer": [
+        {
+          "value": "05",
+          "label": "D4/S1/Profesi"
+        }
+      ]
     },
     {
       "dataKey": "nik_dtsen#2",
-      "answer": ""
+      "answer": 3401026810980001
     },
     {
       "dataKey": "nama#2",
-      "answer": ""
+      "answer": "LAILA AZZAMAH IBDA NAFISA"
     },
     {
       "dataKey": "jk_dtsen#2",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Perempuan"
+        }
+      ]
     },
     {
       "dataKey": "tgl_lahir#2",
-      "answer": ""
+      "answer": 28
     },
     {
       "dataKey": "bln_lahir#2",
-      "answer": ""
+      "answer": [
+        {
+          "value": "10",
+          "label": "Oktober"
+        }
+      ]
     },
     {
       "dataKey": "thn_lahir#2",
-      "answer": ""
+      "answer": 1998
     },
     {
       "dataKey": "status_kawin#2",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Kawin/nikah"
+        }
+      ]
     },
     {
       "dataKey": "hubungan#2",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Istri/suami"
+        }
+      ]
     },
     {
       "dataKey": "sekolah#2",
-      "answer": ""
+      "answer": [
+        {
+          "value": "2",
+          "label": "Tidak bersekolah lagi"
+        }
+      ]
     },
     {
       "dataKey": "ijazah#2",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#3",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#4",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#5",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#6",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#7",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#8",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#9",
-      "answer": ""
-    },
-    {
-      "dataKey": "nik_dtsen#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "nama#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "jk_dtsen#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "tgl_lahir#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "bln_lahir#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "thn_lahir#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_kawin#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "hubungan#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "sekolah#10",
-      "answer": ""
-    },
-    {
-      "dataKey": "ijazah#10",
-      "answer": ""
+      "answer": [
+        {
+          "value": "05",
+          "label": "D4/S1/Profesi"
+        }
+      ]
     },
     {
       "dataKey": "list_individu_dtsen_prelist",
-      "answer": ""
-    },
-    {
-      "dataKey": "status_pegawai",
-      "answer": "PNS"
-    },
-    {
-      "dataKey": "jabatan",
-      "answer": ""
+      "answer": [
+        {
+          "value": 1,
+          "nama_ak": "MUHAMMAD QADRI",
+          "is_prelist": 1
+        },
+        {
+          "value": 2,
+          "nama_ak": "LAILA AZZAMAH IBDA NAFISA",
+          "is_prelist": 1
+        }
+      ]
     }
   ]
 }

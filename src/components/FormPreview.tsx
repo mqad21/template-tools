@@ -168,6 +168,34 @@ export const FormPreview = () => {
           }
         });
         
+        instanceRef.current.event.on('lookup-request', async (config: any, params: any) => {
+          try {
+            const handleJSON = (str: any) => typeof str !== "string" ? str : JSON.parse(str);
+            const cfg = handleJSON(config);
+            const pms = handleJSON(params);
+
+            const baseUrl = "https://fasih-survey.bps.go.id/lookup/api/v1/collections";
+            const url = new URL(`${baseUrl}/${cfg.id}/filter`);
+
+            if (Array.isArray(pms)) {
+              for (const p of pms) {
+                url.searchParams.append("keys", p.key);
+                url.searchParams.append("values", p.value?.toString() ?? "");
+              }
+            }
+
+            url.searchParams.append("version", cfg.version.toString());
+
+            const response = await fetch(url.toString());
+            const data = await response.json();
+
+            return data.data;
+          } catch (e: any) {
+            console.error("Failed to get lookup data:", e);
+            throw e;
+          }
+        });
+        
         instanceRef.current.render();
       } catch (err: any) {
         console.error("FasihForm render error:", err)
