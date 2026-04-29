@@ -46,8 +46,7 @@ export default defineConfig({
                 
                 res.statusCode = 200
                 res.end(JSON.stringify({ status: 'ok' }))
-              } catch (err) {
-              } catch (err) {
+              } catch (err: any) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
               }

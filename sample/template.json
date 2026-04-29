@@ -4,7 +4,7 @@
   "dataKey": "se2026_rollout",
   "acronym": "SE2026",
   "description": "SENSUS EKONOMI 2026 Rollout",
-  "version": "4.0.013",
+  "version": "4.0.023",
   "components": [
     [
       {
@@ -346,7 +346,7 @@
               "label": "3. Kecamatan",
               "type": 25,
               "dataKey": "kec",
-              "required": true,
+              "required": false,
               "disablePaste": false,
               "tabular": false,
               "encrypted": false,
@@ -363,7 +363,7 @@
               "label": "4. Desa/Kelurahan",
               "type": 25,
               "dataKey": "desa",
-              "required": true,
+              "required": false,
               "disablePaste": false,
               "tabular": false,
               "encrypted": false,
@@ -527,24 +527,6 @@
               "enableRemark": false,
               "principal": 8,
               "columnName": "Kodepos",
-              "presetMaster": false,
-              "disableInput": false,
-              "disableInitial": false,
-              "isCapital": false,
-              "isEditable": false,
-              "isEditableList": true
-            },
-            {
-              "label": "Cek Koseka",
-              "type": 4,
-              "dataKey": "tabel_koseka",
-              "required": false,
-              "disablePaste": false,
-              "tabular": false,
-              "encrypted": false,
-              "enableRemark": false,
-              "principal": 9,
-              "columnName": "Cek Koseka",
               "presetMaster": false,
               "disableInput": false,
               "disableInitial": false,
@@ -1426,14 +1408,12 @@
             },
             {
               "label": "Alamat <small><font color=\"#ed7014\"> (Prelist) </font></small>",
-              "type": 4,
+              "type": 30,
               "dataKey": "alamat_prelist",
               "required": false,
               "disablePaste": false,
               "tabular": false,
               "encrypted": false,
-              "render": true,
-              "renderType": 1,
               "enableCondition": "getValue('is_prelist') == '1';",
               "componentEnable": [
                 "is_prelist"
@@ -1442,7 +1422,7 @@
               "principal": 5,
               "columnName": "Alamat Prelist",
               "presetMaster": false,
-              "disableInput": false,
+              "disableInput": true,
               "disableInitial": false,
               "isCapital": false,
               "isEditable": false,
@@ -1507,7 +1487,7 @@
             },
             {
               "label": "Nama Jalan/Gang/Komplek/Gedung/dll (Tuliskan dengan rinci)\n<br><small><font color=\"#ed7014\"> ",
-              "type": 25,
+              "type": 30,
               "dataKey": "jalan_domisili",
               "required": true,
               "disablePaste": false,
@@ -2035,41 +2015,6 @@
                   "value": "getValue('nama_kk')"
                 }
               ],
-              "isCapital": false,
-              "isEditable": false,
-              "isEditableList": true
-            },
-            {
-              "label": "Apakah Terdapat Usaha pada Bangunan Ini?",
-              "type": 26,
-              "dataKey": "usaha_bangunan",
-              "required": true,
-              "disablePaste": false,
-              "tabular": false,
-              "encrypted": false,
-              "options": [
-                {
-                  "label": "1. Ya",
-                  "description": "",
-                  "value": "1",
-                  "open": false
-                },
-                {
-                  "label": "2. Tidak",
-                  "description": "",
-                  "value": "2",
-                  "open": false
-                }
-              ],
-              "enableCondition": "let bangunan = getValue('kode_bang')?.[0]?.value;\n(bangunan == '4' || bangunan == '5' || bangunan == '6')\n",
-              "componentEnable": [
-                "kode_bang"
-              ],
-              "enableRemark": false,
-              "typeOption": 1,
-              "presetMaster": false,
-              "disableInput": false,
-              "disableInitial": false,
               "isCapital": false,
               "isEditable": false,
               "isEditableList": true
@@ -3776,6 +3721,48 @@
                     "isEditableList": true
                   },
                   {
+                    "label": "Opsi Pilih UMKM dalam satu SLS yang sama",
+                    "type": 4,
+                    "dataKey": "pilih_umkm_options",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "expression": "(function(){\nfunction transformToObjects(input) {\n  const keys = Object.keys(input);\n  const length = input[keys[0]].length;\n\n  return Array.from({ length }, (_, i) => {\n    const obj = {};\n    keys.forEach(key => {\n      obj[key] = input[key][i] ?? \"\";\n    });\n    return obj;\n  });\n}\nlet arr = getPrincipalCollection(['data2', 'data4', 'data3']);\nlet result = transformToObjects(arr).filter(a => a.data4?.trim().toLowerCase() != 'keluarga' && a.data3).map(a => ({\n    label: a.data3 + \" - \" + a.data2,\n    value: a.data3\n}))\nresult.push({\n    label: \"Tidak Ada\",\n    value: \"0\"\n})\nreturn result\n})()",
+                    "render": false,
+                    "renderType": 3,
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
+                    "label": "Pilih UMKM dalam satu SLS yang sama",
+                    "type": 27,
+                    "dataKey": "pilih_umkm_sls",
+                    "required": true,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "enableCondition": "getValue('se2026_nested@$ROW$')?.is_prelist == '0'",
+                    "componentEnable": [
+                      "se2026_nested@$ROW$"
+                    ],
+                    "readOnlyCondition": "getValue('se2026_nested')?.is_prelist == '0'",
+                    "enableRemark": false,
+                    "sourceOption": "pilih_umkm_options@$ROW$",
+                    "typeOption": 3,
+                    "presetMaster": false,
+                    "disableInput": false,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
                     "label": "1. Provinsi",
                     "type": 4,
                     "dataKey": "prov_l",
@@ -4151,6 +4138,26 @@
                     "isEditableList": true
                   },
                   {
+                    "label": "8.c. Alamat usaha/perusahaan",
+                    "type": 30,
+                    "dataKey": "alamat_usaha_view",
+                    "required": false,
+                    "disablePaste": false,
+                    "tabular": false,
+                    "encrypted": false,
+                    "enableCondition": "getValue('ec_usaha_respons@$ROW$');",
+                    "componentEnable": [
+                      "ec_usaha_respons@$ROW$"
+                    ],
+                    "enableRemark": false,
+                    "presetMaster": false,
+                    "disableInput": true,
+                    "disableInitial": false,
+                    "isCapital": false,
+                    "isEditable": false,
+                    "isEditableList": true
+                  },
+                  {
                     "label": "8. c. Alamat usaha/perusahaan",
                     "type": 4,
                     "dataKey": "alamat_usaha",
@@ -4158,12 +4165,12 @@
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "expression": "(function() {\n    let a = getValue('jalan_domisili');\n    let b = getValue('nomor_domisili');\n    if (!b || b == \"-\") return a\n    if (a && b) return a + \" \" + b;\n    return \"\"\n})()",
+                    "expression": "(function() {\n    let a = getValue('jalan_domisili');\n    let b = getValue('nomor_domisili');\n    let result = \"\"\n    if (!b || b == \"-\") result = a\n    if (a && b) result = a + \" \" + b;\n    \n    if (!getValue('alamat_usaha_view@$ROW$')) {\n        setValue('alamat_usaha_view@$ROW$', result)\n    }\n    \n    return result\n})()",
                     "componentVar": [
                       "jalan_domisili",
                       "nomor_domisili"
                     ],
-                    "render": true,
+                    "render": false,
                     "renderType": 1,
                     "enableCondition": "getValue('ec_usaha_respons@$ROW$');",
                     "componentEnable": [
@@ -4670,7 +4677,7 @@
                   },
                   {
                     "label": "9. b1. Alamat/lokasi usaha utama",
-                    "type": 25,
+                    "type": 30,
                     "dataKey": "alamat_usaha_utama",
                     "required": true,
                     "disablePaste": false,
@@ -6163,7 +6170,7 @@
                   },
                   {
                     "label": "13. d. Apa <b>input</b> yang digunakan?\n<br><b><small><font color=\"#ed7014\">Contoh: bibit ikan; pakan ikan; daging ikan, tepung; daging kebab, kulit kebab, sayuran; bambu; jagung pipil; kaca; kain; kulit sapi; kayu bulat; rotan; kunci polos\n<font></small></b>",
-                    "type": 25,
+                    "type": 30,
                     "dataKey": "input",
                     "required": true,
                     "disablePaste": false,
@@ -6186,7 +6193,7 @@
                   },
                   {
                     "label": "13. e. Bagaimana <b>proses</b> mengubah input tersebut menjadi produk output (beserta alatnya)?\n<br><b><small><font color=\"#ed7014\">Contoh: bibit ditebarkan, diberi pakan, setelah cukup umur ditangkap dan dijual; menggiling daging ikan menjadi sosis; membuat kebab di rumah dan sudah dikemasi kemudian dititipkan di warung; penggaraman; pengasapan; pemindangan; pembekuan.\n<font></small></b>",
-                    "type": 25,
+                    "type": 30,
                     "dataKey": "proses",
                     "required": true,
                     "disablePaste": false,
@@ -6788,7 +6795,7 @@
                   },
                   {
                     "label": "15. b. Alamat Kantor Pusat",
-                    "type": 25,
+                    "type": 30,
                     "dataKey": "alamat_kp",
                     "required": true,
                     "disablePaste": false,
@@ -7436,7 +7443,7 @@
                     "disablePaste": false,
                     "tabular": false,
                     "encrypted": false,
-                    "enableCondition": "getValue('ec_usaha_lanjutan@$ROW$') && getValue('halal@$ROW$')?.[0]?.value && (getValue('halal@$ROW$')?.[0]?.value == '1') ;",
+                    "enableCondition": "getValue('ec_usaha_lanjutan@$ROW$') && getValue('halal@$ROW$')?.[0]?.value && (getValue('halal@$ROW$')?.[0]?.value != '1') ;",
                     "componentEnable": [
                       "ec_usaha_lanjutan@$ROW$",
                       "halal@$ROW$"
@@ -8806,9 +8813,9 @@
                     "isEditableList": true
                   },
                   {
-                    "label": "29. b. Lembaga Nonprofit yang Melayani Rumah Tangga",
+                    "label": "29. c. Korporasi Publik",
                     "type": 28,
-                    "dataKey": "non_profit",
+                    "dataKey": "publik",
                     "required": true,
                     "disablePaste": false,
                     "tabular": false,
@@ -8831,9 +8838,9 @@
                     "isEditableList": true
                   },
                   {
-                    "label": "29. c. Korporasi Publik",
+                    "label": "29. b. Lembaga Nonprofit yang Melayani Rumah Tangga",
                     "type": 28,
-                    "dataKey": "publik",
+                    "dataKey": "non_profit",
                     "required": true,
                     "disablePaste": false,
                     "tabular": false,
@@ -12954,23 +12961,6 @@
               "isEditableList": true
             },
             {
-              "label": "jml_meteran_var",
-              "type": 4,
-              "dataKey": "jml_meteran_var",
-              "required": false,
-              "disablePaste": false,
-              "tabular": false,
-              "encrypted": false,
-              "expression": "if (getValue('jml_meteran') > 9) {\n    9\n} else {\n    getValue('jml_meteran')\n}",
-              "enableRemark": false,
-              "presetMaster": false,
-              "disableInput": false,
-              "disableInitial": false,
-              "isCapital": false,
-              "isEditable": false,
-              "isEditableList": true
-            },
-            {
               "label": "<div style=\"\nbackground-color: #E8F1FF;\n  border-left: 5px solid #3B82F6;\n  color: #1E3A8A;\n  padding: 12px 16px;\n  border-radius: 6px;\n  margin: 12px 0;\n  font-family: Arial, sans-serif;\n  font-size: 14px;\n  line-height: 1.5;\n\">\n  🔍 Untuk melanjutkan pengisian <b>Daya Meteran</b>, silakan klik tombol <b>Lihat</b> pada bagian di bawah ini.\n</div>",
               "type": 3,
               "dataKey": "nested_meteran_instruction",
@@ -13238,6 +13228,23 @@
               ],
               "currency": "IDR",
               "separatorFormat": "id-ID",
+              "enableRemark": false,
+              "presetMaster": false,
+              "disableInput": false,
+              "disableInitial": false,
+              "isCapital": false,
+              "isEditable": false,
+              "isEditableList": true
+            },
+            {
+              "label": "jml_meteran_var",
+              "type": 4,
+              "dataKey": "jml_meteran_var",
+              "required": false,
+              "disablePaste": false,
+              "tabular": false,
+              "encrypted": false,
+              "expression": "if (getValue('jml_meteran') > 9) {\n    9\n} else {\n    getValue('jml_meteran')\n}",
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -13532,6 +13539,10 @@
               ],
               "currency": "IDR",
               "separatorFormat": "id-ID",
+              "enableCondition": "getValue('jumlah_motor') > 0",
+              "componentEnable": [
+                "jumlah_motor"
+              ],
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -13585,6 +13596,10 @@
               ],
               "currency": "IDR",
               "separatorFormat": "id-ID",
+              "enableCondition": "getValue('jumlah_mobil') > 0",
+              "componentEnable": [
+                "jumlah_mobil"
+              ],
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -13647,6 +13662,10 @@
               ],
               "currency": "IDR",
               "separatorFormat": "id-ID",
+              "enableCondition": "getValue('jumlah_lahan') > 0",
+              "componentEnable": [
+                "jumlah_lahan"
+              ],
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -13693,6 +13712,10 @@
               ],
               "currency": "IDR",
               "separatorFormat": "id-ID",
+              "enableCondition": "getValue('jumlah_rumah') > 0",
+              "componentEnable": [
+                "jumlah_rumah"
+              ],
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -13814,13 +13837,51 @@
               "isEditableList": true
             },
             {
-              "label": "idsbr",
+              "label": "ID SBR Prelist",
               "type": 4,
               "dataKey": "idsbr",
               "required": false,
               "disablePaste": false,
               "tabular": false,
               "encrypted": false,
+              "enableRemark": false,
+              "principal": 3,
+              "columnName": "ID SBR",
+              "presetMaster": false,
+              "disableInput": false,
+              "disableInitial": false,
+              "isCapital": false,
+              "isEditable": false,
+              "isEditableList": true
+            },
+            {
+              "label": "ID SBR keluarga",
+              "type": 4,
+              "dataKey": "idsbr_keluarga",
+              "required": false,
+              "disablePaste": false,
+              "tabular": false,
+              "encrypted": false,
+              "expression": "(function(){\n    let result = []\n    \n    let usaha = getValue('usaha_gabung') ?? []\n    \n    for (let i = 0; i < usaha.length; i++) {\n        let val = usaha[i].value\n        let umkm = getValue('pilih_umkm_sls#' + val)\n        if (umkm?.[0]?.value != '0') {\n            result.push(umkm?.[0]?.value)\n        }\n    }\n    \n    return result.join(\",\")\n    \n})()",
+              "enableRemark": false,
+              "principal": 9,
+              "columnName": "ID SBR di Keluarga",
+              "presetMaster": false,
+              "disableInput": false,
+              "disableInitial": false,
+              "isCapital": false,
+              "isEditable": false,
+              "isEditableList": true
+            },
+            {
+              "label": "ID SBR Match",
+              "type": 4,
+              "dataKey": "idsbr_match",
+              "required": false,
+              "disablePaste": false,
+              "tabular": false,
+              "encrypted": false,
+              "expression": "(function(){\nfunction transformToObjects(input) {\n  const keys = Object.keys(input);\n  const length = input[keys[0]].length;\n\n  return Array.from({ length }, (_, i) => {\n    const obj = {};\n    keys.forEach(key => {\n      obj[key] = input[key][i] ?? \"\";\n    });\n    return obj;\n  });\n}\nlet idsbr = getValue('idsbr');\nlet arr = getPrincipalCollection(['data2', 'data9']);\nlet result = transformToObjects(arr)\n    .find(a => (a.data9 ?? \"\").split(',').includes(String(idsbr)) )\n    \nif (result) {\n    return {\n        label: result.data2,\n        value: idsbr\n    }\n}\nreturn null\n})()",
               "enableRemark": false,
               "presetMaster": false,
               "disableInput": false,
@@ -14051,5 +14112,10 @@
       }
     ]
   ],
+  "forceSubmit": {
+    "enableCondition": "!!getValue('idsbr_match')",
+    "expression": "getValue('ada_bang_usaha') && getValue('ada_bang_usaha')?.[0]?.value == '1'",
+    "message": "Keberadaan harus ditemukan"
+  },
   "themeColor": "#ff781f"
 }

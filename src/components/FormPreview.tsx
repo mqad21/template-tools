@@ -142,7 +142,128 @@ export const FormPreview = () => {
         preset: preset ? JSON.parse(JSON.stringify(preset)) : null,
         response: initialResponse,
         remark: {},
-        principals: [],
+        principals: [
+          {
+            "data1": "1",
+            "data2": "MOCHAMAD SAPAAT",
+            "data3": "",
+            "data4": "keluarga",
+            "data5": "KO PU P4S NO. B9A RT011 RW007 ",
+            "data6": "1",
+            "data7": "0",
+            "data8": "13430",
+            "data9": "",
+            "data10": "2. Tidak"
+          },
+          {
+            "data1": "",
+            "data2": "JOKO",
+            "data3": "11234",
+            "data4": "UMKM",
+            "data5": "",
+            "data6": "",
+            "data7": "",
+            "data8": "",
+            "data9": "",
+            "data10": ""
+          },
+          {
+            "data1": "",
+            "data2": "WARUNG MAJU MUNDUR",
+            "data3": "11234",
+            "data4": "UMKM",
+            "data5": "",
+            "data6": "",
+            "data7": "",
+            "data8": "",
+            "data9": "",
+            "data10": ""
+          },
+          {
+            "data1": "",
+            "data2": "BUDI",
+            "data3": "18752",
+            "data4": "UMKM",
+            "data5": "",
+            "data6": "",
+            "data7": "",
+            "data8": "",
+            "data9": "",
+            "data10": ""
+          },
+          {
+            "data1": "",
+            "data2": "IMAS",
+            "data3": "198632",
+            "data4": "UMKM",
+            "data5": "",
+            "data6": "",
+            "data7": "",
+            "data8": "",
+            "data9": "",
+            "data10": ""
+          },
+          {
+            "data1": "1",
+            "data2": "NURMAN SUHARIYANTO",
+            "data3": "11234",
+            "data4": "keluarga",
+            "data5": "JL. KAPTEN TENDEAN",
+            "data6": "1",
+            "data7": "1",
+            "data8": "63136",
+            "data9": "",
+            "data10": "2. Tidak"
+          },
+          {
+            "data1": "1",
+            "data2": "SITI ABIDAH",
+            "data3": "11236",
+            "data4": "keluarga",
+            "data5": "JL. STATISTIK 2NOC27",
+            "data6": "1",
+            "data7": "1",
+            "data8": "13430",
+            "data9": "",
+            "data10": "2. Tidak"
+          },
+          {
+            "data1": "2",
+            "data2": "FREDY BAGUS",
+            "data3": "11235",
+            "data4": "",
+            "data5": "",
+            "data6": "2",
+            "data7": "1",
+            "data8": "16413",
+            "data9": "11234,18752",
+            "data10": "2. Tidak"
+          },
+          {
+            "data1": "1",
+            "data2": "SUDARMANTO",
+            "data3": "13456",
+            "data4": "keluarga",
+            "data5": "A2/14",
+            "data6": "1",
+            "data7": "0",
+            "data8": "17415",
+            "data9": "",
+            "data10": "2. Tidak"
+          },
+          {
+            "data1": "1",
+            "data2": "MOCH ALI BADRUS",
+            "data3": "12345",
+            "data4": "keluarga",
+            "data5": "DESA KETANON",
+            "data6": "1",
+            "data7": "0",
+            "data8": "66226",
+            "data9": "",
+            "data10": "2. Tidak"
+          }
+        ],
         formMode: 1,
         initialMode: 2,
         user: {
@@ -158,7 +279,7 @@ export const FormPreview = () => {
 
         // Target the inner root we just created
         instanceRef.current = FF("#preview-root-inner", options);
-        
+
         instanceRef.current.event.on('save', async (data: any) => {
           isEngineSaveRef.current = true;
           try {
@@ -167,7 +288,7 @@ export const FormPreview = () => {
             console.error("Failed to persist save:", e);
           }
         });
-        
+
         instanceRef.current.event.on('lookup-request', async (config: any, params: any) => {
           try {
             const handleJSON = (str: any) => typeof str !== "string" ? str : JSON.parse(str);
@@ -195,7 +316,7 @@ export const FormPreview = () => {
             throw e;
           }
         });
-        
+
         instanceRef.current.render();
       } catch (err: any) {
         console.error("FasihForm render error:", err)

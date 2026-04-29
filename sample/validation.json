@@ -1,5 +1,5 @@
 {
-  "version": "4.0.013",
+  "version": "4.0.023",
   "testFunctions": [
     {
       "dataKey": "kunjungan_2",
@@ -712,11 +712,12 @@
     {
       "dataKey": "punya_nib",
       "componentValidation": [
-        "punya_nib@$ROW$"
+        "punya_nib@$ROW$",
+        "tidak_nib@$ROW$"
       ],
       "validations": [
         {
-          "test": "let val = getValue('punya_nib@$ROW$')?.[0]?.value;\nval == '2';",
+          "test": "getValue('punya_nib@$ROW$')?.[0]?.value == '2' && getValue('tidak_nib@$ROW$')?.[0].value != '3'",
           "message": "Apakah perusahaan benar tidak memiliki Nomor Induk Berusaha (NIB)?",
           "type": 1
         }
@@ -1633,19 +1634,6 @@
       ]
     },
     {
-      "dataKey": "non_profit",
-      "componentValidation": [
-        "non_profit@$ROW$"
-      ],
-      "validations": [
-        {
-          "test": "let val = getValue('non_profit@$ROW$');\n\nval < 0 || val > 100;\n",
-          "message": "Rentang nilai antara 0-100",
-          "type": 2
-        }
-      ]
-    },
-    {
       "dataKey": "publik",
       "componentValidation": [
         "publik@$ROW$"
@@ -1653,6 +1641,19 @@
       "validations": [
         {
           "test": "let val = getValue('publik@$ROW$');\n\nval < 0 || val > 100;\n",
+          "message": "Rentang nilai antara 0-100",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "dataKey": "non_profit",
+      "componentValidation": [
+        "non_profit@$ROW$"
+      ],
+      "validations": [
+        {
+          "test": "let val = getValue('non_profit@$ROW$');\n\nval < 0 || val > 100;\n",
           "message": "Rentang nilai antara 0-100",
           "type": 2
         }
@@ -1714,7 +1715,7 @@
           "type": 2
         },
         {
-          "test": "let a = getValue('pribadi@$ROW$');\nlet b = getValue('non_profit@$ROW$');\nlet c = getValue('publik@$ROW$');\nlet d = getValue('non_publik@$ROW$');\nlet e = getValue('pemerintah@$ROW$');\nlet f = getValue('asing@$ROW$');\n\na+b+c+d+e+f !== 100;",
+          "test": "(function () {\r\n    var a = getValue('pribadi@$ROW$');\r\n    var b = getValue('non_profit@$ROW$');\r\n    var c = getValue('publik@$ROW$');\r\n    var d = getValue('non_publik@$ROW$');\r\n    var e = getValue('pemerintah@$ROW$');\r\n    var f = getValue('asing@$ROW$');\r\n\r\n    // ubah ke number, default 0\r\n    var total =\r\n        (a ? Number(a) : 0) +\r\n        (b ? Number(b) : 0) +\r\n        (c ? Number(c) : 0) +\r\n        (d ? Number(d) : 0) +\r\n        (e ? Number(e) : 0) +\r\n        (f ? Number(f) : 0);\r\n\r\n    // TRUE = error kalau tidak sama dengan 100\r\n    return total != 100;\r\n})();",
           "message": "Penjumlahan harus sama dengan 100%",
           "type": 2
         },
@@ -1780,7 +1781,7 @@
         {
           "test": "(function () {\r\n    var row = getRowIndex();\r\n\r\n    var ijazahNow = getValue('ijazah@$ROW$')?.[0]?.value;\r\n    var ijazahOld = getValue('ijazah_prelist@$ROW$')?.[0]?.value;\r\n\r\n    // hanya untuk bukan anggota keluarga baru\r\n    if (row > 100) return false;\r\n\r\n    // skip kalau belum ada data lama\r\n    if (ijazahOld == null || ijazahOld == '') return false;\r\n\r\n    if (ijazahNow == null) return false;\r\n\r\n    // TRUE = error\r\n    return Number(ijazahNow) < Number(ijazahOld);\r\n})();",
           "message": "Tingkat pendidikan sekarang seharusnya sama atau lebih tinggi dari tingkat pendidikan prelist",
-          "type": 2
+          "type": 1
         },
         {
           "test": "(function () {\r\n    var umur = getValue('umur@$ROW$');\r\n    var ijazah = getValue('ijazah@$ROW$')?.[0]?.value;\r\n\r\n    if (umur == null || ijazah == null) return false;\r\n\r\n    return umur >= 18 && umur <= 19 && ijazah == 6;\r\n})();",
@@ -2435,7 +2436,7 @@
           "type": 1
         },
         {
-          "test": "let jns_closet = getValue('jns_closet')?.[0]?.value ?? '';\nlet buang_tinja = getValue('buang_tinja')?.[0]?.value ?? '';\n\njns_closet == '1' && buang_tinja > '1';",
+          "test": "let jns_closet = getValue('jns_closet')?.[0]?.value ?? '';\nlet buang_tinja = getValue('buang_tinja')?.[0]?.value ?? '';\n\njns_closet == '1' && buang_tinja > 2;",
           "message": "Jika memiliki kloset leher angsa maka tempat pembuangan akhir tinja seharusnya bukan di kolam/sawah/danau/laut, lubang tanah, pantai/tanah lapang/kebun, atau lainnya",
           "type": 1
         },
@@ -2480,7 +2481,7 @@
       ],
       "validations": [
         {
-          "test": "(function () {\r\n    var val = getValue('id_pelanggan@$ROW$');\r\n\r\n    if (!val) return false;\r\n\r\n    // ? tidak boleh ada spasi\r\n    if (val !== val.trim()) return true;\r\n\r\n    // ? harus 12 digit angka\r\n    return !/^[0-9]{12}$/.test(val);\r\n})();",
+          "test": "(function () {\r\n  var val = getValue('id_pelanggan@$ROW$');\r\n\r\n  if (!val) return false;\r\n\r\n  // tidak boleh ada spasi di awal/akhir\r\n  if (val !== val.trim()) return true;\r\n\r\n  // harus 11–12 digit angka\r\n  return !/^[0-9]{11,12}$/.test(val);\r\n})();",
           "message": "ID pelanggan harus terdiri dari 12 digit angka",
           "type": 2
         }
@@ -2519,7 +2520,7 @@
       ],
       "validations": [
         {
-          "test": "let pulsa_sebulan = getValue('pulsa_sebulan');\n\nlet isValid = /00$/.test(pulsa_sebulan.toString());\n\nisValid;",
+          "test": "(function () {\r\n    var val = getValue('pulsa_sebulan');\r\n\r\n    if (val == null) return false;\r\n\r\n    var str = val.toString();\r\n\r\n    if (str !== str.trim()) return true;\r\n    if (!/^[0-9]+$/.test(str)) return true;\r\n\r\n    return str.slice(-2) != \"00\";\r\n})();",
           "message": "2 digit terakhir harus 0",
           "type": 2
         }
