@@ -29,6 +29,12 @@ interface State {
   selectedDataKey: string | null
   componentMap: Record<string, Component>
   
+  // Settings & Multi-template
+  bearerToken: string
+  currentTemplateId: string
+  availableTemplateIds: string[]
+  isLoading: boolean
+  
   // Actions
   setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
   setTemplate: (template: any) => void
@@ -40,9 +46,25 @@ interface State {
   updateValidation: (dataKey: string, updates: Partial<TestFunction>) => void
   updatePresetEntry: (dataKey: string, answer: any) => void
   updateResponseEntry: (dataKey: string, answer: any) => void
-  loadSamples: () => Promise<void>
-  saveToDisk: () => Promise<void>
-  syncFromServer: (token: string, templateId: string) => Promise<void>
+  
+  // Storage actions
+  loadCurrentTemplate: () => Promise<void>
+  saveToLocalStorage: () => void
+  syncFromServer: () => Promise<void>
+  setGlobalSettings: (token: string) => void
+  addTemplate: (templateId: string) => void
+  switchTemplate: (templateId: string) => Promise<void>
+  deleteTemplate: (templateId: string) => void
+}
+
+const STORAGE_KEYS = {
+  TOKEN: 'fasih_bearer_token',
+  CURRENT_ID: 'fasih_current_template_id',
+  ID_LIST: 'fasih_template_ids',
+  TEMPLATE: (id: string) => `fasih_template_${id}`,
+  VALIDATION: (id: string) => `fasih_validation_${id}`,
+  PRESET: (id: string) => `fasih_preset_${id}`,
+  RESPONSE: (id: string) => `fasih_response_${id}`,
 }
 
 const buildComponentMap = (components: any): Record<string, Component> => {
@@ -72,23 +94,6 @@ const buildComponentMap = (components: any): Record<string, Component> => {
   return map
 }
 
-// Background sync worker initialization
-let syncWorker: Worker | null = null;
-if (typeof window !== 'undefined') {
-  try {
-    syncWorker = new Worker(new URL('./syncWorker.ts', import.meta.url), { type: 'module' });
-    syncWorker.onmessage = (e) => {
-      if (e.data.type === 'SAVE_SUCCESS') {
-        console.log('Background sync: Saved to disk successfully');
-      } else if (e.data.type === 'SAVE_ERROR') {
-        console.error('Background sync failed:', e.data.error);
-      }
-    };
-  } catch (e) {
-    console.error('Failed to initialize sync worker:', e);
-  }
-}
-
 let saveDebounceTimer: any = null;
 
 export const useStore = create<State>((set, get) => ({
@@ -99,20 +104,31 @@ export const useStore = create<State>((set, get) => ({
   response: null,
   selectedDataKey: null,
   componentMap: {},
+  isLoading: true,
+  
+  bearerToken: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.TOKEN) || '' : '',
+  currentTemplateId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.CURRENT_ID) || '' : '',
+  availableTemplateIds: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ID_LIST) || '[]') : [],
 
   setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
-  setTemplate: (template) => set({ 
-    template, 
-    componentMap: buildComponentMap(template?.components) 
-  }),
-  setValidation: (validation) => set({ validation }),
-  setPreset: (preset) => set({ preset }),
+  setTemplate: (template) => {
+    set({ 
+      template, 
+      componentMap: buildComponentMap(template?.components) 
+    })
+    get().saveToLocalStorage()
+  },
+  setValidation: (validation) => {
+    set({ validation })
+    get().saveToLocalStorage()
+  },
+  setPreset: (preset) => {
+    set({ preset })
+    get().saveToLocalStorage()
+  },
   setResponse: (response) => {
-    const { template } = get();
-    if (template?.id && response) {
-      localStorage.setItem(`fasih-preview-response-${template.id}`, JSON.stringify(response));
-    }
-    set({ response });
+    set({ response })
+    get().saveToLocalStorage()
   },
   setSelectedDataKey: (selectedDataKey) => set({ selectedDataKey }),
 
@@ -166,6 +182,7 @@ export const useStore = create<State>((set, get) => ({
         template: { ...template, components: newComponents },
         componentMap: buildComponentMap(newComponents)
       })
+      get().saveToLocalStorage()
     }
   },
 
@@ -185,6 +202,7 @@ export const useStore = create<State>((set, get) => ({
     set({ 
       validation: { ...validation, testFunctions: newTestFunctions }
     })
+    get().saveToLocalStorage()
   },
 
   updatePresetEntry: (dataKey, answer) => {
@@ -199,6 +217,7 @@ export const useStore = create<State>((set, get) => ({
       newPredata.push({ dataKey, answer })
     }
     set({ preset: { ...preset, predata: newPredata } })
+    get().saveToLocalStorage()
   },
 
   updateResponseEntry: (dataKey, answer) => {
@@ -213,63 +232,85 @@ export const useStore = create<State>((set, get) => ({
       newAnswers.push({ dataKey, answer })
     }
     set({ response: { ...response, answers: newAnswers } })
+    get().saveToLocalStorage()
   },
 
-  loadSamples: async () => {
+  loadCurrentTemplate: async () => {
+    set({ isLoading: true })
+    const { currentTemplateId } = get()
+    
+    if (!currentTemplateId) {
+      set({ template: null, isLoading: false })
+      return
+    }
+
     try {
-      const [template, validation, preset, fileResponse] = await Promise.all([
-        fetch('/sample/template.json').then(res => res.json()),
-        fetch('/sample/validation.json').then(res => res.json()),
-        fetch('/sample/preset.json').then(res => res.json()),
-        fetch('/sample/response.json').then(res => res.json()),
-      ])
+      const templateStr = localStorage.getItem(STORAGE_KEYS.TEMPLATE(currentTemplateId))
+      const validationStr = localStorage.getItem(STORAGE_KEYS.VALIDATION(currentTemplateId))
+      const presetStr = localStorage.getItem(STORAGE_KEYS.PRESET(currentTemplateId))
+      const responseStr = localStorage.getItem(STORAGE_KEYS.RESPONSE(currentTemplateId))
+
+      const template = templateStr ? JSON.parse(templateStr) : null
+      const validation = validationStr ? JSON.parse(validationStr) : null
       
-      let finalResponse = fileResponse;
-      if (template?.id) {
-        const cached = localStorage.getItem(`fasih-preview-response-${template.id}`);
-        if (cached) {
-          try {
-            finalResponse = JSON.parse(cached);
-          } catch (e) {
-            console.error('Failed to parse cached response:', e);
-          }
-        }
-      }
+      // Default values for preset and response
+      const preset = presetStr ? JSON.parse(presetStr) : { predata: [] }
+      const response = responseStr ? JSON.parse(responseStr) : { answers: [] }
 
       set({ 
         template, 
         validation, 
         preset, 
-        response: finalResponse,
-        componentMap: buildComponentMap(template?.components)
+        response,
+        componentMap: template ? buildComponentMap(template.components) : {},
+        isLoading: false
       })
-    } catch (error) {
-      console.error('Failed to load samples:', error)
+      
+      // If we used defaults, save them back to localStorage
+      if (!presetStr || !responseStr) {
+        get().saveToLocalStorage()
+      }
+    } catch (e) {
+      console.error('Failed to load data from localStorage:', e)
+      set({ isLoading: false })
     }
   },
 
-  saveToDisk: async () => {
-    const { template, validation, response, preset } = get()
+  saveToLocalStorage: () => {
+    const { template, validation, preset, response, currentTemplateId } = get()
     
-    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
+    const id = currentTemplateId || template?.id
+    if (!id) return
+
+    if (saveDebounceTimer) clearTimeout(saveDebounceTimer)
     
     saveDebounceTimer = setTimeout(() => {
-      if (syncWorker) {
-        syncWorker.postMessage({
-          type: 'SAVE_TO_DISK',
-          data: { template, validation, response, preset }
-        });
+      localStorage.setItem(STORAGE_KEYS.TEMPLATE(id), JSON.stringify(template))
+      localStorage.setItem(STORAGE_KEYS.VALIDATION(id), JSON.stringify(validation))
+      localStorage.setItem(STORAGE_KEYS.PRESET(id), JSON.stringify(preset))
+      localStorage.setItem(STORAGE_KEYS.RESPONSE(id), JSON.stringify(response))
+      
+      // Update ID list if new
+      const { availableTemplateIds } = get()
+      if (!availableTemplateIds.includes(id)) {
+        const newList = [...availableTemplateIds, id]
+        set({ availableTemplateIds: newList })
+        localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(newList))
       }
-    }, 2000); // Wait for 2s of idle after a change to trigger background sync
+      console.log(`Saved template ${id} to localStorage`)
+    }, 500)
   },
 
-  syncFromServer: async (token: string, templateId: string) => {
+  syncFromServer: async () => {
+    const { bearerToken, currentTemplateId } = get()
+    if (!bearerToken || !currentTemplateId) {
+      throw new Error('Bearer token and Template ID are required. Please check Settings.')
+    }
+
     try {
-      const baseUrl = 'https://fasih-survey.bps.go.id/designer/api/template/develop'
-      
-      const fetchThroughProxy = async (targetUrl: string) => {
-        const res = await fetch(`/api/proxy?url=${encodeURIComponent(targetUrl)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+      const fetchThroughProxy = async (endpoint: string) => {
+        const res = await fetch(`/api/proxy${endpoint}`, {
+          headers: { 'Authorization': `Bearer ${bearerToken}` }
         })
         
         if (!res.ok) {
@@ -281,7 +322,6 @@ export const useStore = create<State>((set, get) => ({
         if (contentType && contentType.includes('application/json')) {
           return res.json()
         } else {
-          // It's a "blob" or raw text
           const text = await res.text()
           try {
             return JSON.parse(text)
@@ -292,45 +332,75 @@ export const useStore = create<State>((set, get) => ({
       }
 
       console.log('Fetching from BPS API...')
+      // Path format for proxy: /designer/api/template/develop/file/...
       const [template, validation] = await Promise.all([
-        fetchThroughProxy(`${baseUrl}/file/${templateId}`),
-        fetchThroughProxy(`${baseUrl}/file-validation/${templateId}`)
+        fetchThroughProxy(`/designer/api/template/develop/file/${currentTemplateId}`),
+        fetchThroughProxy(`/designer/api/template/develop/file-validation/${currentTemplateId}`)
       ])
 
-      // Validation check: ensure we didn't receive an error object with status 200
       if (template && template.success === false && template.message) {
         throw new Error(`Server returned error: ${template.message}`)
       }
 
-      // Basic structure validation
-      if (!template || typeof template !== 'object') {
-        throw new Error('Fetched template is invalid or empty')
-      }
-      
-      if (!template.id && !template.components) {
+      if (!template || typeof template !== 'object' || (!template.id && !template.components)) {
         throw new Error('Fetched data does not appear to be a valid template')
       }
 
-      console.log('Sending to local save API...')
-      // Save the fetched data to local disk using existing saveToDisk logic but with new data
-      const saveRes = await fetch('/api/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ template, validation })
+      set({ 
+        template, 
+        validation,
+        componentMap: buildComponentMap(template?.components)
       })
-
-      if (!saveRes.ok) {
-        const saveErr = await saveRes.json().catch(() => ({}))
-        throw new Error(saveErr.error || 'Failed to save synchronized data to disk')
-      }
       
-      // Reload the local state
-      await get().loadSamples()
-      
+      get().saveToLocalStorage()
       console.log('Synchronized from server correctly')
     } catch (error: any) {
       console.error('Sync from server failed:', error)
       throw error
+    }
+  },
+
+  setGlobalSettings: (token) => {
+    set({ bearerToken: token })
+    localStorage.setItem(STORAGE_KEYS.TOKEN, token)
+  },
+
+  addTemplate: (templateId) => {
+    const { availableTemplateIds } = get()
+    if (!availableTemplateIds.includes(templateId)) {
+      const newList = [...availableTemplateIds, templateId]
+      set({ availableTemplateIds: newList })
+      localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(newList))
+      
+      // Initialize defaults for new template ID if they don't exist
+      if (!localStorage.getItem(STORAGE_KEYS.RESPONSE(templateId))) {
+        localStorage.setItem(STORAGE_KEYS.RESPONSE(templateId), JSON.stringify({ answers: [] }))
+      }
+      if (!localStorage.getItem(STORAGE_KEYS.PRESET(templateId))) {
+        localStorage.setItem(STORAGE_KEYS.PRESET(templateId), JSON.stringify({ predata: [] }))
+      }
+    }
+  },
+
+  switchTemplate: async (templateId) => {
+    set({ currentTemplateId: templateId })
+    localStorage.setItem(STORAGE_KEYS.CURRENT_ID, templateId)
+    await get().loadCurrentTemplate()
+  },
+
+  deleteTemplate: (templateId) => {
+    localStorage.removeItem(STORAGE_KEYS.TEMPLATE(templateId))
+    localStorage.removeItem(STORAGE_KEYS.VALIDATION(templateId))
+    localStorage.removeItem(STORAGE_KEYS.PRESET(templateId))
+    localStorage.removeItem(STORAGE_KEYS.RESPONSE(templateId))
+    
+    const newList = get().availableTemplateIds.filter(id => id !== templateId)
+    set({ availableTemplateIds: newList })
+    localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(newList))
+    
+    if (get().currentTemplateId === templateId) {
+      set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null })
+      localStorage.setItem(STORAGE_KEYS.CURRENT_ID, '')
     }
   }
 }))

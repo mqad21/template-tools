@@ -389,7 +389,7 @@ export const Sidebar = () => {
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         <div className="p-2 space-y-px">
           {sidebarMode === 'components' ? (
-            Array.isArray(template.components) && template.components.map((group, idx) => {
+            Array.isArray(template.components) && template.components.map((group: any, idx: number) => {
               const components = Array.isArray(group) ? group : [group];
               return (
                 <div key={idx} className={cn("space-y-px", idx > 0 && "mt-4 pt-4 border-t border-dashed")}>

@@ -19,7 +19,6 @@ export const PropertyEditor = () => {
     setResponse,
     setTemplate,
     setValidation,
-    saveToDisk,
     componentMap
   } = useStore()
 
@@ -81,9 +80,6 @@ export const PropertyEditor = () => {
         else if (sidebarMode === 'responses') setResponse(parsed)
         else if (sidebarMode === 'template') setTemplate(parsed)
         else if (sidebarMode === 'validation') setValidation(parsed)
-        
-        // Persist to disk
-        saveToDisk()
       } catch (e: any) {
         setJsonError(e.message)
       } finally {
@@ -92,7 +88,7 @@ export const PropertyEditor = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [localJSON, sidebarMode, setPreset, setResponse, setTemplate, setValidation, saveToDisk]);
+  }, [localJSON, sidebarMode, setPreset, setResponse, setTemplate, setValidation]);
 
   const handleJSONChange = (val: string) => {
     setLocalJSON(val)
@@ -145,13 +141,6 @@ export const PropertyEditor = () => {
           </div>
           <div className="w-px h-3 bg-zinc-800" />
           <div className="flex-1">JSON Schema valid for Fasih Engine v2.0</div>
-          <button 
-            onClick={() => saveToDisk()}
-            className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded transition-colors"
-          >
-            <Save className="w-3 h-3" />
-            FORCE SAVE
-          </button>
         </div>
       </div>
     )
@@ -175,7 +164,6 @@ export const PropertyEditor = () => {
   const commitComponentUpdate = () => {
     if (!localComponent || !selectedDataKey) return
     updateComponent(selectedDataKey, localComponent)
-    saveToDisk()
   }
 
   const handleLocalValidationChange = (index: number, key: string, value: any) => {
@@ -188,7 +176,6 @@ export const PropertyEditor = () => {
   const commitValidationUpdate = () => {
     if (!localValidation || !selectedDataKey) return
     updateValidation(selectedDataKey, localValidation)
-    saveToDisk()
   }
 
   const addValidation = () => {
@@ -199,7 +186,6 @@ export const PropertyEditor = () => {
     }
     setLocalValidation(updated)
     updateValidation(selectedDataKey, updated)
-    saveToDisk()
   }
 
   return (
