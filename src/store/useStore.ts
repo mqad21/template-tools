@@ -61,6 +61,7 @@ interface State {
 
 const STORAGE_KEYS = {
   TOKEN: 'fasih_bearer_token',
+  USE_PROXY: 'fasih_use_proxy',
   CURRENT_ID: 'fasih_current_template_id',
   ID_LIST: 'fasih_template_ids',
   TEMPLATE: (id: string) => `fasih_template_${id}`,
@@ -136,6 +137,10 @@ export const useStore = create<State>((set, get) => ({
   setResponse: (response) => {
     set({ response })
     get().saveToLocalStorage()
+  },
+  setGlobalSettings: (token) => {
+    set({ bearerToken: token })
+    localStorage.setItem(STORAGE_KEYS.TOKEN, token)
   },
   setSelectedDataKey: (selectedDataKey) => set({ selectedDataKey }),
 
