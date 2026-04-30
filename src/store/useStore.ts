@@ -379,11 +379,6 @@ export const useStore = create<State>((set, get) => ({
     }
   },
 
-  setGlobalSettings: (token) => {
-    set({ bearerToken: token })
-    localStorage.setItem(STORAGE_KEYS.TOKEN, token)
-  },
-
   addTemplate: (templateId) => {
     const { availableTemplateIds } = get()
     if (!availableTemplateIds.includes(templateId)) {
