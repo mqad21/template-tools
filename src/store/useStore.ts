@@ -31,12 +31,14 @@ interface State {
   
   // Settings & Multi-template
   bearerToken: string
+  useProxy: boolean
   currentTemplateId: string
   availableTemplateIds: string[]
   isLoading: boolean
   
   // Actions
   setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
+  setUseProxy: (useProxy: boolean) => void
   setTemplate: (template: any) => void
   setValidation: (validation: any) => void
   setPreset: (preset: any) => void
@@ -107,10 +109,15 @@ export const useStore = create<State>((set, get) => ({
   isLoading: true,
   
   bearerToken: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.TOKEN) || '' : '',
+  useProxy: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.USE_PROXY) !== 'false' : true,
   currentTemplateId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.CURRENT_ID) || '' : '',
   availableTemplateIds: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ID_LIST) || '[]') : [],
 
   setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
+  setUseProxy: (useProxy) => {
+    set({ useProxy })
+    localStorage.setItem(STORAGE_KEYS.USE_PROXY, String(useProxy))
+  },
   setTemplate: (template) => {
     set({ 
       template, 
@@ -308,8 +315,15 @@ export const useStore = create<State>((set, get) => ({
     }
 
     try {
+      const { useProxy } = get()
       const fetchThroughProxy = async (endpoint: string) => {
-        const res = await fetch(`/api/proxy${endpoint}`, {
+        const targetUrl = `https://fasih-survey.bps.go.id${endpoint}`
+        
+        // If proxy is enabled, use /api/proxy/path
+        // If disabled, fetch directly from BPS URL (requires VPN & CORS extension)
+        const fetchUrl = useProxy ? `/api/proxy${endpoint}` : targetUrl
+        
+        const res = await fetch(fetchUrl, {
           headers: { 'Authorization': `Bearer ${bearerToken}` }
         })
         

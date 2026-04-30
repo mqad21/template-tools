@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Key, Settings, X, Save, Check } from 'lucide-react'
+import { Key, Settings, X, Save, Check, Globe, Shield } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import { cn } from '../lib/utils'
 
@@ -11,24 +11,29 @@ interface SettingsDialogProps {
 export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose }) => {
   const { 
     bearerToken, 
-    setGlobalSettings 
+    useProxy,
+    setGlobalSettings,
+    setUseProxy
   } = useStore()
 
   const [token, setToken] = useState(bearerToken)
+  const [localUseProxy, setLocalUseProxy] = useState(useProxy)
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setToken(bearerToken)
+      setLocalUseProxy(useProxy)
       setIsSaved(false)
     }
-  }, [isOpen, bearerToken])
+  }, [isOpen, bearerToken, useProxy])
 
   if (!isOpen) return null
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     setGlobalSettings(token)
+    setUseProxy(localUseProxy)
     setIsSaved(true)
     setTimeout(() => {
       setIsSaved(false)
@@ -47,8 +52,8 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose 
               <Settings className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Global Settings</h2>
-              <p className="text-xs text-muted-foreground leading-none mt-1">Configure global application settings</p>
+              <h2 className="text-lg font-bold">Studio Settings</h2>
+              <p className="text-xs text-muted-foreground leading-none mt-1">Configure sync and editor preferences</p>
             </div>
           </div>
           <button 
@@ -60,7 +65,8 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose 
         </div>
 
         <form onSubmit={handleSave} className="p-6 space-y-6">
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* Bearer Token */}
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 <Key className="w-3 h-3" />
@@ -68,12 +74,40 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose 
               </label>
               <textarea
                 placeholder="Paste your bearer token here..."
-                className="w-full px-4 py-2.5 min-h-[150px] bg-background border rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                className="w-full px-4 py-2.5 min-h-[120px] bg-background border rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
               />
-              <p className="text-[9px] text-muted-foreground">
-                This token is used for all templates. Keep it secure and update it when it expires.
+            </div>
+
+            {/* Proxy Toggle */}
+            <div className="p-4 bg-muted/20 rounded-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span className="text-xs font-bold">API Proxy</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setLocalUseProxy(!localUseProxy)}
+                  className={cn(
+                    "relative inline-flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    localUseProxy ? "bg-primary" : "bg-muted-foreground/30"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform",
+                      localUseProxy ? "translate-x-5" : "translate-x-1"
+                    )}
+                  />
+                </button>
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-relaxed">
+                {localUseProxy 
+                  ? "Bypass CORS using Vercel's server. Use this for public APIs."
+                  : "Fetch directly from your browser. Necessary for VPN/Internal APIs (Requires a CORS-bypass extension)."
+                }
               </p>
             </div>
           </div>
@@ -91,25 +125,29 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose 
               {isSaved ? (
                 <>
                   <Check className="w-4 h-4" />
-                  Token Saved
+                  Settings Saved
                 </>
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  Save Global Token
+                  Save Settings
                 </>
               )}
             </button>
           </div>
         </form>
 
-        <div className="p-4 bg-muted/30 border-t text-center">
+        <div className="p-4 bg-muted/30 border-t text-center space-y-1">
           <p className="text-[9px] text-muted-foreground leading-tight italic">
-            Note: All template data is still stored locally in your browser and keyed by their respective IDs.
+            Note: All template data is still stored locally in your browser.
           </p>
+          {!localUseProxy && (
+            <p className="text-[9px] text-primary font-bold animate-pulse">
+              ⚠️ Direct mode requires a CORS-bypass browser extension.
+            </p>
+          )}
         </div>
       </div>
     </div>
   )
 }
-
