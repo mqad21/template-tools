@@ -17,7 +17,10 @@ export default async function handler(
       method: 'GET',
       headers: {
         'Authorization': token || '',
-        'Accept': 'application/json',
+        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': request.headers['user-agent'] || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://fasih-survey.bps.go.id/',
+        'Origin': 'https://fasih-survey.bps.go.id/'
       },
     });
 
