@@ -1,24 +1,7 @@
 import { create } from 'zustand'
-
-export interface Component {
-  dataKey: string
-  label: string
-  type: number
-  components?: Component[][]
-  [key: string]: any
-}
-
-export interface ValidationRule {
-  test: string
-  message: string
-  type: number
-}
-
-export interface TestFunction {
-  dataKey: string
-  componentValidation: string[]
-  validations: ValidationRule[]
-}
+import { Component, TestFunction, buildComponentMap } from '@fasih-form-studio/shared'
+export type { Component, TestFunction } from '@fasih-form-studio/shared'
+export { buildComponentMap } from '@fasih-form-studio/shared'
 
 interface State {
   template: any
@@ -35,6 +18,8 @@ interface State {
   currentTemplateId: string
   availableTemplateIds: string[]
   isLoading: boolean
+  parentMap: Record<string, string | null>
+  selectedPath: Set<string>
   
   // Actions
   setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
@@ -70,33 +55,6 @@ const STORAGE_KEYS = {
   RESPONSE: (id: string) => `fasih_response_${id}`,
 }
 
-const buildComponentMap = (components: any): Record<string, Component> => {
-  const map: Record<string, Component> = {}
-  const traverse = (comps: any) => {
-    if (!comps) return
-    const compList = Array.isArray(comps) ? comps : [comps]
-    
-    for (const item of compList) {
-      if (!item) continue
-      
-      if (Array.isArray(item)) {
-        traverse(item)
-        continue
-      }
-      
-      if (item.dataKey) {
-        map[item.dataKey] = item
-      }
-      
-      if (item.components) {
-        traverse(item.components)
-      }
-    }
-  }
-  traverse(components)
-  return map
-}
-
 let saveDebounceTimer: any = null;
 
 export const useStore = create<State>((set, get) => ({
@@ -113,6 +71,8 @@ export const useStore = create<State>((set, get) => ({
   useProxy: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.USE_PROXY) !== 'false' : true,
   currentTemplateId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.CURRENT_ID) || '' : '',
   availableTemplateIds: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ID_LIST) || '[]') : [],
+  parentMap: {},
+  selectedPath: new Set(),
 
   setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
   setUseProxy: (useProxy) => {
@@ -120,9 +80,30 @@ export const useStore = create<State>((set, get) => ({
     localStorage.setItem(STORAGE_KEYS.USE_PROXY, String(useProxy))
   },
   setTemplate: (template) => {
+    const parentMap: Record<string, string | null> = {}
+    const buildParentMap = (comps: any, parent: string | null = null) => {
+      if (!comps) return
+      const list = Array.isArray(comps) ? comps : [comps]
+      for (const item of list) {
+        if (!item) continue
+        if (Array.isArray(item)) {
+          buildParentMap(item, parent)
+          continue
+        }
+        if (item.dataKey) {
+          parentMap[item.dataKey] = parent
+        }
+        if (item.components) {
+          buildParentMap(item.components, item.dataKey || parent)
+        }
+      }
+    }
+    buildParentMap(template?.components)
+
     set({ 
       template, 
-      componentMap: buildComponentMap(template?.components) 
+      componentMap: buildComponentMap(template?.components),
+      parentMap
     })
     get().saveToLocalStorage()
   },
@@ -142,7 +123,21 @@ export const useStore = create<State>((set, get) => ({
     set({ bearerToken: token })
     localStorage.setItem(STORAGE_KEYS.TOKEN, token)
   },
-  setSelectedDataKey: (selectedDataKey) => set({ selectedDataKey }),
+  setSelectedDataKey: (selectedDataKey) => {
+    const { parentMap } = get()
+    const selectedPath = new Set<string>()
+    let current = selectedDataKey
+    while (current && parentMap[current]) {
+      const parent = parentMap[current]
+      if (parent) {
+        selectedPath.add(parent)
+        current = parent
+      } else {
+        break
+      }
+    }
+    set({ selectedDataKey, selectedPath })
+  },
 
   updateComponent: (dataKey, updates) => {
     const { template } = get()
@@ -194,6 +189,8 @@ export const useStore = create<State>((set, get) => ({
         template: { ...template, components: newComponents },
         componentMap: buildComponentMap(newComponents)
       })
+      // Trigger setSelectedDataKey to refresh path if needed
+      get().setSelectedDataKey(get().selectedDataKey)
       get().saveToLocalStorage()
     }
   },
@@ -269,12 +266,33 @@ export const useStore = create<State>((set, get) => ({
       const preset = presetStr ? JSON.parse(presetStr) : { predata: [] }
       const response = responseStr ? JSON.parse(responseStr) : { answers: [] }
 
+      const parentMap: Record<string, string | null> = {}
+      const buildParentMap = (comps: any, parent: string | null = null) => {
+        if (!comps) return
+        const list = Array.isArray(comps) ? comps : [comps]
+        for (const item of list) {
+          if (!item) continue
+          if (Array.isArray(item)) {
+            buildParentMap(item, parent)
+            continue
+          }
+          if (item.dataKey) {
+            parentMap[item.dataKey] = parent
+          }
+          if (item.components) {
+            buildParentMap(item.components, item.dataKey || parent)
+          }
+        }
+      }
+      buildParentMap(template?.components)
+
       set({ 
         template, 
         validation, 
         preset, 
         response,
         componentMap: template ? buildComponentMap(template.components) : {},
+        parentMap,
         isLoading: false
       })
       
@@ -314,56 +332,66 @@ export const useStore = create<State>((set, get) => ({
   },
 
   syncFromServer: async () => {
-    const { bearerToken, currentTemplateId } = get()
-    if (!bearerToken || !currentTemplateId) {
-      throw new Error('Bearer token and Template ID are required. Please check Settings.')
+    const { currentTemplateId, bearerToken } = get()
+    if (!currentTemplateId || !bearerToken) throw new Error('Missing template ID or token')
+
+    const isExtension = typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
+    
+    // In extension, we fetch directly. In web, we use our proxy.
+    const baseUrl = isExtension 
+      ? 'https://fasih-qd.bps.go.id' 
+      : '/api/proxy';
+
+    const fetchData = async (path: string) => {
+      if (isExtension) {
+        console.log('[Store] Sending fetch request to background:', path);
+        // Delegate fetch to background script to bypass CORS/Cookie issues
+        return new Promise((resolve, reject) => {
+          const win = (window as any);
+          if (win.chrome && win.chrome.runtime) {
+            // Safety timeout
+            const timeout = setTimeout(() => {
+              reject(new Error('Sync Timeout: Background script not responding'));
+            }, 15000);
+
+            win.chrome.runtime.sendMessage({ 
+              action: 'fetchFromBps', 
+              path, 
+              token: bearerToken 
+            }, (response: any) => {
+              clearTimeout(timeout);
+              console.log('[Store] Received response from background:', !!response);
+              if (response?.success) {
+                resolve(response.data);
+              } else {
+                console.error('[Store] Background fetch failed:', response?.error);
+                reject(new Error(response?.error || 'Failed to fetch via background script'));
+              }
+            });
+          } else {
+            console.error('[Store] Chrome runtime not available!');
+            reject(new Error('Chrome runtime not available'));
+          }
+        });
+      }
+
+      const response = await fetch(`${baseUrl}${path}`, {
+        credentials: 'include',
+        headers: {
+          'Authorization': bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      return await response.json()
     }
 
     try {
-      const { useProxy } = get()
-      const fetchThroughProxy = async (endpoint: string) => {
-        const targetUrl = `https://fasih-survey.bps.go.id${endpoint}`
-        
-        // If proxy is enabled, use /api/proxy/path
-        // If disabled, fetch directly from BPS URL (requires VPN & CORS extension)
-        const fetchUrl = useProxy ? `/api/proxy${endpoint}` : targetUrl
-        
-        const res = await fetch(fetchUrl, {
-          headers: { 'Authorization': `Bearer ${bearerToken}` }
-        })
-        
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}))
-          throw new Error(errData.error || `Proxy fetch failed: ${res.statusText}`)
-        }
-
-        const contentType = res.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          return res.json()
-        } else {
-          const text = await res.text()
-          try {
-            return JSON.parse(text)
-          } catch (e) {
-            throw new Error('Received invalid data format from server (not a valid JSON)')
-          }
-        }
-      }
-
-      console.log('Fetching from BPS API...')
-      // Path format for proxy: /designer/api/template/develop/file/...
       const [template, validation] = await Promise.all([
-        fetchThroughProxy(`/designer/api/template/develop/file/${currentTemplateId}`),
-        fetchThroughProxy(`/designer/api/template/develop/file-validation/${currentTemplateId}`)
+        fetchData(`/designer/api/template/develop/file/${currentTemplateId}`),
+        fetchData(`/designer/api/template/develop/file-validation/${currentTemplateId}`)
       ])
-
-      if (template && template.success === false && template.message) {
-        throw new Error(`Server returned error: ${template.message}`)
-      }
-
-      if (!template || typeof template !== 'object' || (!template.id && !template.components)) {
-        throw new Error('Fetched data does not appear to be a valid template')
-      }
 
       set({ 
         template, 

@@ -32,7 +32,7 @@ export const PropertyEditor = () => {
 
   const selectedValidation = useMemo(() => {
     if (!validation || !selectedDataKey) return null
-    return validation.testFunctions.find((tf: any) => tf.dataKey === selectedDataKey) || {
+    return validation.testFunctions.find((tf: TestFunction) => tf.dataKey === selectedDataKey) || {
       dataKey: selectedDataKey,
       componentValidation: [selectedDataKey],
       validations: []
@@ -276,7 +276,7 @@ export const PropertyEditor = () => {
           </div>
 
           <div className="space-y-6">
-            {localValidation?.validations.map((rule, idx) => (
+            {localValidation?.validations.map((rule: any, idx: number) => (
               <div key={idx} className="p-4 bg-muted/30 rounded-lg border border-border/50 relative group">
                 <div className="absolute -left-2 top-4 w-1 h-8 bg-primary rounded-full" />
                 <div className="space-y-4">

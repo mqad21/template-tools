@@ -18,8 +18,72 @@ function App() {
   const [syncStatus, setSyncStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [syncError, setSyncError] = useState('')
 
+  const isExtension = typeof window !== 'undefined' && 
+    (window.location.protocol === 'chrome-extension:' || !!(window as any).chrome?.runtime?.id);
+
+  // Preload Engine Resources
+  useEffect(() => {
+    const JS_URL = "./engine/fasih-form.js";
+    const CSS_URL = "./engine/fasih-form.css";
+
+    // Preload JS
+    if (!document.querySelector(`script[src="${JS_URL}"]`)) {
+      const s = document.createElement("script");
+      s.src = JS_URL;
+      s.async = true;
+      document.head.appendChild(s);
+    }
+
+    // Preload CSS
+    if (!document.querySelector(`link[href="${CSS_URL}"]`)) {
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = CSS_URL;
+      document.head.appendChild(l);
+    }
+  }, []);
+
   useEffect(() => {
     loadCurrentTemplate()
+    
+    // Listen for sync messages from extension
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'FFS_SYNC') {
+        const { templateId, template, validation, token } = event.data;
+        console.log('[FFS] Received sync data from extension:', templateId);
+        
+        const STORAGE_KEYS = {
+          CURRENT_ID: 'fasih_current_template_id',
+          ID_LIST: 'fasih_template_ids',
+          TOKEN: 'fasih_bearer_token',
+          TEMPLATE: (id: string) => `fasih_template_${id}`,
+          VALIDATION: (id: string) => `fasih_validation_${id}`,
+        };
+
+        localStorage.setItem(STORAGE_KEYS.CURRENT_ID, templateId);
+        localStorage.setItem(STORAGE_KEYS.TEMPLATE(templateId), JSON.stringify(template));
+        localStorage.setItem(STORAGE_KEYS.VALIDATION(templateId), JSON.stringify(validation));
+        
+        if (token) {
+          localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+          useStore.getState().setGlobalSettings(token);
+          console.log('[FFS] Bearer token synced & saved:', token.substring(0, 15) + '...');
+        } else {
+          console.warn('[FFS] No token received in sync message!');
+        }
+        
+        const idList = JSON.parse(localStorage.getItem(STORAGE_KEYS.ID_LIST) || '[]');
+        if (!idList.includes(templateId)) {
+          idList.push(templateId);
+          localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(idList));
+        }
+
+        // Reload to apply
+        window.location.reload();
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
     
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizingSidebar.current) {
@@ -39,16 +103,32 @@ function App() {
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mouseup', handleMouseUp)
     return () => {
+      window.removeEventListener('message', handleMessage)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
   }, [])
 
   const handleSync = async () => {
-    if (!bearerToken || !currentTemplateId) {
+    // Check if token exists in localStorage as fallback
+    let currentToken = bearerToken;
+    if (!currentToken) {
+      currentToken = localStorage.getItem('fasih_bearer_token') || '';
+      if (currentToken) {
+        useStore.getState().setGlobalSettings(currentToken);
+      }
+    }
+
+    if (!currentToken || !currentTemplateId) {
+      console.warn('[FFS] Sync failed: Missing token or template ID', { hasToken: !!currentToken, templateId: currentTemplateId });
       setSyncStatus('error')
-      setSyncError('Check Settings.')
-      setIsSettingsOpen(true)
+      setSyncError(isExtension ? 'Extension Sync Failed. Try reloading.' : 'Check Settings.')
+      
+      // HARAM BUKA MODAL KALAU DI EKSTENSI
+      if (!isExtension) {
+        setIsSettingsOpen(true)
+      }
+      
       setTimeout(() => setSyncStatus('idle'), 3000)
       return
     }
@@ -117,27 +197,31 @@ function App() {
           <div className="flex items-center gap-2">
             <TemplateSwitcher />
             
-            <button 
-              onClick={handleSync}
-              disabled={syncStatus === 'loading'}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-bold text-xs",
-                syncStatus === 'loading' 
-                  ? "bg-muted text-muted-foreground cursor-wait" 
-                  : "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
-              )}
-            >
-              <RefreshCw className={cn("w-4 h-4", syncStatus === 'loading' && "animate-spin")} />
-              Sync
-            </button>
+            {!isExtension && (
+              <>
+                <button 
+                  onClick={handleSync}
+                  disabled={syncStatus === 'loading'}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-bold text-xs",
+                    syncStatus === 'loading' 
+                      ? "bg-muted text-muted-foreground cursor-wait" 
+                      : "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
+                  )}
+                >
+                  <RefreshCw className={cn("w-4 h-4", syncStatus === 'loading' && "animate-spin")} />
+                  {syncStatus === 'loading' ? 'Syncing...' : 'Sync Server'}
+                </button>
 
-            <button 
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-lg transition-all"
-              title="Studio Settings"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
+                <button 
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+                  title="Settings"
+                >
+                  <Settings className="w-5 h-5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -177,13 +261,15 @@ function App() {
                 {syncStatus === 'loading' ? 'Syncing Data...' : 'Synchronize from Server'}
               </button>
 
-              <button 
-                onClick={() => setIsSettingsOpen(true)}
-                className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Settings className="w-4 h-4" />
-                Configure Sync Settings
-              </button>
+              {!isExtension && (
+                <button 
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Settings className="w-4 h-4" />
+                  Configure Sync Settings
+                </button>
+              )}
             </div>
           </div>
         </main>
@@ -237,6 +323,26 @@ function App() {
           © 2024 Badan Pusat Statistik
         </div>
       </footer>
+
+      {/* Floating Action Button for Sync */}
+      {template && (
+        <button
+          onClick={handleSync}
+          disabled={syncStatus === 'loading'}
+          className={cn(
+            "fixed bottom-10 right-6 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all active:scale-90 group z-50",
+            syncStatus === 'loading' ? "bg-primary/20 cursor-wait" : "bg-primary hover:bg-primary/90 text-primary-foreground"
+          )}
+          title="Sync from Server"
+        >
+          <RefreshCw className={cn("w-6 h-6", syncStatus === 'loading' && "animate-spin")} />
+          
+          {/* Tooltip-ish label on hover */}
+          <span className="absolute right-full mr-3 px-2 py-1 bg-zinc-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-zinc-800">
+            SYNC FROM SERVER
+          </span>
+        </button>
+      )}
 
       <SettingsDialog 
         isOpen={isSettingsOpen}

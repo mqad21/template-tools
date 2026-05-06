@@ -89,31 +89,14 @@ const ComponentTreeItem = React.memo(({
 
   const [isOpen, setIsOpen] = useState(depth < 1)
   
-  // Logic to detect if this container contains the selected component
-  const containsSelected = useMemo(() => {
-    if (!selectedDataKey) return false
-    if (isSelected) return false // We only care if children are selected
-    
-    const checkMatch = (c: Component): boolean => {
-      if (Array.isArray(c.components)) {
-        return c.components.some(group => {
-          const comps = Array.isArray(group) ? group : [group];
-          return comps.some(child => child && (child.dataKey === selectedDataKey || checkMatch(child)));
-        })
-      }
-      return false
-    }
-    return checkMatch(comp)
-  }, [comp, selectedDataKey, isSelected])
+  const containsSelected = useStore(state => state.selectedPath.has(comp.dataKey))
 
-  // Auto-expand if selected OR contains selected child
   useEffect(() => {
     if (isSelected || containsSelected) {
       setIsOpen(true)
     }
   }, [isSelected, containsSelected])
 
-  // Smooth scroll into view when selected
   useEffect(() => {
     if (isSelected && itemRef.current) {
       itemRef.current.scrollIntoView({ 
@@ -147,7 +130,6 @@ const ComponentTreeItem = React.memo(({
         )}
         style={{ paddingLeft: `${(depth * 16) + 12}px` }}
       >
-        {/* Selection Indicator Glow */}
         {isSelected && (
           <div className="absolute inset-0 bg-primary/5 pointer-events-none rounded-r-md animate-pulse" />
         )}
@@ -202,7 +184,6 @@ const ComponentTreeItem = React.memo(({
 
       {hasChildren && isOpen && (
         <div className="flex flex-col relative">
-          {/* Vertical Hierarchy Line */}
           <div 
             className="absolute left-0 top-0 bottom-0 w-px bg-border/40 group-hover:bg-primary/20 transition-colors" 
             style={{ left: `${(depth * 16) + 20}px`, zIndex: 1 }} 
@@ -211,7 +192,6 @@ const ComponentTreeItem = React.memo(({
           <div className="flex flex-col">
             {Array.isArray(comp.components) && comp.components.map((group: any, gIdx: number) => {
               if (!group) return null;
-              // Handle both [comp, comp] and [[comp, comp], [comp]]
               const components = Array.isArray(group) ? group : [group];
               return (
                 <React.Fragment key={gIdx}>
@@ -241,15 +221,17 @@ export const Sidebar = () => {
     response, 
     sidebarMode, 
     setSidebarMode, 
-    selectedDataKey, 
     setSelectedDataKey,
-    componentMap
+    componentMap,
+    setTemplate,
+    setValidation,
+    setPreset,
+    setResponse
   } = useStore()
   
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
-  // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm)
@@ -264,14 +246,6 @@ export const Sidebar = () => {
     return []
   }, [sidebarMode, preset, response])
 
-  const filteredData = useMemo(() => {
-    const lowerSearch = debouncedSearchTerm.toLowerCase()
-    if (!lowerSearch) return dataList
-    return dataList.filter((item: any) => 
-      item.dataKey.toLowerCase().includes(lowerSearch)
-    )
-  }, [dataList, debouncedSearchTerm])
-
   const searchResults = useMemo(() => {
     if (sidebarMode !== 'components' || debouncedSearchTerm.length < 2) return []
     const lowerSearch = debouncedSearchTerm.toLowerCase()
@@ -283,7 +257,6 @@ export const Sidebar = () => {
       .slice(0, 50)
   }, [debouncedSearchTerm, componentMap, sidebarMode])
 
-  // Handle click outside to close search results
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -294,7 +267,6 @@ export const Sidebar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Handle ESC key to clear search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSearchTerm('')
@@ -303,12 +275,10 @@ export const Sidebar = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-
   if (!template) return null
 
   return (
     <div className="w-full border-r bg-card flex flex-col h-full shrink-0">
-      {/* Tab Switcher */}
       <div className="flex border-b bg-muted/30">
         {[
           { id: 'components', icon: Layers, label: 'Tree' },
@@ -352,7 +322,6 @@ export const Sidebar = () => {
             </button>
           )}
 
-          {/* Search Results Dropdown (only for components mode) */}
           {sidebarMode === 'components' && searchTerm.length >= 2 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-card border rounded-md shadow-xl z-50 max-h-[400px] overflow-y-auto custom-scrollbar animate-in slide-in-from-top-2 duration-200">
               <div className="p-1">
@@ -420,14 +389,29 @@ export const Sidebar = () => {
                   }
                 </p>
                 <div className="pt-2">
-                  <div className="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-1.5">
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                    Live Editor Active
-                  </div>
+                  <button 
+                    onClick={() => {
+                      const json = prompt(`Paste ${sidebarMode} JSON here:`)
+                      if (json) {
+                        try {
+                          const parsed = JSON.parse(json)
+                          if (sidebarMode === 'template') setTemplate(parsed)
+                          if (sidebarMode === 'validation') setValidation(parsed)
+                          if (sidebarMode === 'presets') setPreset(parsed)
+                          if (sidebarMode === 'responses') setResponse(parsed)
+                          alert('Success! Data imported.')
+                        } catch (e) {
+                          alert('Invalid JSON!')
+                        }
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl border border-primary/20 text-[10px] font-bold transition-all active:scale-95"
+                  >
+                    <FileJson className="w-4 h-4" />
+                    IMPORT / PASTE JSON
+                  </button>
                 </div>
               </div>
-
-              {/* Quick Jump / Key List if they still want it? User said "Cukup sediain JSON editornya aja", so I will skip the list for now to keep it clean */}
             </div>
           )}
         </div>

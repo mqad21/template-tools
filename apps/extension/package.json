@@ -1,0 +1,17 @@
+{
+  "name": "@fasih-form-studio/extension",
+  "version": "1.0.0",
+  "description": "Chrome Extension for Fasih Form Studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.4.0",
+    "@types/chrome": "^0.0.301",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.9"
+  }
+}
