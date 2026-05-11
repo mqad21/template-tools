@@ -375,42 +375,47 @@ export const Sidebar = () => {
             })
           ) : (
             <div className="p-2 space-y-4">
-              <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-2">
-                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground mb-4">
+              <div className="p-6 bg-primary/5 border border-primary/10 rounded-[2rem] space-y-4 relative overflow-hidden group">
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
+                
+                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                   {sidebarMode === 'template' ? <FileJson className="w-6 h-6" /> : sidebarMode === 'validation' ? <ShieldCheck className="w-6 h-6" /> : sidebarMode === 'presets' ? <Database className="w-6 h-6" /> : <ClipboardList className="w-6 h-6" />}
                 </div>
-                <h3 className="text-sm font-bold capitalize">{sidebarMode} Editor</h3>
-                <p className="text-[10px] text-muted-foreground leading-relaxed">
-                  {sidebarMode === 'template' 
-                    ? "You are now editing the entire template structure. Be careful with the JSON syntax."
-                    : sidebarMode === 'validation'
-                    ? "You are now editing the validation rules. This is where you define logical tests and error messages."
-                    : `You are now in full JSON editing mode. The middle panel shows the complete ${sidebarMode.slice(0,-1)} structure.`
-                  }
-                </p>
-                <div className="pt-2">
-                  <button 
-                    onClick={() => {
-                      const json = prompt(`Paste ${sidebarMode} JSON here:`)
-                      if (json) {
-                        try {
-                          const parsed = JSON.parse(json)
-                          if (sidebarMode === 'template') setTemplate(parsed)
-                          if (sidebarMode === 'validation') setValidation(parsed)
-                          if (sidebarMode === 'presets') setPreset(parsed)
-                          if (sidebarMode === 'responses') setResponse(parsed)
-                          alert('Success! Data imported.')
-                        } catch (e) {
-                          alert('Invalid JSON!')
-                        }
-                      }
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl border border-primary/20 text-[10px] font-bold transition-all active:scale-95"
-                  >
-                    <FileJson className="w-4 h-4" />
-                    IMPORT / PASTE JSON
-                  </button>
+                
+                <div className="space-y-1">
+                  <h3 className="text-sm font-black capitalize tracking-tight">{sidebarMode} Configuration</h3>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    {sidebarMode === 'template' 
+                      ? "Directly edit the JSON structure of your form. This includes all components, labels, and root settings."
+                      : sidebarMode === 'validation'
+                      ? "Define logic-based validation rules. You can use JavaScript expressions to validate user input."
+                      : `Manage the ${sidebarMode} data. This JSON object is passed directly to the Fasih Engine.`
+                    }
+                  </p>
                 </div>
+
+                <div className="pt-2 space-y-2">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-background/50 rounded-xl border border-border/50 text-[9px] text-muted-foreground font-mono">
+                    <div className="w-1 h-1 bg-green-500 rounded-full animate-ping" />
+                    FULL EDITOR ACTIVE
+                  </div>
+                  
+                  <p className="text-[9px] text-muted-foreground italic px-1">
+                    * Changes are saved automatically to your browser's local storage.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="px-2">
+                <button 
+                  onClick={() => {
+                    // Just to ensure it's "open" if they closed the modal somehow
+                    setSidebarMode(sidebarMode)
+                  }}
+                  className="w-full py-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-[10px] font-bold transition-all active:scale-95 shadow-lg border border-zinc-800"
+                >
+                  FOCUS EDITOR
+                </button>
               </div>
             </div>
           )}

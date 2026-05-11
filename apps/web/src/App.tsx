@@ -3,15 +3,27 @@ import { Sidebar } from './components/Sidebar'
 import { PropertyEditor } from './components/PropertyEditor'
 import { FormPreview } from './components/FormPreview'
 import { useStore } from './store/useStore'
-import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout } from 'lucide-react'
+import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout, X, FileJson, ShieldCheck, ClipboardList, Code } from 'lucide-react'
 import { SettingsDialog } from './components/SettingsDialog'
 import { TemplateSwitcher } from './components/TemplateSwitcher'
 import { cn } from './lib/utils'
 
 function App() {
-  const { loadCurrentTemplate, template, syncFromServer, bearerToken, currentTemplateId, isLoading } = useStore()
+  const { 
+    loadCurrentTemplate, 
+    template, 
+    syncFromServer, 
+    bearerToken, 
+    currentTemplateId, 
+    isLoading,
+    previewWidth,
+    setPreviewWidth,
+    previewMode,
+    selectedDataKey,
+    sidebarMode,
+    setSelectedDataKey
+  } = useStore()
   const [sidebarWidth, setSidebarWidth] = useState(320)
-  const [previewWidth, setPreviewWidth] = useState(450)
   const isResizingSidebar = React.useRef(false)
   const isResizingPreview = React.useRef(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -23,8 +35,8 @@ function App() {
 
   // Preload Engine Resources
   useEffect(() => {
-    const JS_URL = "./engine/fasih-form.js";
-    const CSS_URL = "./engine/fasih-form.css";
+    const JS_URL = "/engine/fasih-form.js";
+    const CSS_URL = "/engine/fasih-form.css";
 
     // Preload JS
     if (!document.querySelector(`script[src="${JS_URL}"]`)) {
@@ -90,7 +102,9 @@ function App() {
         setSidebarWidth(Math.max(200, Math.min(600, e.clientX)))
       }
       if (isResizingPreview.current) {
-        setPreviewWidth(Math.max(300, Math.min(800, window.innerWidth - e.clientX)))
+        const maxWidth = previewMode === 'desktop' ? window.innerWidth - 400 : 800
+        const minWidth = previewMode === 'desktop' ? 800 : 300
+        setPreviewWidth(Math.max(minWidth, Math.min(maxWidth, window.innerWidth - e.clientX)))
       }
     }
 
@@ -199,6 +213,33 @@ function App() {
             
             {!isExtension && (
               <>
+                {/* Quick Edit Menu */}
+                <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-xl border border-border/50">
+                  {[
+                    { id: 'template', icon: FileJson, label: 'JSON' },
+                    { id: 'validation', icon: ShieldCheck, label: 'Val' },
+                    { id: 'presets', icon: Database, label: 'Pre' },
+                    { id: 'responses', icon: ClipboardList, label: 'Res' },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => useStore.getState().setSidebarMode(item.id as any)}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-[10px] font-bold",
+                        sidebarMode === item.id 
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                      title={`Edit ${item.label}`}
+                    >
+                      <item.icon className="w-3.5 h-3.5" />
+                      <span className="hidden lg:inline">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="w-px h-6 bg-border mx-2" />
+
                 <button 
                   onClick={handleSync}
                   disabled={syncStatus === 'loading'}
@@ -275,7 +316,7 @@ function App() {
         </main>
       ) : (
         <main className="flex-1 flex overflow-hidden relative">
-          <div style={{ width: sidebarWidth }}>
+          <div style={{ width: sidebarWidth }} className="shrink-0">
             <Sidebar />
           </div>
           
@@ -289,22 +330,52 @@ function App() {
             <div className="absolute inset-y-0 left-1/2 -ml-px w-px bg-border group-hover:bg-primary transition-colors" />
           </div>
 
-          <PropertyEditor />
-
-          <div 
-            className="relative w-1 group hover:w-1.5 bg-border/20 hover:bg-primary/30 cursor-col-resize transition-all shrink-0 active:bg-primary/50"
-            onMouseDown={() => {
-              isResizingPreview.current = true
-              document.body.style.cursor = 'col-resize'
-            }}
-          >
-            <div className="absolute inset-y-0 left-1/2 -ml-px w-px bg-border group-hover:bg-primary transition-colors" />
-          </div>
-
-          <div style={{ width: previewWidth }}>
+          <div className="flex-1 h-full relative overflow-hidden">
             <FormPreview />
           </div>
         </main>
+      )}
+
+      {/* Property Editor Modal */}
+      {(selectedDataKey || (sidebarMode !== 'components')) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-end p-4 bg-background/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className={cn(
+              "bg-card border shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-right-4 duration-300",
+              sidebarMode === 'components' ? "w-full max-w-2xl h-[90vh] rounded-3xl" : "w-[98vw] h-[98vh] rounded-2xl"
+            )}
+          >
+            <div className="flex items-center justify-between p-4 border-b bg-muted/20">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  {sidebarMode === 'components' ? <Layout className="w-4 h-4" /> : <Code className="w-4 h-4" />}
+                </div>
+                <h2 className="font-bold text-sm uppercase tracking-wider">
+                  {sidebarMode === 'components' ? 'Component Editor' : `${sidebarMode} JSON Editor`}
+                </h2>
+              </div>
+              <div className="flex items-center gap-4">
+                {sidebarMode !== 'components' && (
+                  <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest hidden sm:block">
+                    Full Template Mode
+                  </div>
+                )}
+                <button 
+                  onClick={() => {
+                    setSelectedDataKey(null)
+                    useStore.getState().setSidebarMode('components')
+                  }}
+                  className="p-2 hover:bg-destructive/10 hover:text-destructive rounded-full transition-all text-muted-foreground"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <PropertyEditor />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Footer Status Bar */}

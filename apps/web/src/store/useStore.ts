@@ -20,10 +20,14 @@ interface State {
   isLoading: boolean
   parentMap: Record<string, string | null>
   selectedPath: Set<string>
+  previewWidth: number
+  previewMode: 'mobile' | 'desktop'
   
   // Actions
   setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
   setUseProxy: (useProxy: boolean) => void
+  setPreviewWidth: (width: number) => void
+  setPreviewMode: (mode: 'mobile' | 'desktop') => void
   setTemplate: (template: any) => void
   setValidation: (validation: any) => void
   setPreset: (preset: any) => void
@@ -53,6 +57,8 @@ const STORAGE_KEYS = {
   VALIDATION: (id: string) => `fasih_validation_${id}`,
   PRESET: (id: string) => `fasih_preset_${id}`,
   RESPONSE: (id: string) => `fasih_response_${id}`,
+  PREVIEW_WIDTH: 'fasih_preview_width',
+  PREVIEW_MODE: 'fasih_preview_mode',
 }
 
 let saveDebounceTimer: any = null;
@@ -73,11 +79,28 @@ export const useStore = create<State>((set, get) => ({
   availableTemplateIds: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ID_LIST) || '[]') : [],
   parentMap: {},
   selectedPath: new Set(),
+  previewWidth: typeof window !== 'undefined' ? Number(localStorage.getItem(STORAGE_KEYS.PREVIEW_WIDTH)) || 450 : 450,
+  previewMode: typeof window !== 'undefined' ? (localStorage.getItem(STORAGE_KEYS.PREVIEW_MODE) as 'mobile' | 'desktop') || 'mobile' : 'mobile',
 
   setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
   setUseProxy: (useProxy) => {
     set({ useProxy })
     localStorage.setItem(STORAGE_KEYS.USE_PROXY, String(useProxy))
+  },
+  setPreviewWidth: (previewWidth) => {
+    set({ previewWidth })
+    localStorage.setItem(STORAGE_KEYS.PREVIEW_WIDTH, String(previewWidth))
+  },
+  setPreviewMode: (previewMode) => {
+    set({ previewMode })
+    localStorage.setItem(STORAGE_KEYS.PREVIEW_MODE, previewMode)
+    
+    // When switching to desktop, if width is too small, increase it
+    if (previewMode === 'desktop' && get().previewWidth < 800) {
+      get().setPreviewWidth(850)
+    } else if (previewMode === 'mobile' && get().previewWidth > 600) {
+      get().setPreviewWidth(450)
+    }
   },
   setTemplate: (template) => {
     const parentMap: Record<string, string | null> = {}

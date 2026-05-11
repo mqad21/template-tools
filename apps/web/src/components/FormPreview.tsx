@@ -1,20 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useStore } from '../store/useStore'
-import { Eye, Loader2, AlertCircle, RefreshCw } from 'lucide-react'
+import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check } from 'lucide-react'
 import { cn } from '../lib/utils'
 
-const JS_URL = "./engine/fasih-form.js";
-const CSS_URL = "./engine/fasih-form.css";
+const JS_URL = "/engine/fasih-form.js";
+const CSS_URL = "/engine/fasih-form.css";
 
 declare global {
   interface Window {
     FasihForm?: any;
     lib?: any;
+    fasihFormInstance?: any;
   }
 }
 
 export const FormPreview = () => {
-  const { template, validation, preset, response } = useStore()
+  const { 
+    template, 
+    validation, 
+    preset, 
+    response,
+    previewMode
+  } = useStore()
+  
   const [loading, setLoading] = useState(true)
   const [isRendering, setIsRendering] = useState(false)
   const [ready, setReady] = useState(false)
@@ -24,18 +32,24 @@ export const FormPreview = () => {
   const isEngineSaveRef = useRef(false)
   const innerTimerRef = useRef<any>(null)
   const [reloadKey, setReloadKey] = useState(0)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success'>('idle')
 
   const handleReload = () => {
     setError(null)
     setReloadKey(prev => prev + 1)
   }
 
+  const setPreviewMode = (mode: 'mobile' | 'desktop') => {
+    useStore.getState().setPreviewMode(mode)
+  }
+
+  // 1. Resource loading & Engine polling
   useEffect(() => {
     let mounted = true
 
     const loadResources = async () => {
       try {
-        // Load Script
+        // Load Script if not present
         if (!document.querySelector(`script[src="${JS_URL}"]`)) {
           await new Promise<void>((resolve, reject) => {
             const s = document.createElement("script");
@@ -47,7 +61,7 @@ export const FormPreview = () => {
           });
         }
 
-        // Load Style
+        // Load Style if not present
         if (!document.querySelector(`link[href="${CSS_URL}"]`)) {
           const l = document.createElement("link");
           l.rel = "stylesheet";
@@ -59,18 +73,16 @@ export const FormPreview = () => {
         let attempts = 0;
         const checkLibrary = () => {
           if (!mounted) return;
-          const FasihForm = window.FasihForm || window.lib;
-          console.log("Checking for FasihForm/lib:", !!FasihForm, typeof FasihForm);
+          const engine = window.FasihForm || window.lib;
 
-          if (typeof FasihForm === "function" || (FasihForm && typeof FasihForm.render === 'function')) {
+          if (typeof engine === "function" || (engine && (typeof engine.init === 'function' || typeof engine.render === 'function'))) {
             setLoading(false);
             setReady(true);
-          } else if (attempts < 100) { // Increased attempts
+          } else if (attempts < 50) {
             attempts++;
-            setTimeout(checkLibrary, 200); // Increased interval slightly
+            setTimeout(checkLibrary, 200);
           } else {
-            console.error("Window contents:", Object.keys(window).filter(k => k.toLowerCase().includes('form') || k.toLowerCase().includes('lib')));
-            setError("FasihForm library not found in window object. Check console for details.");
+            setError("FasihForm library not found. Please ensure engine files are correctly placed in /public/engine/");
             setLoading(false);
           }
         };
@@ -88,24 +100,25 @@ export const FormPreview = () => {
     return () => { mounted = false }
   }, [])
 
+  // 2. Sophisticated Render Logic (Double-buffering & Event Handlers)
   useEffect(() => {
     let mounted = true;
-    if (!ready || error || !template || !containerRef.current) return
+    if (!ready || !template || !containerRef.current) return
 
+    // Prevent re-render loop if update came from engine itself
     if (isEngineSaveRef.current) {
       isEngineSaveRef.current = false;
       return;
     }
 
-    const FasihForm = window.FasihForm || window.lib;
+    const engine = window.FasihForm || window.lib;
 
-    // Debounce re-render to avoid flicker and race conditions
+    // Debounce re-render to avoid flicker
     const timer = setTimeout(() => {
       if (!mounted) return;
       setIsRendering(true);
 
-      // We use another timeout/requestAnimationFrame to allow the "isRendering" state to be painted
-      // before the heavy synchronous render() call blocks the thread.
+      // Inner timer to allow isRendering state to paint
       innerTimerRef.current = setTimeout(() => {
         if (!mounted) {
           setIsRendering(false);
@@ -113,7 +126,7 @@ export const FormPreview = () => {
         }
 
         try {
-          // 1. Destroy previous instance if it exist
+          // 1. Cleanup previous instance
           if (instanceRef.current) {
             try {
               if (typeof instanceRef.current.destroy === 'function') {
@@ -125,42 +138,29 @@ export const FormPreview = () => {
             instanceRef.current = null;
           }
 
-          // 2. Create a new unique off-screen root for double-buffering
-          const uniqueId = `preview-root-inner-${Date.now()}`;
+          // 2. Create unique off-screen root for swapping
+          const uniqueId = `ff-inner-${Date.now()}`;
           const newRoot = document.createElement('div');
           newRoot.id = uniqueId;
-
-          // Style it to be hidden but still in the DOM so engine can calculate layouts
-          newRoot.style.height = 'calc(100svh - 175px)';
+          newRoot.className = 'fasih-form-wrapper';
+          
+          // Initial hidden state for smooth swap
           newRoot.style.width = '100%';
-          newRoot.style.position = 'absolute';
-          newRoot.style.top = '0';
-          newRoot.style.left = '0';
+          newRoot.style.minHeight = '100%';
           newRoot.style.opacity = '0';
-          newRoot.style.pointerEvents = 'none';
+          newRoot.style.transition = 'opacity 0.3s ease';
 
           if (containerRef.current) {
-            // Ensure container is positioned relative to hold the absolute child
-            containerRef.current.style.position = 'relative';
             containerRef.current.appendChild(newRoot);
           }
 
-          // Attempt to load latest response for this template from localstorage
-          let initialResponse = response ? JSON.parse(JSON.stringify(response)) : null;
-          if (template?.id) {
-            const cached = localStorage.getItem(`fasih-preview-response-${template.id}`);
-            if (cached) {
-              try {
-                initialResponse = JSON.parse(cached);
-              } catch (e) {
-                console.error("Failed to parse cached response");
-              }
-            }
-          }
-
-          // Efficiently clone data
           const deepClone = (obj: any) => {
-            if (typeof structuredClone === 'function') return structuredClone(obj);
+            if (!obj) return null;
+            try {
+              if (typeof structuredClone === 'function') return structuredClone(obj);
+            } catch (e) {
+              console.warn("structuredClone failed, falling back to JSON:", e);
+            }
             return JSON.parse(JSON.stringify(obj));
           };
 
@@ -168,9 +168,9 @@ export const FormPreview = () => {
             mode: "CAPI",
             assignmentId: "preview",
             template: deepClone(template),
-            validation: validation ? deepClone(validation) : null,
-            preset: preset ? deepClone(preset) : null,
-            response: initialResponse,
+            validation: validation ? deepClone(validation) : { testFunctions: [] },
+            preset: preset ? deepClone(preset) : { predata: [] },
+            response: response ? deepClone(response) : { answers: [] },
             remark: {},
             principals: [],
             formMode: 1,
@@ -182,16 +182,19 @@ export const FormPreview = () => {
             locale: "id",
           };
 
-          const FF = typeof FasihForm === 'function' ? FasihForm : (FasihForm.render ? FasihForm : null);
+          const FF = typeof engine === 'function' ? engine : (engine && engine.render ? engine : null);
           if (!FF) throw new Error("FasihForm constructor or render function not found");
 
           // Target the new unique root
           instanceRef.current = FF(`#${uniqueId}`, options);
 
+          // Register Event Handlers
           instanceRef.current.event.on('save', async (data: any) => {
             isEngineSaveRef.current = true;
             try {
               useStore.getState().setResponse(data.response);
+              setSaveStatus('success');
+              setTimeout(() => setSaveStatus('idle'), 3000);
             } catch (e) {
               console.error("Failed to persist save:", e);
             }
@@ -216,10 +219,10 @@ export const FormPreview = () => {
               searchParams.append("version", cfg.version.toString());
 
               const { bearerToken } = useStore.getState();
-              const response = await fetch(`/api/proxy${proxyPath}?${searchParams.toString()}`, {
-                headers: bearerToken ? { 'Authorization': `Bearer ${bearerToken}` } : {}
+              const res = await fetch(`/api/proxy${proxyPath}?${searchParams.toString()}`, {
+                headers: bearerToken ? { 'Authorization': bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}` } : {}
               });
-              const data = await response.json();
+              const data = await res.json();
 
               return data.data;
             } catch (e: any) {
@@ -231,11 +234,11 @@ export const FormPreview = () => {
           instanceRef.current.event.on('external-data-fetch', async (type: string, payload: any) => {
             try {
               const { bearerToken } = useStore.getState();
-              const response = await fetch(`/api/proxy/connector/api/hit/${type}`, {
+              const res = await fetch(`/api/proxy/connector/api/hit/${type}`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  ...(bearerToken ? { 'Authorization': `Bearer ${bearerToken}` } : {})
+                  ...(bearerToken ? { 'Authorization': bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}` } : {})
                 },
                 body: JSON.stringify({
                   assignmentId: "477ef19e-e012-4ade-ba04-3a4963c3a9c5",
@@ -244,7 +247,7 @@ export const FormPreview = () => {
                   body: payload
                 }),
               });
-              return await response.json();
+              return await res.json();
             } catch (e: any) {
               console.error("Failed to fetch external data:", e);
               return null;
@@ -252,78 +255,205 @@ export const FormPreview = () => {
           });
 
           instanceRef.current.render();
+          
+          // Expose to window for the user's trigger logic
+          window.fasihFormInstance = instanceRef.current;
 
-          // Swap logic: Remove old roots, show new root seamlessly
-          if (containerRef.current) {
+          // Seamless Swap
+          if (containerRef.current && mounted) {
             Array.from(containerRef.current.children).forEach(child => {
               if (child !== newRoot) {
                 containerRef.current?.removeChild(child);
               }
             });
-            // Make the new root visible
-            newRoot.style.position = 'relative';
             newRoot.style.opacity = '1';
-            newRoot.style.pointerEvents = 'auto';
           }
+          
+          setError(null);
         } catch (err: any) {
-          console.error("FasihForm render error:", err)
-          setError("Render Error: " + err.message);
+          console.error("FF Render Error:", err);
+          setError(`Render Error: ${err.message}`);
         } finally {
           setIsRendering(false);
         }
-      }, 50); // Small delay to allow UI to show loading state
-    }, 150) // Slightly longer debounce for stability
+      }, 50);
+    }, 150);
 
     return () => {
       mounted = false;
       clearTimeout(timer);
       if (innerTimerRef.current) clearTimeout(innerTimerRef.current);
     }
-  }, [template, validation, preset, response, ready, error, reloadKey])
+  }, [template, validation, preset, response, ready, reloadKey, previewMode])
 
   return (
-    <div className="w-full border-l bg-muted/10 flex flex-col h-full overflow-hidden">
-      <div className="p-4 border-b bg-background flex items-center justify-between">
+    <div className="w-full flex flex-col h-full bg-background border-l overflow-hidden">
+      {/* Header */}
+      <div className="p-4 border-b bg-background flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold">Live Preview</span>
-        </div>
-        <div className="flex items-center gap-2">
-          {!loading && !error && (
-            <div className="flex items-center gap-2">
-              {isRendering && <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />}
-              <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold uppercase">
-                {isRendering ? 'Updating...' : 'Active'}
-              </span>
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            <Eye className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold leading-none">Live Preview</h3>
+            <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-1">
+                <div className={cn("w-1.5 h-1.5 rounded-full", ready ? "bg-green-500" : "bg-red-500 animate-pulse")} />
+                <span className="text-[8px] text-muted-foreground uppercase">Engine</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className={cn("w-1.5 h-1.5 rounded-full", isRendering ? "bg-amber-500 animate-pulse" : "bg-green-500")} />
+                <span className="text-[8px] text-muted-foreground uppercase">{isRendering ? 'Rendering' : 'Ready'}</span>
+              </div>
             </div>
-          )}
-          <button
-            onClick={handleReload}
-            className="p-1.5 hover:bg-primary/10 rounded-md transition-all text-muted-foreground hover:text-primary active:rotate-180 duration-500"
-            title="Reload Form Instance"
-          >
-            <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
-          </button>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="flex items-center bg-muted/50 p-1 rounded-xl border border-border/50">
+            <button
+              onClick={() => setPreviewMode('mobile')}
+              className={cn(
+                "px-4 py-1.5 text-[10px] font-bold rounded-lg transition-all",
+                previewMode === 'mobile' 
+                  ? "bg-background shadow-sm text-primary ring-1 ring-border" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              MOBILE
+            </button>
+            <button
+              onClick={() => setPreviewMode('desktop')}
+              className={cn(
+                "px-4 py-1.5 text-[10px] font-bold rounded-lg transition-all",
+                previewMode === 'desktop' 
+                  ? "bg-background shadow-sm text-primary ring-1 ring-border" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              DESKTOP
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-2 border-l pl-4 border-border/50">
+            {isRendering && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+            <button onClick={handleReload} className="p-2 hover:bg-muted rounded-xl text-muted-foreground transition-colors" title="Force Reload">
+              <RefreshCw className={cn("w-4 h-4", isRendering && "animate-spin")} />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 relative overflow-auto">
+      {/* Content Area */}
+      <div className="flex-1 overflow-auto bg-muted/10 p-6 relative flex flex-col items-center custom-scrollbar">
         {loading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/50 backdrop-blur-sm z-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
-            <p className="text-xs text-muted-foreground">Loading Form Engine...</p>
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/50 backdrop-blur-sm">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+            <p className="text-sm font-medium text-muted-foreground animate-pulse">Initializing Engine...</p>
           </div>
+        )}
+
+        {/* Floating Action Button - Save */}
+        {ready && !loading && (
+          <button
+            onClick={() => {
+              const instance = instanceRef.current || window.fasihFormInstance;
+              if (instance) {
+                // Try multiple ways to emit just in case the API is slightly different
+                const ref = instance.ref || instance;
+                if (typeof ref.emit === 'function') {
+                  ref.emit('trigger-save');
+                } else if (instance.event?.emit) {
+                  instance.event.emit('trigger-save');
+                }
+                console.log('Triggered save on instance:', instance);
+              } else {
+                console.warn('Fasih Form instance not found for saving');
+              }
+            }}
+            className={cn(
+              "fixed bottom-10 right-[88px] w-12 h-12 rounded-full shadow-2xl transition-all active:scale-90 z-50 group",
+              "grid place-items-center p-0",
+              saveStatus === 'success' 
+                ? "bg-green-500 text-white shadow-green-500/40" 
+                : "bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90"
+            )}
+            title="Trigger Save"
+          >
+            {saveStatus === 'success' ? (
+              <Check className="w-6 h-6 animate-in zoom-in duration-300" />
+            ) : (
+              <Save className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            )}
+            
+            {/* Tooltip/Feedback */}
+            <span className={cn(
+              "absolute bottom-full mb-3 right-0 px-2 py-1 text-[10px] font-bold rounded shadow-xl border transition-all whitespace-nowrap pointer-events-none",
+              saveStatus === 'success'
+                ? "bg-green-500 text-white border-green-400 opacity-100 translate-y-0"
+                : "bg-zinc-900 text-white border-zinc-800 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
+            )}>
+              {saveStatus === 'success' ? 'SAVED SUCCESSFULLY' : 'TRIGGER SAVE'}
+            </span>
+
+            {saveStatus === 'idle' && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-foreground/50 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-foreground"></span>
+              </span>
+            )}
+          </button>
         )}
 
         {error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-destructive/5 z-20">
-            <AlertCircle className="w-12 h-12 text-destructive mb-4 opacity-50" />
-            <h3 className="font-semibold text-destructive">Preview Error</h3>
-            <p className="text-xs text-muted-foreground mt-2">{error}</p>
+          <div className="absolute inset-0 z-30 bg-destructive/5 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-16 h-16 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-6">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-bold text-destructive mb-2">Preview Error</h3>
+            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">{error}</p>
+            <button 
+              onClick={handleReload}
+              className="mt-6 px-6 py-2 bg-destructive text-destructive-foreground rounded-xl font-bold text-xs hover:opacity-90 transition-all"
+            >
+              Try Again
+            </button>
           </div>
         )}
+        
+        <div 
+          className={cn(
+            "transition-all duration-500 ease-in-out relative flex flex-col items-center",
+            previewMode === 'mobile' 
+              ? "w-[440px] max-w-full h-[850px] max-h-[calc(100vh-120px)] rounded-[3.5rem] border-[10px] border-zinc-950 bg-zinc-950 shadow-2xl my-auto ring-1 ring-white/10" 
+              : "w-full flex-1"
+          )}
+        >
+          {/* Notch / Dynamic Island area */}
+          {previewMode === 'mobile' && (
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-zinc-950 rounded-full z-20 flex items-center justify-center gap-1.5 px-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+              <div className="w-8 h-1.5 rounded-full bg-zinc-800" />
+            </div>
+          )}
 
-        <div id="preview-root" ref={containerRef} className="min-h-full w-full bg-white shadow-inner p-4 max-h-[100svh]" />
+          <div 
+            ref={containerRef}
+            className={cn(
+              "bg-white transition-all duration-500 relative custom-scrollbar overflow-y-auto",
+              previewMode === 'mobile' 
+                ? "w-full h-full rounded-[2.8rem] border-[2px] border-zinc-900 pt-8 pb-6" 
+                : "w-full h-full rounded-2xl border border-border/50"
+            )}
+          >
+            {/* Fasih Engine renders inside unique child roots here */}
+          </div>
+          
+          {/* Home Indicator */}
+          {previewMode === 'mobile' && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-white/20 rounded-full z-20 pointer-events-none" />
+          )}
+        </div>
       </div>
     </div>
   )

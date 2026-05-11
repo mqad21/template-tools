@@ -103,44 +103,94 @@ export const PropertyEditor = () => {
   }
 
   if (sidebarMode !== 'components') {
+    const handleFormatJSON = () => {
+      try {
+        const parsed = JSON.parse(localJSON)
+        setLocalJSON(JSON.stringify(parsed, null, 2))
+        setJsonError(null)
+      } catch (e: any) {
+        setJsonError(`Cannot format: ${e.message}`)
+      }
+    }
+
     return (
-      <div className="flex-1 flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
-        <div className="h-12 border-b border-zinc-800 flex items-center justify-between px-6 bg-zinc-900/50">
+      <div className="flex-1 h-full flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+        <div className="h-12 border-b border-zinc-800 flex items-center justify-between px-6 bg-zinc-900/50 shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-1.5 rounded-md bg-primary/20 text-primary">
               <Code className="w-4 h-4" />
             </div>
-            <h2 className="text-xs font-bold uppercase tracking-widest">{sidebarMode} JSON EDITOR</h2>
+            <div>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em]">{sidebarMode} EDITOR</h2>
+              <p className="text-[8px] text-zinc-500 font-medium">Advanced JSON Configuration</p>
+            </div>
           </div>
-          {jsonError ? (
-            <div className="flex items-center gap-2 px-3 py-1 bg-destructive/10 text-destructive border border-destructive/20 rounded-full text-[10px] font-bold">
-              <ShieldCheck className="w-3 h-3 rotate-180" />
-              INVALID JSON: {jsonError}
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded-full text-[10px] font-bold">
-              <ShieldCheck className="w-3 h-3" />
-              SYNCED & VALID
-            </div>
-          )}
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={handleFormatJSON}
+              className="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-[10px] font-bold transition-colors border border-zinc-700"
+            >
+              FORMAT JSON
+            </button>
+
+            {jsonError ? (
+              <div className="flex items-center gap-2 px-3 py-1 bg-destructive/10 text-destructive border border-destructive/20 rounded-full text-[10px] font-bold animate-in zoom-in duration-300">
+                <ShieldCheck className="w-3 h-3 rotate-180" />
+                INVALID JSON
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded-full text-[10px] font-bold animate-in zoom-in duration-300">
+                <ShieldCheck className="w-3 h-3" />
+                SYNCED
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="flex-1 p-0 relative">
-          <textarea
-            className="absolute inset-0 w-full h-full p-8 bg-zinc-950 text-zinc-300 font-mono text-xs leading-relaxed outline-none resize-none selection:bg-primary/30"
-            value={localJSON}
-            spellCheck={false}
-            onChange={(e) => handleJSONChange(e.target.value)}
-          />
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Gutter / Help */}
+          <div className="w-48 border-r border-zinc-900 bg-zinc-950 p-4 space-y-4 hidden md:block overflow-y-auto">
+            <div className="space-y-1">
+              <h3 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Editing Tips</h3>
+              <p className="text-[9px] text-zinc-600 leading-relaxed">
+                {sidebarMode === 'template' && "The template defines the structural layout and core component properties."}
+                {sidebarMode === 'validation' && "Validations are logic rules that run on data change to ensure quality."}
+                {sidebarMode === 'presets' && "Predata allows you to pre-fill the form with existing data."}
+                {sidebarMode === 'responses' && "Answers represent the current user input state."}
+              </p>
+            </div>
+            
+            <div className="space-y-2 pt-4">
+              <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                <div className="flex items-center gap-2 text-primary mb-1">
+                  <Database className="w-3 h-3" />
+                  <span className="text-[9px] font-bold uppercase">Real-time</span>
+                </div>
+                <p className="text-[8px] text-zinc-500 leading-tight">Changes are saved automatically to local storage every 500ms.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 relative">
+            <textarea
+              className="absolute inset-0 w-full h-full p-8 bg-zinc-950 text-zinc-300 font-mono text-xs leading-relaxed outline-none resize-none selection:bg-primary/30 custom-scrollbar"
+              value={localJSON}
+              spellCheck={false}
+              onChange={(e) => handleJSONChange(e.target.value)}
+              placeholder={`Paste your ${sidebarMode} JSON here...`}
+            />
+          </div>
         </div>
         
-        <div className="h-8 border-t border-zinc-800 flex items-center px-6 bg-zinc-900/30 text-[10px] text-zinc-500 gap-4">
+        <div className="h-10 border-t border-zinc-900 flex items-center px-6 bg-zinc-950 text-[10px] text-zinc-500 gap-6 shrink-0">
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-            Real-time update enabled
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+            <span className="font-mono opacity-80 uppercase tracking-tighter">Auto-save: Enabled</span>
           </div>
           <div className="w-px h-3 bg-zinc-800" />
-          <div className="flex-1">JSON Schema valid for Fasih Engine v2.0</div>
+          <div className="flex-1 font-mono opacity-40">UTF-8 • JSON • Fasih V2</div>
+          {jsonError && <div className="text-destructive font-bold truncate max-w-md">{jsonError}</div>}
         </div>
       </div>
     )
@@ -189,14 +239,7 @@ export const PropertyEditor = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-background">
-      <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-background/80 backdrop-blur-md border-b">
-        <div className="flex items-center gap-2">
-          <Settings2 className="w-5 h-5 text-primary" />
-          <h2 className="font-semibold">{localComponent?.dataKey || 'Editor'}</h2>
-        </div>
-      </div>
-
+    <div className="flex-1 bg-background">
       <div className="p-6 space-y-8 max-w-4xl mx-auto">
         {/* Basic Properties */}
         <section className="space-y-4">
