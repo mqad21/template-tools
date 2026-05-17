@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useStore } from '../store/useStore'
-import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check } from 'lucide-react'
+import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check, Cpu } from 'lucide-react'
 import { cn } from '../lib/utils'
+import { getEngine, createBlobUrls } from '../lib/engineStorage'
 
-const JS_URL = "/engine/fasih-form.js";
-const CSS_URL = "/engine/fasih-form.css";
+const STATIC_JS_URL = "/engine/fasih-form.js";
+const STATIC_CSS_URL = "/engine/fasih-form.css";
 
 declare global {
   interface Window {
@@ -15,14 +16,15 @@ declare global {
 }
 
 export const FormPreview = () => {
-  const { 
-    template, 
-    validation, 
-    preset, 
+  const {
+    template,
+    validation,
+    preset,
     response,
-    previewMode
+    previewMode,
+    selectedEngineVersion,
   } = useStore()
-  
+
   const [loading, setLoading] = useState(true)
   const [isRendering, setIsRendering] = useState(false)
   const [ready, setReady] = useState(false)
@@ -33,9 +35,13 @@ export const FormPreview = () => {
   const innerTimerRef = useRef<any>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success'>('idle')
+  // Track active Blob URLs so we can revoke them on cleanup
+  const blobUrlsRef = useRef<{ jsUrl: string; cssUrl: string } | null>(null)
 
   const handleReload = () => {
     setError(null)
+    setLoading(true)
+    setReady(false)
     setReloadKey(prev => prev + 1)
   }
 
@@ -46,28 +52,56 @@ export const FormPreview = () => {
   // 1. Resource loading & Engine polling
   useEffect(() => {
     let mounted = true
+    // Revoke old blob URLs if any
+    if (blobUrlsRef.current) {
+      URL.revokeObjectURL(blobUrlsRef.current.jsUrl)
+      URL.revokeObjectURL(blobUrlsRef.current.cssUrl)
+      blobUrlsRef.current = null
+    }
 
     const loadResources = async () => {
       try {
-        // Load Script if not present
-        if (!document.querySelector(`script[src="${JS_URL}"]`)) {
-          await new Promise<void>((resolve, reject) => {
-            const s = document.createElement("script");
-            s.src = JS_URL;
-            s.async = true;
-            s.onload = () => resolve();
-            s.onerror = () => reject(new Error("Failed to load FasihForm script"));
-            document.head.appendChild(s);
-          });
+        let jsUrl = STATIC_JS_URL
+        let cssUrl = STATIC_CSS_URL
+
+        // If a local version is selected, try to load it from IndexedDB
+        if (selectedEngineVersion) {
+          const engine = await getEngine(selectedEngineVersion)
+          if (engine) {
+            const urls = createBlobUrls(engine)
+            blobUrlsRef.current = urls
+            jsUrl = urls.jsUrl
+            cssUrl = urls.cssUrl
+            console.log(`[Engine] Loading v${selectedEngineVersion} from local cache (blob URL)`)
+          } else {
+            console.warn(`[Engine] v${selectedEngineVersion} not found in local cache, falling back to static.`)
+          }
         }
 
-        // Load Style if not present
-        if (!document.querySelector(`link[href="${CSS_URL}"]`)) {
-          const l = document.createElement("link");
-          l.rel = "stylesheet";
-          l.href = CSS_URL;
-          document.head.appendChild(l);
-        }
+        // Remove any previous engine scripts/styles before loading new ones
+        document.querySelectorAll('script[data-fasih-engine]').forEach(el => el.remove())
+        document.querySelectorAll('link[data-fasih-engine]').forEach(el => el.remove())
+        // Remove old window globals so new script can register them
+        delete window.FasihForm
+        delete window.lib
+
+        // Load Script
+        await new Promise<void>((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = jsUrl;
+          s.async = true;
+          s.setAttribute('data-fasih-engine', 'true')
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error(`Failed to load FasihForm script from: ${jsUrl}`));
+          document.head.appendChild(s);
+        });
+
+        // Load Style
+        const l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.href = cssUrl;
+        l.setAttribute('data-fasih-engine', 'true')
+        document.head.appendChild(l);
 
         // Poll for FasihForm or lib on window
         let attempts = 0;
@@ -97,8 +131,10 @@ export const FormPreview = () => {
     }
 
     loadResources()
-    return () => { mounted = false }
-  }, [])
+    return () => {
+      mounted = false
+    }
+  }, [selectedEngineVersion, reloadKey])
 
   // 2. Sophisticated Render Logic (Double-buffering & Event Handlers)
   useEffect(() => {
@@ -143,9 +179,10 @@ export const FormPreview = () => {
           const newRoot = document.createElement('div');
           newRoot.id = uniqueId;
           newRoot.className = 'fasih-form-wrapper';
-          
+
           // Initial hidden state for smooth swap
           newRoot.style.width = '100%';
+          newRoot.style.height = '100%';
           newRoot.style.minHeight = '100%';
           newRoot.style.opacity = '0';
           newRoot.style.transition = 'opacity 0.3s ease';
@@ -255,7 +292,7 @@ export const FormPreview = () => {
           });
 
           instanceRef.current.render();
-          
+
           // Expose to window for the user's trigger logic
           window.fasihFormInstance = instanceRef.current;
 
@@ -268,7 +305,7 @@ export const FormPreview = () => {
             });
             newRoot.style.opacity = '1';
           }
-          
+
           setError(null);
         } catch (err: any) {
           console.error("FF Render Error:", err);
@@ -287,7 +324,7 @@ export const FormPreview = () => {
   }, [template, validation, preset, response, ready, reloadKey, previewMode])
 
   return (
-    <div className="w-full flex flex-col h-full bg-background border-l overflow-hidden">
+    <div className="w-full flex flex-col bg-background border-l">
       {/* Header */}
       <div className="p-4 border-b bg-background flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
@@ -305,6 +342,15 @@ export const FormPreview = () => {
                 <div className={cn("w-1.5 h-1.5 rounded-full", isRendering ? "bg-amber-500 animate-pulse" : "bg-green-500")} />
                 <span className="text-[8px] text-muted-foreground uppercase">{isRendering ? 'Rendering' : 'Ready'}</span>
               </div>
+              {/* Engine version indicator */}
+              {selectedEngineVersion ? (
+                <span className="text-[8px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-mono">
+                  v{selectedEngineVersion}
+                </span>
+              ) : (
+                <span className="text-[8px] text-muted-foreground opacity-60 font-mono">built-in</span>
+              )}
+
             </div>
           </div>
         </div>
@@ -315,8 +361,8 @@ export const FormPreview = () => {
               onClick={() => setPreviewMode('mobile')}
               className={cn(
                 "px-4 py-1.5 text-[10px] font-bold rounded-lg transition-all",
-                previewMode === 'mobile' 
-                  ? "bg-background shadow-sm text-primary ring-1 ring-border" 
+                previewMode === 'mobile'
+                  ? "bg-background shadow-sm text-primary ring-1 ring-border"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -326,15 +372,15 @@ export const FormPreview = () => {
               onClick={() => setPreviewMode('desktop')}
               className={cn(
                 "px-4 py-1.5 text-[10px] font-bold rounded-lg transition-all",
-                previewMode === 'desktop' 
-                  ? "bg-background shadow-sm text-primary ring-1 ring-border" 
+                previewMode === 'desktop'
+                  ? "bg-background shadow-sm text-primary ring-1 ring-border"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
               DESKTOP
             </button>
           </div>
-          
+
           <div className="flex items-center gap-2 border-l pl-4 border-border/50">
             {isRendering && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
             <button onClick={handleReload} className="p-2 hover:bg-muted rounded-xl text-muted-foreground transition-colors" title="Force Reload">
@@ -374,8 +420,8 @@ export const FormPreview = () => {
             className={cn(
               "fixed bottom-10 right-[88px] w-12 h-12 rounded-full shadow-2xl transition-all active:scale-90 z-50 group",
               "grid place-items-center p-0",
-              saveStatus === 'success' 
-                ? "bg-green-500 text-white shadow-green-500/40" 
+              saveStatus === 'success'
+                ? "bg-green-500 text-white shadow-green-500/40"
                 : "bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90"
             )}
             title="Trigger Save"
@@ -385,7 +431,7 @@ export const FormPreview = () => {
             ) : (
               <Save className="w-6 h-6 group-hover:scale-110 transition-transform" />
             )}
-            
+
             {/* Tooltip/Feedback */}
             <span className={cn(
               "absolute bottom-full mb-3 right-0 px-2 py-1 text-[10px] font-bold rounded shadow-xl border transition-all whitespace-nowrap pointer-events-none",
@@ -412,7 +458,7 @@ export const FormPreview = () => {
             </div>
             <h3 className="text-lg font-bold text-destructive mb-2">Preview Error</h3>
             <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">{error}</p>
-            <button 
+            <button
               onClick={handleReload}
               className="mt-6 px-6 py-2 bg-destructive text-destructive-foreground rounded-xl font-bold text-xs hover:opacity-90 transition-all"
             >
@@ -420,12 +466,12 @@ export const FormPreview = () => {
             </button>
           </div>
         )}
-        
-        <div 
+
+        <div
           className={cn(
             "transition-all duration-500 ease-in-out relative flex flex-col items-center",
-            previewMode === 'mobile' 
-              ? "w-[440px] max-w-full h-[850px] max-h-[calc(100vh-120px)] rounded-[3.5rem] border-[10px] border-zinc-950 bg-zinc-950 shadow-2xl my-auto ring-1 ring-white/10" 
+            previewMode === 'mobile'
+              ? "w-[440px] max-w-full h-screen rounded-[3.5rem] border-[10px] border-zinc-950 bg-zinc-950 shadow-2xl ring-1 ring-white/10"
               : "w-full flex-1"
           )}
         >
@@ -437,18 +483,18 @@ export const FormPreview = () => {
             </div>
           )}
 
-          <div 
+          <div
             ref={containerRef}
             className={cn(
               "bg-white transition-all duration-500 relative custom-scrollbar overflow-y-auto",
-              previewMode === 'mobile' 
-                ? "w-full h-full rounded-[2.8rem] border-[2px] border-zinc-900 pt-8 pb-6" 
-                : "w-full h-full rounded-2xl border border-border/50"
+              previewMode === 'mobile'
+                ? "w-full h-[calc(100vh-200px)] rounded-[2.8rem] border-[2px] border-zinc-900 pt-8 pb-6"
+                : "w-full h-[calc(100vh-200px)] rounded-2xl border border-border/50"
             )}
           >
             {/* Fasih Engine renders inside unique child roots here */}
           </div>
-          
+
           {/* Home Indicator */}
           {previewMode === 'mobile' && (
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-white/20 rounded-full z-20 pointer-events-none" />

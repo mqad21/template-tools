@@ -239,7 +239,7 @@ export const PropertyEditor = () => {
   }
 
   return (
-    <div className="flex-1 bg-background">
+    <div className="flex-1 bg-background overflow-y-auto custom-scrollbar">
       <div className="p-6 space-y-8 max-w-4xl mx-auto">
         {/* Basic Properties */}
         <section className="space-y-4">

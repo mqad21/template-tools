@@ -1,7 +1,22 @@
 import { create } from 'zustand'
 import { Component, TestFunction, buildComponentMap } from '@fasih-form-studio/shared'
+import { saveEngine, deleteEngine, getStoredVersions } from '../lib/engineStorage'
 export type { Component, TestFunction } from '@fasih-form-studio/shared'
 export { buildComponentMap } from '@fasih-form-studio/shared'
+
+export interface FormEngineVersion {
+  id: string
+  formEngineId: number
+  version: string
+  basePath: string
+  createdAt: string
+  modifiedAt: string
+  modifiedBy: string
+  linkDownload: string
+  message: string
+  isDefault: boolean
+  isForce: boolean
+}
 
 interface State {
   template: any
@@ -22,6 +37,15 @@ interface State {
   selectedPath: Set<string>
   previewWidth: number
   previewMode: 'mobile' | 'desktop'
+
+  // Engine Version Management
+  engineVersions: FormEngineVersion[]
+  selectedEngineVersion: string | null  // null = use static /engine/fasih-form.js
+  storedEngineVersions: string[]        // versions already downloaded to IndexedDB
+  isFetchingVersions: boolean
+  isDownloadingVersion: string | null   // version string being downloaded, or null
+  lastVersionFetch: number | null       // timestamp of last successful API fetch
+  downloadProgress: number              // 0-100
   
   // Actions
   setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
@@ -46,6 +70,13 @@ interface State {
   addTemplate: (templateId: string) => void
   switchTemplate: (templateId: string) => Promise<void>
   deleteTemplate: (templateId: string) => void
+
+  // Engine version actions
+  fetchEngineVersions: (force?: boolean) => Promise<void>
+  setSelectedEngineVersion: (version: string | null) => void
+  downloadEngineVersion: (version: FormEngineVersion) => Promise<void>
+  deleteLocalEngineVersion: (version: string) => Promise<void>
+  refreshStoredVersions: () => Promise<void>
 }
 
 const STORAGE_KEYS = {
@@ -59,7 +90,16 @@ const STORAGE_KEYS = {
   RESPONSE: (id: string) => `fasih_response_${id}`,
   PREVIEW_WIDTH: 'fasih_preview_width',
   PREVIEW_MODE: 'fasih_preview_mode',
+  ENGINE_VERSIONS: 'fasih_engine_versions',
+  ENGINE_VERSIONS_TS: 'fasih_engine_versions_ts',
+  SELECTED_ENGINE: 'fasih_selected_engine',
 }
+
+// Cache TTL: 30 minutes
+const VERSION_CACHE_TTL_MS = 30 * 60 * 1000
+
+
+
 
 let saveDebounceTimer: any = null;
 
@@ -81,6 +121,15 @@ export const useStore = create<State>((set, get) => ({
   selectedPath: new Set(),
   previewWidth: typeof window !== 'undefined' ? Number(localStorage.getItem(STORAGE_KEYS.PREVIEW_WIDTH)) || 450 : 450,
   previewMode: typeof window !== 'undefined' ? (localStorage.getItem(STORAGE_KEYS.PREVIEW_MODE) as 'mobile' | 'desktop') || 'mobile' : 'mobile',
+
+  // Engine version state
+  engineVersions: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ENGINE_VERSIONS) || '[]') : [],
+  selectedEngineVersion: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.SELECTED_ENGINE) || null : null,
+  storedEngineVersions: [],
+  isFetchingVersions: false,
+  isDownloadingVersion: null,
+  lastVersionFetch: typeof window !== 'undefined' ? Number(localStorage.getItem(STORAGE_KEYS.ENGINE_VERSIONS_TS)) || null : null,
+  downloadProgress: 0,
 
   setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
   setUseProxy: (useProxy) => {
@@ -467,5 +516,164 @@ export const useStore = create<State>((set, get) => ({
       set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null })
       localStorage.setItem(STORAGE_KEYS.CURRENT_ID, '')
     }
-  }
+  },
+
+  fetchEngineVersions: async (force = false) => {
+    const { lastVersionFetch, engineVersions, isFetchingVersions } = get()
+    if (isFetchingVersions) return
+
+    const now = Date.now()
+    const isCacheValid = lastVersionFetch && (now - lastVersionFetch) < VERSION_CACHE_TTL_MS
+    if (!force && isCacheValid && engineVersions.length > 0) return
+
+    set({ isFetchingVersions: true })
+    try {
+      const isExtension = typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:'
+      let data: FormEngineVersion[]
+
+      if (isExtension) {
+        // Use background script to bypass CORS in extension context
+        data = await new Promise((resolve, reject) => {
+          const win = window as any
+          const timeout = setTimeout(() => reject(new Error('Timeout fetching versions')), 15000)
+          win.chrome?.runtime?.sendMessage(
+            { action: 'fetchFromBps', path: '/designer/api/form-engine/list-form-engine-release', token: get().bearerToken },
+            (res: any) => {
+              clearTimeout(timeout)
+              if (res?.success) resolve(res.data?.data ?? [])
+              else reject(new Error(res?.error || 'Failed'))
+            }
+          )
+        })
+      } else {
+        const { bearerToken } = get()
+        const res = await fetch('/api/proxy/designer/api/form-engine/list-form-engine-release', {
+          headers: bearerToken ? { Authorization: bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}` } : {}
+        })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const json = await res.json()
+        data = json.data ?? []
+      }
+
+      // Filter: only formEngineId === 2, sort newest first by createdAt
+      const filtered = data
+        .filter((v) => v.formEngineId === 2)
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+      localStorage.setItem(STORAGE_KEYS.ENGINE_VERSIONS, JSON.stringify(filtered))
+      localStorage.setItem(STORAGE_KEYS.ENGINE_VERSIONS_TS, String(now))
+      set({ engineVersions: filtered, lastVersionFetch: now })
+    } catch (e: any) {
+      console.error('[Engine] Failed to fetch versions:', e)
+    } finally {
+      set({ isFetchingVersions: false })
+    }
+  },
+
+  setSelectedEngineVersion: (version) => {
+    set({ selectedEngineVersion: version })
+    if (version) {
+      localStorage.setItem(STORAGE_KEYS.SELECTED_ENGINE, version)
+    } else {
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_ENGINE)
+    }
+  },
+
+  downloadEngineVersion: async (versionObj) => {
+    const { isDownloadingVersion } = get()
+    if (isDownloadingVersion) return
+
+    set({ isDownloadingVersion: versionObj.version, downloadProgress: 0 })
+    try {
+      // Download the zip file via proxy
+      const isExtension = typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:'
+      let zipBuffer: ArrayBuffer
+
+      if (isExtension) {
+        // Can't stream binary in extension message; direct fetch attempt
+        const res = await fetch(versionObj.linkDownload)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        zipBuffer = await res.arrayBuffer()
+      } else {
+        const { bearerToken } = get()
+        // Encode the download URL to proxy it
+        const proxyUrl = `/api/proxy/mobile/assignment-sync/api/mobile/template/download-form-engine?formEngineId=2&version=${encodeURIComponent(versionObj.version)}`
+        const res = await fetch(proxyUrl, {
+          headers: bearerToken ? { Authorization: bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}` } : {}
+        })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+        // Read with progress tracking
+        const contentLength = res.headers.get('Content-Length')
+        const totalBytes = contentLength ? parseInt(contentLength) : 0
+        const reader = res.body!.getReader()
+        const chunks: Uint8Array[] = []
+        let received = 0
+
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          if (value) {
+            chunks.push(value)
+            received += value.byteLength
+            if (totalBytes > 0) {
+              set({ downloadProgress: Math.round((received / totalBytes) * 80) })
+            }
+          }
+        }
+
+        const blob = new Blob(chunks as any[])
+        zipBuffer = await blob.arrayBuffer()
+      }
+
+      set({ downloadProgress: 85 })
+
+      // Dynamically import JSZip to unzip
+      const JSZip = (await import('jszip')).default
+      const zip = await JSZip.loadAsync(zipBuffer)
+
+      set({ downloadProgress: 90 })
+
+      // Extract JS and CSS from the zip
+      // Expected structure: fasih-form/fasih-form.umd.js and fasih-form/style.css
+      let jsContent = ''
+      let cssContent = ''
+
+      const jsFile = zip.file(/\.umd\.js$/i)[0] ?? zip.file(/fasih-form.*\.js$/i)[0]
+      const cssFile = zip.file(/style\.css$/i)[0] ?? zip.file(/\.css$/i)[0]
+
+      if (jsFile) jsContent = await jsFile.async('string')
+      if (cssFile) cssContent = await cssFile.async('string')
+
+      if (!jsContent) throw new Error('JS file not found in zip')
+
+      set({ downloadProgress: 95 })
+
+      await saveEngine(versionObj.version, jsContent, cssContent)
+
+      set({ downloadProgress: 100 })
+
+      // Refresh stored versions list
+      await get().refreshStoredVersions()
+    } catch (e: any) {
+      console.error('[Engine] Download failed:', e)
+      throw e
+    } finally {
+      setTimeout(() => set({ isDownloadingVersion: null, downloadProgress: 0 }), 500)
+    }
+  },
+
+  deleteLocalEngineVersion: async (version) => {
+    await deleteEngine(version)
+    const { selectedEngineVersion } = get()
+    if (selectedEngineVersion === version) {
+      get().setSelectedEngineVersion(null)
+    }
+    await get().refreshStoredVersions()
+  },
+
+  refreshStoredVersions: async () => {
+    const stored = await getStoredVersions()
+    set({ storedEngineVersions: stored })
+  },
 }))

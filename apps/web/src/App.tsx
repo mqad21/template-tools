@@ -3,9 +3,11 @@ import { Sidebar } from './components/Sidebar'
 import { PropertyEditor } from './components/PropertyEditor'
 import { FormPreview } from './components/FormPreview'
 import { useStore } from './store/useStore'
-import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout, X, FileJson, ShieldCheck, ClipboardList, Code } from 'lucide-react'
+import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout, X, FileJson, ShieldCheck, ClipboardList, Code, Cpu, GitCompare } from 'lucide-react'
 import { SettingsDialog } from './components/SettingsDialog'
 import { TemplateSwitcher } from './components/TemplateSwitcher'
+import { EngineManagerDialog } from './components/EngineManagerDialog'
+import { CompareDialog } from './components/CompareDialog'
 import { cn } from './lib/utils'
 
 function App() {
@@ -27,32 +29,18 @@ function App() {
   const isResizingSidebar = React.useRef(false)
   const isResizingPreview = React.useRef(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isEngineManagerOpen, setIsEngineManagerOpen] = useState(false)
+  const [isCompareOpen, setIsCompareOpen] = useState(false)
   const [syncStatus, setSyncStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [syncError, setSyncError] = useState('')
 
   const isExtension = typeof window !== 'undefined' && 
     (window.location.protocol === 'chrome-extension:' || !!(window as any).chrome?.runtime?.id);
 
-  // Preload Engine Resources
+  // Preload Engine Resources & init stored versions
   useEffect(() => {
-    const JS_URL = "/engine/fasih-form.js";
-    const CSS_URL = "/engine/fasih-form.css";
-
-    // Preload JS
-    if (!document.querySelector(`script[src="${JS_URL}"]`)) {
-      const s = document.createElement("script");
-      s.src = JS_URL;
-      s.async = true;
-      document.head.appendChild(s);
-    }
-
-    // Preload CSS
-    if (!document.querySelector(`link[href="${CSS_URL}"]`)) {
-      const l = document.createElement("link");
-      l.rel = "stylesheet";
-      l.href = CSS_URL;
-      document.head.appendChild(l);
-    }
+    // Initialize stored versions list from IndexedDB
+    useStore.getState().refreshStoredVersions()
   }, []);
 
   useEffect(() => {
@@ -255,6 +243,23 @@ function App() {
                 </button>
 
                 <button 
+                  onClick={() => setIsCompareOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg transition-all font-bold text-xs"
+                  title="Compare Templates"
+                >
+                  <GitCompare className="w-4 h-4" />
+                  Compare
+                </button>
+
+                <button 
+                  onClick={() => setIsEngineManagerOpen(true)}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+                  title="Engine Version Manager"
+                >
+                  <Cpu className="w-5 h-5" />
+                </button>
+
+                <button 
                   onClick={() => setIsSettingsOpen(true)}
                   className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
                   title="Settings"
@@ -330,7 +335,7 @@ function App() {
             <div className="absolute inset-y-0 left-1/2 -ml-px w-px bg-border group-hover:bg-primary transition-colors" />
           </div>
 
-          <div className="flex-1 h-full relative overflow-hidden">
+          <div className="flex-1 h-full relative overflow-auto custom-scrollbar">
             <FormPreview />
           </div>
         </main>
@@ -338,11 +343,11 @@ function App() {
 
       {/* Property Editor Modal */}
       {(selectedDataKey || (sidebarMode !== 'components')) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-end p-4 bg-background/40 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-end bg-background/40 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
             className={cn(
               "bg-card border shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-right-4 duration-300",
-              sidebarMode === 'components' ? "w-full max-w-2xl h-[90vh] rounded-3xl" : "w-[98vw] h-[98vh] rounded-2xl"
+              sidebarMode === 'components' ? "w-full max-w-2xl h-full rounded-l-3xl" : "w-full h-full"
             )}
           >
             <div className="flex items-center justify-between p-4 border-b bg-muted/20">
@@ -418,6 +423,16 @@ function App() {
       <SettingsDialog 
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+      />
+
+      <EngineManagerDialog
+        isOpen={isEngineManagerOpen}
+        onClose={() => setIsEngineManagerOpen(false)}
+      />
+
+      <CompareDialog
+        isOpen={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
       />
     </div>
   )
