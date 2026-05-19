@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useStore } from '../store/useStore'
-import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check, Cpu } from 'lucide-react'
+import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check, Cpu, Settings2, X } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { getEngine, createBlobUrls } from '../lib/engineStorage'
 
@@ -35,6 +35,60 @@ export const FormPreview = () => {
   const innerTimerRef = useRef<any>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success'>('idle')
+
+  // Form Engine Config
+  const [showConfig, setShowConfig] = useState(false)
+
+  // --- simple fields ---
+  const [cfgMode, setCfgMode] = useState('CAPI')
+  const [cfgAssignmentId, setCfgAssignmentId] = useState('preview')
+  const [cfgFormMode, setCfgFormMode] = useState('1')
+  const [cfgInitialMode, setCfgInitialMode] = useState('2')
+  const [cfgLocale, setCfgLocale] = useState('id')
+
+  // --- JSON fields ---
+  const [remarkJson, setRemarkJson] = useState('{}')
+  const [principalsJson, setPrincipalsJson] = useState('[]')
+  const [userJson, setUserJson] = useState(JSON.stringify({ username: 'tester', role: 'Developer' }, null, 2))
+  const [remarkError, setRemarkError] = useState<string | null>(null)
+  const [principalsError, setPrincipalsError] = useState<string | null>(null)
+  const [userError, setUserError] = useState<string | null>(null)
+
+  const parseRemarkSafe = () => {
+    try {
+      const parsed = JSON.parse(remarkJson)
+      if (typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Must be a JSON object')
+      setRemarkError(null)
+      return parsed
+    } catch (e: any) {
+      setRemarkError(e.message)
+      return {}
+    }
+  }
+
+  const parsePrincipalsSafe = () => {
+    try {
+      const parsed = JSON.parse(principalsJson)
+      if (!Array.isArray(parsed)) throw new Error('Must be a JSON array')
+      setPrincipalsError(null)
+      return parsed
+    } catch (e: any) {
+      setPrincipalsError(e.message)
+      return []
+    }
+  }
+
+  const parseUserSafe = () => {
+    try {
+      const parsed = JSON.parse(userJson)
+      if (typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Must be a JSON object')
+      setUserError(null)
+      return parsed
+    } catch (e: any) {
+      setUserError(e.message)
+      return { username: 'tester', role: 'Developer' }
+    }
+  }
   // Track active Blob URLs so we can revoke them on cleanup
   const blobUrlsRef = useRef<{ jsUrl: string; cssUrl: string } | null>(null)
 
@@ -202,21 +256,18 @@ export const FormPreview = () => {
           };
 
           const options = {
-            mode: "CAPI",
-            assignmentId: "preview",
+            mode: cfgMode || 'CAPI',
+            assignmentId: cfgAssignmentId || 'preview',
             template: deepClone(template),
             validation: validation ? deepClone(validation) : { testFunctions: [] },
             preset: preset ? deepClone(preset) : { predata: [] },
             response: response ? deepClone(response) : { answers: [] },
-            remark: {},
-            principals: [],
-            formMode: 1,
-            initialMode: 2,
-            user: {
-              username: "tester",
-              role: "Developer",
-            },
-            locale: "id",
+            remark: parseRemarkSafe(),
+            principals: parsePrincipalsSafe(),
+            formMode: Number(cfgFormMode) || 1,
+            initialMode: Number(cfgInitialMode) || 2,
+            user: parseUserSafe(),
+            locale: cfgLocale || 'id',
           };
 
           const FF = typeof engine === 'function' ? engine : (engine && engine.render ? engine : null);
@@ -321,7 +372,7 @@ export const FormPreview = () => {
       clearTimeout(timer);
       if (innerTimerRef.current) clearTimeout(innerTimerRef.current);
     }
-  }, [template, validation, preset, response, ready, reloadKey, previewMode])
+  }, [template, validation, preset, response, ready, reloadKey, previewMode, remarkJson, principalsJson, userJson, cfgMode, cfgAssignmentId, cfgFormMode, cfgInitialMode, cfgLocale])
 
   return (
     <div className="w-full flex flex-col bg-background border-l">
@@ -383,12 +434,228 @@ export const FormPreview = () => {
 
           <div className="flex items-center gap-2 border-l pl-4 border-border/50">
             {isRendering && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+            <button
+              onClick={() => setShowConfig(v => !v)}
+              className={cn(
+                "p-2 rounded-xl transition-colors",
+                showConfig
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted text-muted-foreground"
+              )}
+              title="Engine Config"
+            >
+              <Settings2 className="w-4 h-4" />
+            </button>
             <button onClick={handleReload} className="p-2 hover:bg-muted rounded-xl text-muted-foreground transition-colors" title="Force Reload">
               <RefreshCw className={cn("w-4 h-4", isRendering && "animate-spin")} />
             </button>
           </div>
         </div>
       </div>
+
+      {/* Engine Config Panel */}
+      {showConfig && (
+        <div className="border-b bg-muted/5 px-4 py-3 shrink-0">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Settings2 className="w-3.5 h-3.5 text-primary" />
+              <span className="text-xs font-bold text-foreground">Engine Config</span>
+              <span className="text-[9px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full font-mono">auto-applies on change</span>
+            </div>
+            <button
+              onClick={() => setShowConfig(false)}
+              className="p-1 hover:bg-muted rounded-lg text-muted-foreground transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          {/* Row 1 — simple string/number fields */}
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            {/* mode */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="ec-mode" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                mode <span className="font-normal normal-case opacity-60">string</span>
+              </label>
+              <input
+                id="ec-mode"
+                value={cfgMode}
+                onChange={e => setCfgMode(e.target.value)}
+                className="w-full text-xs font-mono rounded-lg border border-border/50 bg-background px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-primary/40 transition-all"
+                placeholder="CAPI"
+              />
+            </div>
+
+            {/* assignmentId */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="ec-assignmentId" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                assignmentId <span className="font-normal normal-case opacity-60">string</span>
+              </label>
+              <input
+                id="ec-assignmentId"
+                value={cfgAssignmentId}
+                onChange={e => setCfgAssignmentId(e.target.value)}
+                className="w-full text-xs font-mono rounded-lg border border-border/50 bg-background px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-primary/40 transition-all"
+                placeholder="preview"
+              />
+            </div>
+
+            {/* locale */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="ec-locale" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                locale <span className="font-normal normal-case opacity-60">string</span>
+              </label>
+              <input
+                id="ec-locale"
+                value={cfgLocale}
+                onChange={e => setCfgLocale(e.target.value)}
+                className="w-full text-xs font-mono rounded-lg border border-border/50 bg-background px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-primary/40 transition-all"
+                placeholder="id"
+              />
+            </div>
+
+            {/* formMode */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="ec-formMode" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                formMode <span className="font-normal normal-case opacity-60">number</span>
+              </label>
+              <input
+                id="ec-formMode"
+                type="number"
+                value={cfgFormMode}
+                onChange={e => setCfgFormMode(e.target.value)}
+                className="w-full text-xs font-mono rounded-lg border border-border/50 bg-background px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-primary/40 transition-all"
+                placeholder="1"
+              />
+            </div>
+
+            {/* initialMode */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="ec-initialMode" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                initialMode <span className="font-normal normal-case opacity-60">number</span>
+              </label>
+              <input
+                id="ec-initialMode"
+                type="number"
+                value={cfgInitialMode}
+                onChange={e => setCfgInitialMode(e.target.value)}
+                className="w-full text-xs font-mono rounded-lg border border-border/50 bg-background px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-primary/40 transition-all"
+                placeholder="2"
+              />
+            </div>
+          </div>
+
+          {/* Row 2 — JSON fields */}
+          <div className="grid grid-cols-3 gap-3">
+            {/* user */}
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                user <span className="font-normal normal-case opacity-60">object</span>
+              </label>
+              <textarea
+                id="ec-user"
+                value={userJson}
+                onChange={e => {
+                  setUserJson(e.target.value)
+                  try {
+                    const parsed = JSON.parse(e.target.value)
+                    if (typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Must be a JSON object')
+                    setUserError(null)
+                  } catch (err: any) {
+                    setUserError(err.message)
+                  }
+                }}
+                rows={5}
+                spellCheck={false}
+                className={cn(
+                  "w-full text-xs font-mono rounded-lg border bg-background px-2.5 py-2 resize-y outline-none focus:ring-1 transition-all",
+                  userError
+                    ? "border-destructive focus:ring-destructive/50 text-destructive"
+                    : "border-border/50 focus:ring-primary/40"
+                )}
+                placeholder='{"username": "tester", "role": "Developer"}'
+              />
+              {userError && (
+                <p className="text-[9px] text-destructive flex items-center gap-1">
+                  <AlertCircle className="w-2.5 h-2.5 shrink-0" />
+                  {userError}
+                </p>
+              )}
+            </div>
+
+            {/* remark */}
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                remark <span className="font-normal normal-case opacity-60">object</span>
+              </label>
+              <textarea
+                id="ec-remark"
+                value={remarkJson}
+                onChange={e => {
+                  setRemarkJson(e.target.value)
+                  try {
+                    const parsed = JSON.parse(e.target.value)
+                    if (typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Must be a JSON object')
+                    setRemarkError(null)
+                  } catch (err: any) {
+                    setRemarkError(err.message)
+                  }
+                }}
+                rows={5}
+                spellCheck={false}
+                className={cn(
+                  "w-full text-xs font-mono rounded-lg border bg-background px-2.5 py-2 resize-y outline-none focus:ring-1 transition-all",
+                  remarkError
+                    ? "border-destructive focus:ring-destructive/50 text-destructive"
+                    : "border-border/50 focus:ring-primary/40"
+                )}
+                placeholder="{}"
+              />
+              {remarkError && (
+                <p className="text-[9px] text-destructive flex items-center gap-1">
+                  <AlertCircle className="w-2.5 h-2.5 shrink-0" />
+                  {remarkError}
+                </p>
+              )}
+            </div>
+
+            {/* principals */}
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                principals <span className="font-normal normal-case opacity-60">array</span>
+              </label>
+              <textarea
+                id="ec-principals"
+                value={principalsJson}
+                onChange={e => {
+                  setPrincipalsJson(e.target.value)
+                  try {
+                    const parsed = JSON.parse(e.target.value)
+                    if (!Array.isArray(parsed)) throw new Error('Must be a JSON array')
+                    setPrincipalsError(null)
+                  } catch (err: any) {
+                    setPrincipalsError(err.message)
+                  }
+                }}
+                rows={5}
+                spellCheck={false}
+                className={cn(
+                  "w-full text-xs font-mono rounded-lg border bg-background px-2.5 py-2 resize-y outline-none focus:ring-1 transition-all",
+                  principalsError
+                    ? "border-destructive focus:ring-destructive/50 text-destructive"
+                    : "border-border/50 focus:ring-primary/40"
+                )}
+                placeholder="[]"
+              />
+              {principalsError && (
+                <p className="text-[9px] text-destructive flex items-center gap-1">
+                  <AlertCircle className="w-2.5 h-2.5 shrink-0" />
+                  {principalsError}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content Area */}
       <div className="flex-1 overflow-auto bg-muted/10 p-6 relative flex flex-col items-center custom-scrollbar">
