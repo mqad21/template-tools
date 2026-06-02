@@ -8,6 +8,7 @@ import { SettingsDialog } from './components/SettingsDialog'
 import { TemplateSwitcher } from './components/TemplateSwitcher'
 import { EngineManagerDialog } from './components/EngineManagerDialog'
 import { CompareDialog } from './components/CompareDialog'
+import { LoadAssignmentDialog } from './components/LoadAssignmentDialog'
 import { cn } from './lib/utils'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isEngineManagerOpen, setIsEngineManagerOpen] = useState(false)
   const [isCompareOpen, setIsCompareOpen] = useState(false)
+  const [isLoadAssignmentOpen, setIsLoadAssignmentOpen] = useState(false)
   const [syncStatus, setSyncStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [syncError, setSyncError] = useState('')
 
@@ -243,6 +245,15 @@ function App() {
                 </button>
 
                 <button 
+                  onClick={() => setIsLoadAssignmentOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg transition-all font-bold text-xs"
+                  title="Load Data from Assignment ID"
+                >
+                  <Database className="w-4 h-4" />
+                  Load Assignment
+                </button>
+
+                <button 
                   onClick={() => setIsCompareOpen(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg transition-all font-bold text-xs"
                   title="Compare Templates"
@@ -433,6 +444,11 @@ function App() {
       <CompareDialog
         isOpen={isCompareOpen}
         onClose={() => setIsCompareOpen(false)}
+      />
+
+      <LoadAssignmentDialog
+        isOpen={isLoadAssignmentOpen}
+        onClose={() => setIsLoadAssignmentOpen(false)}
       />
     </div>
   )

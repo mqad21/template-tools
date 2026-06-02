@@ -25,20 +25,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === 'fetchFromBps') {
-    handleFetchFromBps(request.path, request.token, sendResponse);
+    handleFetchFromBps(request.path, request.token, request.domain, sendResponse);
     return true; // Keep channel open for async
   }
 });
 
-async function handleFetchFromBps(path: string, token: string, sendResponse: any) {
-  console.log('[Background] Received fetch request for:', path);
+async function handleFetchFromBps(path: string, token: string, domain: string, sendResponse: any) {
+  const targetDomain = domain || 'https://fasih-qd.bps.go.id';
+  console.log('[Background] Received fetch request for:', path, 'domain:', targetDomain);
   
   try {
     // 1. Find the BPS tab
     const tabs = await chrome.tabs.query({ 
       url: [
         'https://fasih-qd.bps.go.id/*',
-        'https://fasih-survey.bps.go.id/*'
+        'https://fasih-survey.bps.go.id/*',
+        'https://fasih-sm.bps.go.id/*'
       ]
     });
     
@@ -54,9 +56,9 @@ async function handleFetchFromBps(path: string, token: string, sendResponse: any
     // 2. Execute the fetch inside the tab
     const results = await chrome.scripting.executeScript({
       target: { tabId: targetTabId },
-      func: async (fetchPath, bearerToken) => {
+      func: async (fetchPath, bearerToken, fetchDomain) => {
         try {
-          const response = await fetch(`https://fasih-qd.bps.go.id${fetchPath}`, {
+          const response = await fetch(`${fetchDomain}${fetchPath}`, {
             headers: {
               'Authorization': bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}`,
               'Accept': 'application/json, text/plain, */*',
@@ -72,7 +74,7 @@ async function handleFetchFromBps(path: string, token: string, sendResponse: any
           return { success: false, error: e.message };
         }
       },
-      args: [path, token]
+      args: [path, token, targetDomain]
     });
 
     // 3. Send result back to Studio

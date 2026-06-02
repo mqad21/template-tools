@@ -14,6 +14,11 @@ export default defineConfig({
   server: {
     // Standard Vite proxy for local development
     proxy: {
+      '/api/proxy-sm': {
+        target: 'https://fasih-sm.bps.go.id',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/proxy-sm/, ''),
+      },
       '/api/proxy': {
         target: 'https://fasih-survey.bps.go.id',
         changeOrigin: true,

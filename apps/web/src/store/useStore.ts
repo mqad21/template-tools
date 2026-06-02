@@ -77,6 +77,7 @@ interface State {
   downloadEngineVersion: (version: FormEngineVersion) => Promise<void>
   deleteLocalEngineVersion: (version: string) => Promise<void>
   refreshStoredVersions: () => Promise<void>
+  fetchAssignmentData: (assignmentId: string) => Promise<void>
 }
 
 const STORAGE_KEYS = {
@@ -675,5 +676,59 @@ export const useStore = create<State>((set, get) => ({
   refreshStoredVersions: async () => {
     const stored = await getStoredVersions()
     set({ storedEngineVersions: stored })
+  },
+
+  fetchAssignmentData: async (assignmentId) => {
+    const { bearerToken } = get()
+    if (!bearerToken) throw new Error('Missing token')
+
+    const isExtension = typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:'
+    const path = `/app/api/assignment-general/api/assignment/get-by-assignment-id?assignmentId=${assignmentId}`
+    const baseUrl = isExtension ? 'https://fasih-sm.bps.go.id' : '/api/proxy-sm'
+
+    try {
+      let result: any;
+      if (isExtension) {
+        result = await new Promise((resolve, reject) => {
+          const win = window as any
+          const timeout = setTimeout(() => reject(new Error('Timeout fetching assignment')), 15000)
+          win.chrome?.runtime?.sendMessage(
+            { action: 'fetchFromBps', path, token: bearerToken, domain: baseUrl },
+            (res: any) => {
+              clearTimeout(timeout)
+              if (res?.success) resolve(res.data)
+              else reject(new Error(res?.error || 'Failed'))
+            }
+          )
+        })
+      } else {
+        const res = await fetch(`${baseUrl}${path}`, {
+          headers: bearerToken ? { Authorization: bearerToken.startsWith('Bearer ') ? bearerToken : `Bearer ${bearerToken}` } : {}
+        })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        result = await res.json()
+      }
+
+      if (result?.data?.pre_defined_data) {
+        try {
+          const preDataObj = JSON.parse(result.data.pre_defined_data)
+          get().setPreset(preDataObj)
+        } catch (e) {
+          console.error('Failed to parse pre_defined_data', e)
+        }
+      }
+
+      if (result?.data?.data) {
+        try {
+          const dataObj = JSON.parse(result.data.data)
+          get().setResponse(dataObj)
+        } catch (e) {
+          console.error('Failed to parse data', e)
+        }
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch assignment data:', error)
+      throw error
+    }
   },
 }))

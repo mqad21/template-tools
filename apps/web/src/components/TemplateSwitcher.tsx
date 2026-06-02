@@ -40,6 +40,17 @@ export const TemplateSwitcher: React.FC = () => {
     }
   }
 
+  const getTemplateTitle = (id: string) => {
+    try {
+      const raw = localStorage.getItem(`fasih_template_${id}`)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        return parsed?.title || `ID: ${id}`
+      }
+    } catch (e) {}
+    return `ID: ${id}`
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -88,7 +99,7 @@ export const TemplateSwitcher: React.FC = () => {
                       {currentTemplateId === id ? <Check className="w-3.5 h-3.5" /> : <Layout className="w-3.5 h-3.5 text-muted-foreground" />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold truncate">ID: {id}</p>
+                      <p className="text-[10px] font-bold truncate">{getTemplateTitle(id)}</p>
                       {currentTemplateId === id && <p className="text-[8px] opacity-70">Active Now</p>}
                     </div>
                   </div>
