@@ -25,3 +25,4 @@ dist-ssr
 
 # History directory (removed feature)
 history/
+apps/web/.env

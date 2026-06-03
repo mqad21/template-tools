@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
+  envPrefix: ['VITE_', 'SSO_'],
   plugins: [react()],
   resolve: {
     alias: {
@@ -27,6 +28,11 @@ export default defineConfig({
           // instead of /api/proxy?url=https://...
           return path.replace(/^\/api\/proxy/, '')
         },
+      },
+      '/api/sso': {
+        target: 'https://sso.bps.go.id',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/sso/, ''),
       }
     }
   }

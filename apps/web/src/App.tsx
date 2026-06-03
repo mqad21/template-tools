@@ -10,6 +10,7 @@ import { EngineManagerDialog } from './components/EngineManagerDialog'
 import { CompareDialog } from './components/CompareDialog'
 import { LoadAssignmentDialog } from './components/LoadAssignmentDialog'
 import { cn } from './lib/utils'
+import { handleSSOCallback } from './lib/oauth'
 
 function App() {
   const { 
@@ -39,8 +40,16 @@ function App() {
   const isExtension = typeof window !== 'undefined' && 
     (window.location.protocol === 'chrome-extension:' || !!(window as any).chrome?.runtime?.id);
 
+
   // Preload Engine Resources & init stored versions
   useEffect(() => {
+    // Check for SSO callback
+    handleSSOCallback().then((success) => {
+      if (success) {
+        console.log('[SSO] Successfully logged in via SSO');
+      }
+    });
+
     // Initialize stored versions list from IndexedDB
     useStore.getState().refreshStoredVersions()
   }, []);
