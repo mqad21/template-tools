@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Database, X, Download } from 'lucide-react'
+import { Database, X, Download, Code } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import { cn } from '../lib/utils'
 
@@ -9,29 +9,72 @@ interface LoadAssignmentDialogProps {
 }
 
 export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOpen, onClose }) => {
-  const [assignmentId, setAssignmentId] = useState('')
+  const [inputData, setInputData] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
-  const { fetchAssignmentData } = useStore()
+  const { fetchAssignmentData, setPreset, setResponse } = useStore()
 
   if (!isOpen) return null
 
   const handleLoad = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!assignmentId.trim()) return
+    const input = inputData.trim()
+    if (!input) return
 
     setStatus('loading')
     try {
-      await fetchAssignmentData(assignmentId.trim())
+      // 1. Try to parse as JSON Response
+      if (input.startsWith('{') || input.startsWith('[')) {
+        try {
+          const parsed = JSON.parse(input)
+          let found = false
+          if (parsed?.data?.pre_defined_data) {
+            setPreset(JSON.parse(parsed.data.pre_defined_data))
+            found = true
+          }
+          if (parsed?.data?.data) {
+            setResponse(JSON.parse(parsed.data.data))
+            found = true
+          }
+          
+          if (!found) {
+            throw new Error('No pre_defined_data or data found in JSON response')
+          }
+          
+          setStatus('success')
+          setTimeout(() => {
+            setStatus('idle')
+            setInputData('')
+            onClose()
+          }, 1000)
+          return
+        } catch (err: any) {
+          throw new Error('Invalid JSON format or missing data: ' + err.message)
+        }
+      }
+
+      // 2. Try to parse as cURL or extract assignment ID
+      let assignmentIdToFetch = input
+      if (input.startsWith('curl')) {
+        const match = input.match(/assignmentId=([a-zA-Z0-9-]+)/)
+        if (match && match[1]) {
+          assignmentIdToFetch = match[1]
+        } else {
+          throw new Error('Could not find assignmentId in the cURL command')
+        }
+      }
+
+      // 3. Fetch by Assignment ID
+      await fetchAssignmentData(assignmentIdToFetch)
       setStatus('success')
       setTimeout(() => {
         setStatus('idle')
-        setAssignmentId('')
+        setInputData('')
         onClose()
       }, 1000)
     } catch (e: any) {
       setStatus('error')
-      setErrorMsg(e.message || 'Failed to load assignment')
+      setErrorMsg(e.message || 'Failed to process input')
     }
   }
 
@@ -44,8 +87,8 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Load Assignment Data</h2>
-              <p className="text-xs text-muted-foreground leading-none mt-1">Fetch preset and response data</p>
+              <h2 className="text-lg font-bold">Load Data</h2>
+              <p className="text-xs text-muted-foreground leading-none mt-1">From Assignment ID, cURL, or JSON</p>
             </div>
           </div>
           <button 
@@ -58,21 +101,22 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
 
         <form onSubmit={handleLoad} className="p-6 space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Assignment ID
+            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+              <Code className="w-3 h-3" />
+              Input (ID / cURL / JSON)
             </label>
-            <input
-              type="text"
-              placeholder="e.g. 47a2de0f-becd-4c15-bcf0-1b42274db4e8"
-              className="w-full px-4 py-3 bg-background border rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-              value={assignmentId}
-              onChange={(e) => setAssignmentId(e.target.value)}
+            <textarea
+              placeholder="Paste Assignment ID, cURL command, or raw JSON response here..."
+              className="w-full px-4 py-3 bg-background border rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all min-h-[140px] resize-y"
+              value={inputData}
+              onChange={(e) => setInputData(e.target.value)}
               autoFocus
+              spellCheck={false}
             />
           </div>
 
           {status === 'error' && (
-            <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-xs font-medium">
+            <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-xs font-medium break-words">
               {errorMsg}
             </div>
           )}
@@ -80,7 +124,7 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
           <div className="pt-2">
             <button
               type="submit"
-              disabled={status === 'loading' || !assignmentId.trim()}
+              disabled={status === 'loading' || !inputData.trim()}
               className={cn(
                 "w-full px-4 py-3 text-sm font-bold rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2",
                 status === 'success' 
@@ -89,7 +133,7 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
               )}
             >
               {status === 'loading' ? (
-                'Loading...'
+                'Processing...'
               ) : status === 'success' ? (
                 'Data Loaded Successfully!'
               ) : (

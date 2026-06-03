@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import { useStore, Component, TestFunction } from '../store/useStore'
 import { Code, Settings2, ShieldCheck, Save, Database, ClipboardList } from 'lucide-react'
 import { cn } from '../lib/utils'
+import Editor from '@monaco-editor/react'
 
 export const PropertyEditor = () => {
   const { 
@@ -47,13 +48,10 @@ export const PropertyEditor = () => {
 
   const [localJSON, setLocalJSON] = useState('')
   const [jsonError, setJsonError] = useState<string | null>(null)
-  const lastUpdateFromEditorRef = React.useRef(false)
+  const [isDirty, setIsDirty] = useState(false)
 
   useEffect(() => {
-    if (lastUpdateFromEditorRef.current) {
-      lastUpdateFromEditorRef.current = false;
-      return;
-    }
+    if (isDirty) return; // don't override while user is editing
 
     if (sidebarMode === 'components') return;
 
@@ -66,34 +64,42 @@ export const PropertyEditor = () => {
     } else if (sidebarMode === 'validation') {
       setLocalJSON(JSON.stringify(validation, null, 2))
     }
-  }, [sidebarMode, preset, response, template, validation]) // Sync aggressively with external changes
+  }, [sidebarMode, preset, response, template, validation, isDirty])
 
-  // Debounced update logic
+  // Reset dirty state when switching modes
   useEffect(() => {
-    if (!lastUpdateFromEditorRef.current) return;
-    
-    const timer = setTimeout(() => {
-      try {
-        const parsed = JSON.parse(localJSON)
-        setJsonError(null)
-        if (sidebarMode === 'presets') setPreset(parsed)
-        else if (sidebarMode === 'responses') setResponse(parsed)
-        else if (sidebarMode === 'template') setTemplate(parsed)
-        else if (sidebarMode === 'validation') setValidation(parsed)
-      } catch (e: any) {
-        setJsonError(e.message)
-      } finally {
-        lastUpdateFromEditorRef.current = false;
-      }
-    }, 500);
+    setIsDirty(false)
+  }, [sidebarMode])
 
-    return () => clearTimeout(timer);
-  }, [localJSON, sidebarMode, setPreset, setResponse, setTemplate, setValidation]);
+  const localJSONRef = useRef(localJSON)
+  useEffect(() => {
+    localJSONRef.current = localJSON
+  }, [localJSON])
 
-  const handleJSONChange = (val: string) => {
+  const handleSaveJSON = useCallback(() => {
+    try {
+      const parsed = JSON.parse(localJSONRef.current)
+      setJsonError(null)
+      if (sidebarMode === 'presets') setPreset(parsed)
+      else if (sidebarMode === 'responses') setResponse(parsed)
+      else if (sidebarMode === 'template') setTemplate(parsed)
+      else if (sidebarMode === 'validation') setValidation(parsed)
+      setIsDirty(false)
+    } catch (e: any) {
+      setJsonError(e.message)
+    }
+  }, [sidebarMode, setPreset, setResponse, setTemplate, setValidation])
+
+  const handleEditorDidMount = (editor: any, monaco: any) => {
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+      handleSaveJSON()
+    });
+  }
+
+  const handleJSONChange = (val: string | undefined) => {
+    if (val === undefined) return;
     setLocalJSON(val)
-    lastUpdateFromEditorRef.current = true;
-    // Validation-only parsing to show errors immediately without updating store
+    setIsDirty(true)
     try {
       JSON.parse(val)
       setJsonError(null)
@@ -128,6 +134,14 @@ export const PropertyEditor = () => {
           
           <div className="flex items-center gap-3">
             <button 
+              onClick={handleSaveJSON}
+              className="flex items-center gap-1.5 px-3 py-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md text-[10px] font-bold transition-colors shadow-sm"
+              title="Save (Ctrl+S)"
+            >
+              <Save className="w-3 h-3" />
+              SAVE
+            </button>
+            <button 
               onClick={handleFormatJSON}
               className="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-[10px] font-bold transition-colors border border-zinc-700"
             >
@@ -138,6 +152,11 @@ export const PropertyEditor = () => {
               <div className="flex items-center gap-2 px-3 py-1 bg-destructive/10 text-destructive border border-destructive/20 rounded-full text-[10px] font-bold animate-in zoom-in duration-300">
                 <ShieldCheck className="w-3 h-3 rotate-180" />
                 INVALID JSON
+              </div>
+            ) : isDirty ? (
+              <div className="flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full text-[10px] font-bold animate-in zoom-in duration-300">
+                <ShieldCheck className="w-3 h-3" />
+                UNSAVED
               </div>
             ) : (
               <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded-full text-[10px] font-bold animate-in zoom-in duration-300">
@@ -165,28 +184,40 @@ export const PropertyEditor = () => {
               <div className="p-2 bg-primary/5 rounded border border-primary/10">
                 <div className="flex items-center gap-2 text-primary mb-1">
                   <Database className="w-3 h-3" />
-                  <span className="text-[9px] font-bold uppercase">Real-time</span>
+                  <span className="text-[9px] font-bold uppercase">Manual Save</span>
                 </div>
-                <p className="text-[8px] text-zinc-500 leading-tight">Changes are saved automatically to local storage every 500ms.</p>
+                <p className="text-[8px] text-zinc-500 leading-tight">Press Ctrl+S or click SAVE to persist changes to storage.</p>
               </div>
             </div>
           </div>
 
           <div className="flex-1 relative">
-            <textarea
-              className="absolute inset-0 w-full h-full p-8 bg-zinc-950 text-zinc-300 font-mono text-xs leading-relaxed outline-none resize-none selection:bg-primary/30 custom-scrollbar"
+            <Editor
+              height="100%"
+              theme="vs-dark"
+              language="json"
               value={localJSON}
-              spellCheck={false}
-              onChange={(e) => handleJSONChange(e.target.value)}
-              placeholder={`Paste your ${sidebarMode} JSON here...`}
+              onChange={handleJSONChange}
+              onMount={handleEditorDidMount}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 13,
+                wordWrap: 'on',
+                formatOnPaste: true,
+                padding: { top: 24, bottom: 24 },
+                scrollBeyondLastLine: false,
+                smoothScrolling: true,
+                cursorBlinking: "smooth",
+                cursorSmoothCaretAnimation: "on"
+              }}
             />
           </div>
         </div>
         
         <div className="h-10 border-t border-zinc-900 flex items-center px-6 bg-zinc-950 text-[10px] text-zinc-500 gap-6 shrink-0">
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-            <span className="font-mono opacity-80 uppercase tracking-tighter">Auto-save: Enabled</span>
+            <div className={cn("w-1.5 h-1.5 rounded-full", isDirty ? "bg-amber-500" : "bg-green-500 animate-pulse")} />
+            <span className="font-mono opacity-80 uppercase tracking-tighter">Manual Save</span>
           </div>
           <div className="w-px h-3 bg-zinc-800" />
           <div className="flex-1 font-mono opacity-40">UTF-8 • JSON • Fasih V2</div>

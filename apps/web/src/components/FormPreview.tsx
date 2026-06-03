@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useStore } from '../store/useStore'
-import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check, Cpu, Settings2, X } from 'lucide-react'
+import { Eye, Loader2, AlertCircle, RefreshCw, Save, Check, Cpu, Settings2, X, Download } from 'lucide-react'
 import { cn } from '../lib/utils'
+import JSZip from 'jszip'
 import { getEngine, createBlobUrls } from '../lib/engineStorage'
 
 const STATIC_JS_URL = "/engine/fasih-form.js";
@@ -101,6 +102,36 @@ export const FormPreview = () => {
 
   const setPreviewMode = (mode: 'mobile' | 'desktop') => {
     useStore.getState().setPreviewMode(mode)
+  }
+
+  const handleDownloadZip = async () => {
+    try {
+      const zip = new JSZip()
+      if (template) {
+        zip.file("template.json", JSON.stringify(template, null, 2))
+      }
+      if (preset) {
+        zip.file("preset.json", JSON.stringify(preset, null, 2))
+      }
+      if (response) {
+        zip.file("response.json", JSON.stringify(response, null, 2))
+      }
+      if (validation) {
+        zip.file("validation.json", JSON.stringify(validation, null, 2))
+      }
+      
+      const content = await zip.generateAsync({ type: "blob" })
+      const url = URL.createObjectURL(content)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `form-assets-${Date.now()}.zip`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error("Failed to generate zip", e)
+    }
   }
 
   // 1. Resource loading & Engine polling
@@ -256,6 +287,7 @@ export const FormPreview = () => {
           };
 
           const options = {
+            debug: true,
             mode: cfgMode || 'CAPI',
             assignmentId: cfgAssignmentId || 'preview',
             template: deepClone(template),
@@ -445,6 +477,9 @@ export const FormPreview = () => {
               title="Engine Config"
             >
               <Settings2 className="w-4 h-4" />
+            </button>
+            <button onClick={handleDownloadZip} className="p-2 hover:bg-muted rounded-xl text-muted-foreground transition-colors" title="Download Assets ZIP">
+              <Download className="w-4 h-4" />
             </button>
             <button onClick={handleReload} className="p-2 hover:bg-muted rounded-xl text-muted-foreground transition-colors" title="Force Reload">
               <RefreshCw className={cn("w-4 h-4", isRendering && "animate-spin")} />

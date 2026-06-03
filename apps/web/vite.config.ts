@@ -13,7 +13,6 @@ export default defineConfig({
     },
   },
   server: {
-    // Standard Vite proxy for local development
     proxy: {
       '/api/proxy-sm': {
         target: 'https://fasih-sm.bps.go.id',

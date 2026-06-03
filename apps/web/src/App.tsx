@@ -250,7 +250,7 @@ function App() {
                   )}
                 >
                   <RefreshCw className={cn("w-4 h-4", syncStatus === 'loading' && "animate-spin")} />
-                  {syncStatus === 'loading' ? 'Syncing...' : 'Sync Server'}
+                  {syncStatus === 'loading' ? 'Syncing...' : 'Sync Template'}
                 </button>
 
                 <button 

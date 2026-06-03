@@ -74,16 +74,25 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose 
                   <Key className="w-3 h-3" />
                   Global Bearer Token
                 </span>
-                <button
-                  type="button"
-                  onClick={loginWithSSO}
-                  className="px-2 py-1 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded text-[10px] transition-colors"
-                >
-                  Login SSO Pegawai
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => loginWithSSO('pegawai')}
+                    className="px-2 py-1 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded text-[10px] transition-colors"
+                  >
+                    SSO Pegawai
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => loginWithSSO('eksternal')}
+                    className="px-2 py-1 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded text-[10px] transition-colors"
+                  >
+                    SSO Eksternal
+                  </button>
+                </div>
               </label>
               <textarea
-                placeholder="Paste your bearer token here or click Login SSO Pegawai..."
+                placeholder="Paste your bearer token here or click one of the Login SSO buttons..."
                 className="w-full px-4 py-2.5 min-h-[120px] bg-background border rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
