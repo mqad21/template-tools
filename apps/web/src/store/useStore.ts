@@ -18,12 +18,32 @@ export interface FormEngineVersion {
   isForce: boolean
 }
 
+export type PrincipalContent = {
+  dataKey: string;
+  answer: any;
+  principal: number;
+  columnName: string;
+};
+
+export type Principal = {
+  principals: PrincipalContent[];
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  templateDataKey: string;
+  templateVersion: string;
+  validationVersion?: string;
+};
+
 interface State {
   template: any
   validation: any
   preset: any
   response: any
-  sidebarMode: 'components' | 'presets' | 'responses' | 'template' | 'validation'
+  principal: Principal | null
+  sidebarMode: 'components' | 'presets' | 'responses' | 'template' | 'validation' | 'principals'
+  isPrincipalsEditorOpen: boolean
   selectedDataKey: string | null
   componentMap: Record<string, Component>
   
@@ -37,6 +57,7 @@ interface State {
   selectedPath: Set<string>
   previewWidth: number
   previewMode: 'mobile' | 'desktop'
+  assignmentId: string
 
   // Engine Version Management
   engineVersions: FormEngineVersion[]
@@ -48,14 +69,17 @@ interface State {
   downloadProgress: number              // 0-100
   
   // Actions
-  setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation') => void
+  setSidebarMode: (mode: 'components' | 'presets' | 'responses' | 'template' | 'validation' | 'principals') => void
+  setIsPrincipalsEditorOpen: (open: boolean) => void
   setUseProxy: (useProxy: boolean) => void
   setPreviewWidth: (width: number) => void
   setPreviewMode: (mode: 'mobile' | 'desktop') => void
+  setAssignmentId: (id: string) => void
   setTemplate: (template: any) => void
   setValidation: (validation: any) => void
   setPreset: (preset: any) => void
   setResponse: (response: any) => void
+  setPrincipal: (principal: Principal | null) => void
   setSelectedDataKey: (dataKey: string | null) => void
   updateComponent: (dataKey: string, updates: Partial<Component>) => void
   updateValidation: (dataKey: string, updates: Partial<TestFunction>) => void
@@ -89,6 +113,7 @@ const STORAGE_KEYS = {
   VALIDATION: (id: string) => `fasih_validation_${id}`,
   PRESET: (id: string) => `fasih_preset_${id}`,
   RESPONSE: (id: string) => `fasih_response_${id}`,
+  PRINCIPAL: (id: string) => `fasih_principal_${id}`,
   PREVIEW_WIDTH: 'fasih_preview_width',
   PREVIEW_MODE: 'fasih_preview_mode',
   ENGINE_VERSIONS: 'fasih_engine_versions',
@@ -106,10 +131,12 @@ let saveDebounceTimer: any = null;
 
 export const useStore = create<State>((set, get) => ({
   sidebarMode: 'components',
+  isPrincipalsEditorOpen: false,
   template: null,
   validation: null,
   preset: null,
   response: null,
+  principal: null,
   selectedDataKey: null,
   componentMap: {},
   isLoading: true,
@@ -122,6 +149,7 @@ export const useStore = create<State>((set, get) => ({
   selectedPath: new Set(),
   previewWidth: typeof window !== 'undefined' ? Number(localStorage.getItem(STORAGE_KEYS.PREVIEW_WIDTH)) || 450 : 450,
   previewMode: typeof window !== 'undefined' ? (localStorage.getItem(STORAGE_KEYS.PREVIEW_MODE) as 'mobile' | 'desktop') || 'mobile' : 'mobile',
+  assignmentId: 'preview',
 
   // Engine version state
   engineVersions: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(STORAGE_KEYS.ENGINE_VERSIONS) || '[]') : [],
@@ -132,7 +160,8 @@ export const useStore = create<State>((set, get) => ({
   lastVersionFetch: typeof window !== 'undefined' ? Number(localStorage.getItem(STORAGE_KEYS.ENGINE_VERSIONS_TS)) || null : null,
   downloadProgress: 0,
 
-  setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null }),
+  setSidebarMode: (sidebarMode) => set({ sidebarMode, selectedDataKey: null, isPrincipalsEditorOpen: false }),
+  setIsPrincipalsEditorOpen: (isPrincipalsEditorOpen) => set({ isPrincipalsEditorOpen }),
   setUseProxy: (useProxy) => {
     set({ useProxy })
     localStorage.setItem(STORAGE_KEYS.USE_PROXY, String(useProxy))
@@ -152,6 +181,7 @@ export const useStore = create<State>((set, get) => ({
       get().setPreviewWidth(450)
     }
   },
+  setAssignmentId: (assignmentId) => set({ assignmentId }),
   setTemplate: (template) => {
     const parentMap: Record<string, string | null> = {}
     const buildParentMap = (comps: any, parent: string | null = null) => {
@@ -190,6 +220,10 @@ export const useStore = create<State>((set, get) => ({
   },
   setResponse: (response) => {
     set({ response })
+    get().saveToLocalStorage()
+  },
+  setPrincipal: (principal) => {
+    set({ principal })
     get().saveToLocalStorage()
   },
   setGlobalSettings: (token) => {
@@ -338,6 +372,8 @@ export const useStore = create<State>((set, get) => ({
       // Default values for preset and response
       const preset = presetStr ? JSON.parse(presetStr) : { predata: [] }
       const response = responseStr ? JSON.parse(responseStr) : { answers: [] }
+      const principalStr = localStorage.getItem(STORAGE_KEYS.PRINCIPAL(currentTemplateId))
+      const principal = principalStr ? JSON.parse(principalStr) : null
 
       const parentMap: Record<string, string | null> = {}
       const buildParentMap = (comps: any, parent: string | null = null) => {
@@ -364,6 +400,7 @@ export const useStore = create<State>((set, get) => ({
         validation, 
         preset, 
         response,
+        principal,
         componentMap: template ? buildComponentMap(template.components) : {},
         parentMap,
         isLoading: false
@@ -380,7 +417,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
-    const { template, validation, preset, response, currentTemplateId } = get()
+    const { template, validation, preset, response, principal, currentTemplateId } = get()
     
     const id = currentTemplateId || template?.id
     if (!id) return
@@ -392,6 +429,7 @@ export const useStore = create<State>((set, get) => ({
       localStorage.setItem(STORAGE_KEYS.VALIDATION(id), JSON.stringify(validation))
       localStorage.setItem(STORAGE_KEYS.PRESET(id), JSON.stringify(preset))
       localStorage.setItem(STORAGE_KEYS.RESPONSE(id), JSON.stringify(response))
+      localStorage.setItem(STORAGE_KEYS.PRINCIPAL(id), JSON.stringify(principal))
       
       // Update ID list if new
       const { availableTemplateIds } = get()
@@ -508,13 +546,14 @@ export const useStore = create<State>((set, get) => ({
     localStorage.removeItem(STORAGE_KEYS.VALIDATION(templateId))
     localStorage.removeItem(STORAGE_KEYS.PRESET(templateId))
     localStorage.removeItem(STORAGE_KEYS.RESPONSE(templateId))
+    localStorage.removeItem(STORAGE_KEYS.PRINCIPAL(templateId))
     
     const newList = get().availableTemplateIds.filter(id => id !== templateId)
     set({ availableTemplateIds: newList })
     localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(newList))
     
     if (get().currentTemplateId === templateId) {
-      set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null })
+      set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null, principal: null })
       localStorage.setItem(STORAGE_KEYS.CURRENT_ID, '')
     }
   },
@@ -726,6 +765,7 @@ export const useStore = create<State>((set, get) => ({
           console.error('Failed to parse data', e)
         }
       }
+      set({ assignmentId })
     } catch (error: any) {
       console.error('Failed to fetch assignment data:', error)
       throw error

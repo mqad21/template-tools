@@ -10,8 +10,11 @@ export const PropertyEditor = () => {
     validation, 
     preset,
     response,
+    principal,
     selectedDataKey, 
     sidebarMode,
+    setSidebarMode,
+    setSelectedDataKey,
     updateComponent, 
     updateValidation,
     updatePresetEntry,
@@ -20,6 +23,8 @@ export const PropertyEditor = () => {
     setResponse,
     setTemplate,
     setValidation,
+    setPrincipal,
+    setIsPrincipalsEditorOpen,
     componentMap
   } = useStore()
 
@@ -50,19 +55,31 @@ export const PropertyEditor = () => {
   const [jsonError, setJsonError] = useState<string | null>(null)
   const [isDirty, setIsDirty] = useState(false)
 
+  const editorRef = useRef<any>(null)
+  const localJSONRef = useRef(localJSON)
+
   useEffect(() => {
     if (isDirty) return; // don't override while user is editing
 
     if (sidebarMode === 'components') return;
 
+    let newValue = ''
     if (sidebarMode === 'presets') {
-      setLocalJSON(JSON.stringify(preset, null, 2))
+      newValue = JSON.stringify(preset, null, 2)
     } else if (sidebarMode === 'responses') {
-      setLocalJSON(JSON.stringify(response, null, 2))
+      newValue = JSON.stringify(response, null, 2)
     } else if (sidebarMode === 'template') {
-      setLocalJSON(JSON.stringify(template, null, 2))
+      newValue = JSON.stringify(template, null, 2)
     } else if (sidebarMode === 'validation') {
-      setLocalJSON(JSON.stringify(validation, null, 2))
+      newValue = JSON.stringify(validation, null, 2)
+    } else if (sidebarMode === 'principals') {
+      newValue = JSON.stringify(principal || { principals: [] }, null, 2)
+    }
+
+    setLocalJSON(newValue)
+    localJSONRef.current = newValue
+    if (editorRef.current) {
+      editorRef.current.setValue(newValue)
     }
   }, [sidebarMode, preset, response, template, validation, isDirty])
 
@@ -70,11 +87,6 @@ export const PropertyEditor = () => {
   useEffect(() => {
     setIsDirty(false)
   }, [sidebarMode])
-
-  const localJSONRef = useRef(localJSON)
-  useEffect(() => {
-    localJSONRef.current = localJSON
-  }, [localJSON])
 
   const handleSaveJSON = useCallback(() => {
     try {
@@ -84,13 +96,23 @@ export const PropertyEditor = () => {
       else if (sidebarMode === 'responses') setResponse(parsed)
       else if (sidebarMode === 'template') setTemplate(parsed)
       else if (sidebarMode === 'validation') setValidation(parsed)
+      else if (sidebarMode === 'principals') setPrincipal(parsed)
       setIsDirty(false)
+      
+      // Close the editor dialog immediately after saving
+      setSelectedDataKey(null)
+      if (sidebarMode === 'principals') {
+        setIsPrincipalsEditorOpen(false)
+      } else {
+        setSidebarMode('components')
+      }
     } catch (e: any) {
       setJsonError(e.message)
     }
-  }, [sidebarMode, setPreset, setResponse, setTemplate, setValidation])
+  }, [sidebarMode, setPreset, setResponse, setTemplate, setValidation, setSelectedDataKey, setSidebarMode])
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
+    editorRef.current = editor
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       handleSaveJSON()
     });
@@ -98,21 +120,21 @@ export const PropertyEditor = () => {
 
   const handleJSONChange = (val: string | undefined) => {
     if (val === undefined) return;
-    setLocalJSON(val)
-    setIsDirty(true)
-    try {
-      JSON.parse(val)
-      setJsonError(null)
-    } catch (e: any) {
-      setJsonError(e.message)
+    localJSONRef.current = val
+    if (!isDirty) {
+      setIsDirty(true)
     }
   }
 
   if (sidebarMode !== 'components') {
     const handleFormatJSON = () => {
       try {
-        const parsed = JSON.parse(localJSON)
-        setLocalJSON(JSON.stringify(parsed, null, 2))
+        const parsed = JSON.parse(localJSONRef.current)
+        const formatted = JSON.stringify(parsed, null, 2)
+        localJSONRef.current = formatted
+        if (editorRef.current) {
+          editorRef.current.setValue(formatted)
+        }
         setJsonError(null)
       } catch (e: any) {
         setJsonError(`Cannot format: ${e.message}`)
@@ -177,6 +199,7 @@ export const PropertyEditor = () => {
                 {sidebarMode === 'validation' && "Validations are logic rules that run on data change to ensure quality."}
                 {sidebarMode === 'presets' && "Predata allows you to pre-fill the form with existing data."}
                 {sidebarMode === 'responses' && "Answers represent the current user input state."}
+                {sidebarMode === 'principals' && "Principals define credentials/identities and metadata passed to the engine."}
               </p>
             </div>
             
@@ -196,7 +219,7 @@ export const PropertyEditor = () => {
               height="100%"
               theme="vs-dark"
               language="json"
-              value={localJSON}
+              defaultValue={localJSON}
               onChange={handleJSONChange}
               onMount={handleEditorDidMount}
               options={{

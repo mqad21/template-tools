@@ -3,7 +3,7 @@ import { Sidebar } from './components/Sidebar'
 import { PropertyEditor } from './components/PropertyEditor'
 import { FormPreview } from './components/FormPreview'
 import { useStore } from './store/useStore'
-import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout, X, FileJson, ShieldCheck, ClipboardList, Code, Cpu, GitCompare } from 'lucide-react'
+import { Activity, RefreshCw, Settings, AlertCircle, CheckCircle2, Loader2, Database, Layout, X, FileJson, ShieldCheck, ClipboardList, Code, Cpu, GitCompare, Fingerprint } from 'lucide-react'
 import { SettingsDialog } from './components/SettingsDialog'
 import { TemplateSwitcher } from './components/TemplateSwitcher'
 import { EngineManagerDialog } from './components/EngineManagerDialog'
@@ -25,6 +25,7 @@ function App() {
     previewMode,
     selectedDataKey,
     sidebarMode,
+    isPrincipalsEditorOpen,
     setSelectedDataKey
   } = useStore()
   const [sidebarWidth, setSidebarWidth] = useState(320)
@@ -212,32 +213,6 @@ function App() {
             
             {!isExtension && (
               <>
-                {/* Quick Edit Menu */}
-                <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-xl border border-border/50">
-                  {[
-                    { id: 'template', icon: FileJson, label: 'JSON' },
-                    { id: 'validation', icon: ShieldCheck, label: 'Val' },
-                    { id: 'presets', icon: Database, label: 'Pre' },
-                    { id: 'responses', icon: ClipboardList, label: 'Res' },
-                  ].map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => useStore.getState().setSidebarMode(item.id as any)}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-[10px] font-bold",
-                        sidebarMode === item.id 
-                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      )}
-                      title={`Edit ${item.label}`}
-                    >
-                      <item.icon className="w-3.5 h-3.5" />
-                      <span className="hidden lg:inline">{item.label}</span>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="w-px h-6 bg-border mx-2" />
 
                 <button 
                   onClick={handleSync}
@@ -362,7 +337,7 @@ function App() {
       )}
 
       {/* Property Editor Modal */}
-      {(selectedDataKey || (sidebarMode !== 'components')) && (
+      {(selectedDataKey || (sidebarMode !== 'components' && (sidebarMode !== 'principals' || isPrincipalsEditorOpen))) && (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-background/40 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
             className={cn(
@@ -388,7 +363,11 @@ function App() {
                 <button 
                   onClick={() => {
                     setSelectedDataKey(null)
-                    useStore.getState().setSidebarMode('components')
+                    if (sidebarMode === 'principals') {
+                      useStore.getState().setIsPrincipalsEditorOpen(false)
+                    } else {
+                      useStore.getState().setSidebarMode('components')
+                    }
                   }}
                   className="p-2 hover:bg-destructive/10 hover:text-destructive rounded-full transition-all text-muted-foreground"
                 >

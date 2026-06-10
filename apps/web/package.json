@@ -27,6 +27,7 @@
   "dependencies": {
     "@fasih-form-studio/shared": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
+    "monaco-editor": "^0.55.1",
     "clsx": "^2.1.1",
     "idb-keyval": "^6.2.2",
     "jszip": "^3.10.1",

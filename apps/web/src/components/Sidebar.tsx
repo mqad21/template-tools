@@ -6,7 +6,7 @@ import {
   Calendar, Clock as ClockIcon, Image, File, MapPin,
   CheckCircle2, Radio as RadioIcon, ToggleLeft,
   Menu, FileDigit, Code2, PenLine, Star,
-  Database, ClipboardList, FileJson, ShieldCheck
+  Database, ClipboardList, FileJson, ShieldCheck, Fingerprint
 } from 'lucide-react'
 import { cn, stripHtml } from '../lib/utils'
 
@@ -219,8 +219,10 @@ export const Sidebar = () => {
     template, 
     preset, 
     response, 
+    principal,
     sidebarMode, 
     setSidebarMode, 
+    setIsPrincipalsEditorOpen,
     setSelectedDataKey,
     componentMap,
     setTemplate,
@@ -279,25 +281,26 @@ export const Sidebar = () => {
 
   return (
     <div className="w-full border-r bg-card flex flex-col h-full shrink-0">
-      <div className="flex border-b bg-muted/30">
+      <div className="grid grid-cols-3 border-b bg-muted/30 divide-x divide-y divide-border/30">
         {[
           { id: 'components', icon: Layers, label: 'Tree' },
           { id: 'template', icon: FileJson, label: 'Template' },
           { id: 'validation', icon: ShieldCheck, label: 'Validation' },
           { id: 'presets', icon: Database, label: 'Presets' },
           { id: 'responses', icon: ClipboardList, label: 'Response' },
+          { id: 'principals', icon: Fingerprint, label: 'Principals' },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setSidebarMode(tab.id as any)}
             className={cn(
-              "flex-1 flex flex-col items-center gap-1 py-3 text-[9px] font-black uppercase tracking-widest transition-all border-b-2",
+              "flex flex-col items-center justify-center gap-1 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all relative",
               sidebarMode === tab.id 
-                ? "bg-background text-primary border-primary shadow-[inset_0_-2px_0_0_rgba(var(--primary),1)]" 
-                : "text-muted-foreground/60 border-transparent hover:text-muted-foreground hover:bg-muted/50"
+                ? "bg-background text-primary font-bold shadow-[inset_0_-2px_0_0_currentColor]" 
+                : "text-muted-foreground/60 hover:text-muted-foreground hover:bg-muted/50"
             )}
           >
-            <tab.icon className={cn("w-4 h-4", sidebarMode === tab.id ? "animate-in zoom-in duration-300" : "")} />
+            <tab.icon className={cn("w-3.5 h-3.5", sidebarMode === tab.id ? "animate-in zoom-in duration-300 text-primary" : "")} />
             {tab.label}
           </button>
         ))}
@@ -373,6 +376,70 @@ export const Sidebar = () => {
                 </div>
               )
             })
+          ) : sidebarMode === 'principals' ? (
+            <div className="p-2 space-y-4 animate-in fade-in duration-300">
+              <div className="p-4 bg-primary/5 border border-primary/10 rounded-2xl space-y-3 relative overflow-hidden group">
+                <div className="absolute -right-4 -top-4 w-16 h-16 bg-primary/5 rounded-full blur-xl animate-pulse" />
+                <div className="flex items-center gap-2">
+                  <Fingerprint className="w-4 h-4 text-primary shrink-0" />
+                  <h3 className="text-xs font-black uppercase tracking-wider text-foreground">Principals Configuration</h3>
+                </div>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
+                  Principals define authorization roles and metadata passed to the rendering engine.
+                </p>
+                <button 
+                  onClick={() => setIsPrincipalsEditorOpen(true)}
+                  className="w-full py-2.5 bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl text-[10px] font-extrabold transition-all active:scale-95 shadow-md"
+                >
+                  EDIT JSON CONFIG
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground/80">Active Principals Table</span>
+                  <span className="text-[9px] font-semibold text-muted-foreground/60 font-mono">
+                    {(principal?.principals?.length || 0)} entries
+                  </span>
+                </div>
+                
+                {(!principal || !principal.principals || principal.principals.length === 0) ? (
+                  <div className="p-8 text-center border border-dashed border-border/60 rounded-xl text-[10px] text-muted-foreground">
+                    No active principals found.
+                  </div>
+                ) : (
+                  <div className="border border-border/50 rounded-xl overflow-hidden bg-card/30 shadow-inner">
+                    <div className="max-h-[360px] overflow-y-auto overflow-x-auto custom-scrollbar">
+                      <table className="w-full text-left border-collapse text-[10px]">
+                        <thead>
+                          <tr className="bg-muted/30 border-b border-border/40 text-muted-foreground font-black uppercase tracking-widest text-[8px]">
+                            <th className="py-2 px-3">Key / Column</th>
+                            <th className="py-2 px-2 text-center">Lvl</th>
+                            <th className="py-2 px-3">Value</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border/20 font-mono text-[9px]">
+                          {principal.principals.map((p, idx) => (
+                            <tr key={idx} className="hover:bg-muted/20 transition-colors">
+                              <td className="py-2 px-3 font-semibold text-foreground/80 max-w-[90px] truncate">
+                                <div className="truncate font-sans font-bold text-foreground text-[10px]" title={p.dataKey}>{p.dataKey}</div>
+                                <div className="text-[8px] text-muted-foreground truncate" title={p.columnName}>{p.columnName || '-'}</div>
+                              </td>
+                              <td className="py-2 px-2 text-center">
+                                <span className="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-[8px] font-bold">{p.principal}</span>
+                              </td>
+                              <td className="py-2 px-3 text-foreground truncate max-w-[100px]" title={typeof p.answer === 'object' ? JSON.stringify(p.answer) : String(p.answer)}>
+                                {typeof p.answer === 'object' ? JSON.stringify(p.answer) : String(p.answer ?? '')}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           ) : (
             <div className="p-2 space-y-4">
               <div className="p-6 bg-primary/5 border border-primary/10 rounded-[2rem] space-y-4 relative overflow-hidden group">

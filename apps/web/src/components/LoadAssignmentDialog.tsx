@@ -12,7 +12,7 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
   const [inputData, setInputData] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
-  const { fetchAssignmentData, setPreset, setResponse } = useStore()
+  const { fetchAssignmentData, setPreset, setResponse, setAssignmentId } = useStore()
 
   if (!isOpen) return null
 
@@ -39,6 +39,12 @@ export const LoadAssignmentDialog: React.FC<LoadAssignmentDialogProps> = ({ isOp
           
           if (!found) {
             throw new Error('No pre_defined_data or data found in JSON response')
+          }
+          
+          if (parsed?.data?.assignmentId) {
+            setAssignmentId(parsed.data.assignmentId)
+          } else if (parsed?.data?.id) {
+            setAssignmentId(parsed.data.id)
           }
           
           setStatus('success')
