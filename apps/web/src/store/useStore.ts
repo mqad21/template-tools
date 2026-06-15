@@ -42,6 +42,7 @@ interface State {
   preset: any
   response: any
   principal: Principal | null
+  principalInput: Principal | null
   sidebarMode: 'components' | 'presets' | 'responses' | 'template' | 'validation' | 'principals'
   isPrincipalsEditorOpen: boolean
   selectedDataKey: string | null
@@ -80,6 +81,7 @@ interface State {
   setPreset: (preset: any) => void
   setResponse: (response: any) => void
   setPrincipal: (principal: Principal | null) => void
+  setPrincipalInput: (principalInput: Principal | null) => void
   setSelectedDataKey: (dataKey: string | null) => void
   updateComponent: (dataKey: string, updates: Partial<Component>) => void
   updateValidation: (dataKey: string, updates: Partial<TestFunction>) => void
@@ -114,6 +116,7 @@ const STORAGE_KEYS = {
   PRESET: (id: string) => `fasih_preset_${id}`,
   RESPONSE: (id: string) => `fasih_response_${id}`,
   PRINCIPAL: (id: string) => `fasih_principal_${id}`,
+  PRINCIPAL_INPUT: (id: string) => `fasih_principal_input_${id}`,
   PREVIEW_WIDTH: 'fasih_preview_width',
   PREVIEW_MODE: 'fasih_preview_mode',
   ENGINE_VERSIONS: 'fasih_engine_versions',
@@ -137,6 +140,7 @@ export const useStore = create<State>((set, get) => ({
   preset: null,
   response: null,
   principal: null,
+  principalInput: null,
   selectedDataKey: null,
   componentMap: {},
   isLoading: true,
@@ -224,6 +228,10 @@ export const useStore = create<State>((set, get) => ({
   },
   setPrincipal: (principal) => {
     set({ principal })
+    get().saveToLocalStorage()
+  },
+  setPrincipalInput: (principalInput) => {
+    set({ principalInput })
     get().saveToLocalStorage()
   },
   setGlobalSettings: (token) => {
@@ -374,6 +382,8 @@ export const useStore = create<State>((set, get) => ({
       const response = responseStr ? JSON.parse(responseStr) : { answers: [] }
       const principalStr = localStorage.getItem(STORAGE_KEYS.PRINCIPAL(currentTemplateId))
       const principal = principalStr ? JSON.parse(principalStr) : null
+      const principalInputStr = localStorage.getItem(STORAGE_KEYS.PRINCIPAL_INPUT(currentTemplateId))
+      const principalInput = principalInputStr ? JSON.parse(principalInputStr) : null
 
       const parentMap: Record<string, string | null> = {}
       const buildParentMap = (comps: any, parent: string | null = null) => {
@@ -401,6 +411,7 @@ export const useStore = create<State>((set, get) => ({
         preset, 
         response,
         principal,
+        principalInput,
         componentMap: template ? buildComponentMap(template.components) : {},
         parentMap,
         isLoading: false
@@ -417,7 +428,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   saveToLocalStorage: () => {
-    const { template, validation, preset, response, principal, currentTemplateId } = get()
+    const { template, validation, preset, response, principal, principalInput, currentTemplateId } = get()
     
     const id = currentTemplateId || template?.id
     if (!id) return
@@ -430,6 +441,7 @@ export const useStore = create<State>((set, get) => ({
       localStorage.setItem(STORAGE_KEYS.PRESET(id), JSON.stringify(preset))
       localStorage.setItem(STORAGE_KEYS.RESPONSE(id), JSON.stringify(response))
       localStorage.setItem(STORAGE_KEYS.PRINCIPAL(id), JSON.stringify(principal))
+      localStorage.setItem(STORAGE_KEYS.PRINCIPAL_INPUT(id), JSON.stringify(principalInput))
       
       // Update ID list if new
       const { availableTemplateIds } = get()
@@ -547,13 +559,14 @@ export const useStore = create<State>((set, get) => ({
     localStorage.removeItem(STORAGE_KEYS.PRESET(templateId))
     localStorage.removeItem(STORAGE_KEYS.RESPONSE(templateId))
     localStorage.removeItem(STORAGE_KEYS.PRINCIPAL(templateId))
+    localStorage.removeItem(STORAGE_KEYS.PRINCIPAL_INPUT(templateId))
     
     const newList = get().availableTemplateIds.filter(id => id !== templateId)
     set({ availableTemplateIds: newList })
     localStorage.setItem(STORAGE_KEYS.ID_LIST, JSON.stringify(newList))
     
     if (get().currentTemplateId === templateId) {
-      set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null, principal: null })
+      set({ currentTemplateId: '', template: null, validation: null, preset: null, response: null, principal: null, principalInput: null })
       localStorage.setItem(STORAGE_KEYS.CURRENT_ID, '')
     }
   },

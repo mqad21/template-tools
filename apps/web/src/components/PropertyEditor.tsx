@@ -10,7 +10,7 @@ export const PropertyEditor = () => {
     validation, 
     preset,
     response,
-    principal,
+    principalInput,
     selectedDataKey, 
     sidebarMode,
     setSidebarMode,
@@ -23,7 +23,7 @@ export const PropertyEditor = () => {
     setResponse,
     setTemplate,
     setValidation,
-    setPrincipal,
+    setPrincipalInput,
     setIsPrincipalsEditorOpen,
     componentMap
   } = useStore()
@@ -73,7 +73,7 @@ export const PropertyEditor = () => {
     } else if (sidebarMode === 'validation') {
       newValue = JSON.stringify(validation, null, 2)
     } else if (sidebarMode === 'principals') {
-      newValue = JSON.stringify(principal || { principals: [] }, null, 2)
+      newValue = JSON.stringify(principalInput || { principals: [] }, null, 2)
     }
 
     setLocalJSON(newValue)
@@ -81,7 +81,7 @@ export const PropertyEditor = () => {
     if (editorRef.current) {
       editorRef.current.setValue(newValue)
     }
-  }, [sidebarMode, preset, response, template, validation, isDirty])
+  }, [sidebarMode, preset, response, template, validation, principalInput, isDirty])
 
   // Reset dirty state when switching modes
   useEffect(() => {
@@ -96,7 +96,7 @@ export const PropertyEditor = () => {
       else if (sidebarMode === 'responses') setResponse(parsed)
       else if (sidebarMode === 'template') setTemplate(parsed)
       else if (sidebarMode === 'validation') setValidation(parsed)
-      else if (sidebarMode === 'principals') setPrincipal(parsed)
+      else if (sidebarMode === 'principals') setPrincipalInput(parsed)
       setIsDirty(false)
       
       // Close the editor dialog immediately after saving
@@ -109,7 +109,7 @@ export const PropertyEditor = () => {
     } catch (e: any) {
       setJsonError(e.message)
     }
-  }, [sidebarMode, setPreset, setResponse, setTemplate, setValidation, setSelectedDataKey, setSidebarMode])
+  }, [sidebarMode, setPreset, setResponse, setTemplate, setValidation, setPrincipalInput, setSelectedDataKey, setSidebarMode])
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor

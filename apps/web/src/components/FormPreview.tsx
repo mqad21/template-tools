@@ -23,7 +23,7 @@ export const FormPreview = () => {
     validation,
     preset,
     response,
-    principal,
+    principalInput,
     previewMode,
     selectedEngineVersion,
     assignmentId,
@@ -82,12 +82,12 @@ export const FormPreview = () => {
   const blobUrlsRef = useRef<{ jsUrl: string; cssUrl: string } | null>(null)
 
   useEffect(() => {
-    if (principal && principal.principals) {
-      setPrincipalsJson(JSON.stringify(principal.principals, null, 2))
+    if (principalInput && principalInput.principals) {
+      setPrincipalsJson(JSON.stringify(principalInput.principals, null, 2))
     } else {
       setPrincipalsJson('[]')
     }
-  }, [principal])
+  }, [principalInput])
 
   const handleReload = () => {
     setError(null)
@@ -522,9 +522,9 @@ export const FormPreview = () => {
 
           try {
             const parsedArray = JSON.parse(newConfig.principalsJson)
-            const currentPrincipal = useStore.getState().principal
-            useStore.getState().setPrincipal({
-              ...(currentPrincipal || {
+            const currentPrincipalInput = useStore.getState().principalInput
+            useStore.getState().setPrincipalInput({
+              ...(currentPrincipalInput || {
                 createdAt: new Date().toISOString(),
                 createdBy: 'tester',
                 templateDataKey: template?.dataKey || '',

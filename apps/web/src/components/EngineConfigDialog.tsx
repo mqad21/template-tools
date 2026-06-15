@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { 
   Settings2, X, Save, Check, AlertCircle, 
-  User, Database, Globe, Sliders, FileCode, CheckCircle2 
+  User, Database, Globe, Sliders, FileCode, CheckCircle2,
+  Plus, Trash2
 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import Editor from '@monaco-editor/react'
@@ -59,6 +60,50 @@ export const EngineConfigDialog: React.FC<EngineConfigDialogProps> = ({
   const [principalsError, setPrincipalsError] = useState<string | null>(null)
   const [userError, setUserError] = useState<string | null>(null)
   const [isSaved, setIsSaved] = useState(false)
+  const [principalsViewMode, setPrincipalsViewMode] = useState<'table' | 'json'>('table')
+
+  // Parse and edit helpers for Principals Table View
+  let parsedPrincipals: any[] = []
+  let isPrincipalsParsable = false
+  try {
+    const parsed = JSON.parse(principalsJson)
+    if (Array.isArray(parsed)) {
+      parsedPrincipals = parsed
+      isPrincipalsParsable = true
+    }
+  } catch (e) {
+    // Keep isPrincipalsParsable = false
+  }
+
+  const handleTableChange = (index: number, field: string, val: any) => {
+    const updated = parsedPrincipals.map((item, idx) => {
+      if (idx === index) {
+        return {
+          ...item,
+          [field]: val
+        }
+      }
+      return item
+    })
+    setPrincipalsJson(JSON.stringify(updated, null, 2))
+    setPrincipalsError(null)
+  }
+
+  const handleAddRow = () => {
+    const newRow: Record<string, any> = {}
+    for (let i = 1; i <= 10; i++) {
+      newRow[`data${i}`] = ''
+    }
+    const updated = [...parsedPrincipals, newRow]
+    setPrincipalsJson(JSON.stringify(updated, null, 2))
+    setPrincipalsError(null)
+  }
+
+  const handleDeleteRow = (index: number) => {
+    const updated = parsedPrincipals.filter((_, idx) => idx !== index)
+    setPrincipalsJson(JSON.stringify(updated, null, 2))
+    setPrincipalsError(null)
+  }
 
   // Reset drafts to current config values when opened
   useEffect(() => {
@@ -486,64 +531,176 @@ export const EngineConfigDialog: React.FC<EngineConfigDialogProps> = ({
 
           {/* Tab 3: Remarks & Principals */}
           {activeTab === 'remarks' && (
-            <div className="space-y-4 flex-1 flex flex-col min-h-0 animate-in fade-in duration-200">
-              <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
-                {/* Remark JSON */}
-                <div className="space-y-1.5 flex flex-col min-h-0">
-                  <div className="flex justify-between items-center shrink-0">
-                    <label htmlFor="modal-remark" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <FileCode className="w-3.5 h-3.5" />
-                      Remark Object
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => handleFormatJson(remarkJson, setRemarkJson, setRemarkError, 'object')}
-                      className="text-[10px] text-primary font-bold hover:underline"
-                    >
-                      Format
-                    </button>
+            <div className="space-y-6 animate-in fade-in duration-200">
+              
+              {/* Remark JSON */}
+              <div className="space-y-1.5 flex flex-col h-[200px] shrink-0">
+                <div className="flex justify-between items-center shrink-0">
+                  <label htmlFor="modal-remark" className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                    <FileCode className="w-3.5 h-3.5" />
+                    Remark Object
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => handleFormatJson(remarkJson, setRemarkJson, setRemarkError, 'object')}
+                    className="text-[10px] text-primary font-bold hover:underline"
+                  >
+                    Format
+                  </button>
+                </div>
+                <div className="relative flex-1 border border-border/80 rounded-xl overflow-hidden bg-zinc-950">
+                  <Editor
+                    height="100%"
+                    theme="vs-dark"
+                    language="json"
+                    value={remarkJson}
+                    onChange={handleRemarkChange}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 11,
+                      wordWrap: 'on',
+                      formatOnPaste: true,
+                      scrollBeyondLastLine: false,
+                      smoothScrolling: true,
+                    }}
+                  />
+                </div>
+                {remarkError && (
+                  <div className="mt-1.5 p-2 rounded-lg bg-destructive/10 text-destructive text-[10px] flex items-center gap-1.5 shrink-0">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span className="font-mono text-[9px] truncate">{remarkError}</span>
                   </div>
-                  <div className="relative flex-1 min-h-[220px] border border-border/80 rounded-xl overflow-hidden bg-zinc-950">
-                    <Editor
-                      height="100%"
-                      theme="vs-dark"
-                      language="json"
-                      value={remarkJson}
-                      onChange={handleRemarkChange}
-                      options={{
-                        minimap: { enabled: false },
-                        fontSize: 11,
-                        wordWrap: 'on',
-                        formatOnPaste: true,
-                        scrollBeyondLastLine: false,
-                        smoothScrolling: true,
-                      }}
-                    />
-                  </div>
-                  {remarkError && (
-                    <div className="mt-1.5 p-2 rounded-lg bg-destructive/10 text-destructive text-[10px] flex items-center gap-1.5 shrink-0">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      <span className="font-mono text-[9px] truncate">{remarkError}</span>
+                )}
+              </div>
+
+              {/* Principals Array */}
+              <div className="space-y-1.5 flex flex-col h-[340px] shrink-0">
+                <div className="flex justify-between items-center shrink-0">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                    <FileCode className="w-3.5 h-3.5" />
+                    Principals Array
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex bg-muted/60 p-0.5 rounded-lg border border-border/50 text-[9px] font-bold">
+                      <button
+                        type="button"
+                        onClick={() => setPrincipalsViewMode('table')}
+                        className={cn(
+                          "px-2.5 py-1 rounded-md transition-all",
+                          principalsViewMode === 'table' ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        Table View
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPrincipalsViewMode('json')}
+                        className={cn(
+                          "px-2.5 py-1 rounded-md transition-all",
+                          principalsViewMode === 'json' ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        Raw JSON
+                      </button>
                     </div>
-                  )}
+                    {principalsViewMode === 'json' && (
+                      <button
+                        type="button"
+                        onClick={() => handleFormatJson(principalsJson, setPrincipalsJson, setPrincipalsError, 'array')}
+                        className="text-[10px] text-primary font-bold hover:underline"
+                      >
+                        Format
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                {/* Principals Array JSON */}
-                <div className="space-y-1.5 flex flex-col min-h-0">
-                  <div className="flex justify-between items-center shrink-0">
-                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <FileCode className="w-3.5 h-3.5" />
-                      Principals Array
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => handleFormatJson(principalsJson, setPrincipalsJson, setPrincipalsError, 'array')}
-                      className="text-[10px] text-primary font-bold hover:underline"
-                    >
-                      Format
-                    </button>
-                  </div>
-                  <div className="relative flex-1 min-h-[220px] border border-border/80 rounded-xl overflow-hidden bg-zinc-950">
+                <div className="relative h-[290px] border border-border/80 rounded-xl overflow-hidden bg-zinc-950 flex flex-col shrink-0">
+                  {principalsViewMode === 'table' ? (
+                    <div className="flex flex-col h-[288px] relative shrink-0">
+                      {!isPrincipalsParsable && (
+                        <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center z-10 animate-in fade-in duration-200">
+                          <AlertCircle className="w-8 h-8 text-destructive mb-2" />
+                          <h4 className="text-xs font-bold text-destructive">Invalid JSON Structure</h4>
+                          <p className="text-[10px] text-muted-foreground max-w-xs mt-1">
+                            The table view requires a valid JSON array of objects. Please correct any syntax errors in Raw JSON mode first.
+                          </p>
+                        </div>
+                      )}
+                      <div className="h-[228px] overflow-auto custom-scrollbar">
+                        <table className="w-full text-left border-collapse text-[10px] min-w-[1100px]">
+                          <thead>
+                            <tr className="bg-muted/30 border-b border-border/40 text-muted-foreground font-black uppercase tracking-widest text-[8px] sticky top-0 z-10 bg-zinc-900">
+                              {Array.from({ length: 10 }).map((_, i) => (
+                                <th key={i} className="py-2 px-3 min-w-[100px]">Data {i + 1}</th>
+                              ))}
+                              <th className="py-2 px-2 text-center w-12 sticky right-0 bg-zinc-900 z-20 border-l border-border/20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.5)]">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-border/20 font-mono text-[9px]">
+                            {parsedPrincipals.map((p, idx) => (
+                              <tr key={idx} className="hover:bg-muted/10 transition-colors">
+                                {Array.from({ length: 10 }).map((_, i) => {
+                                  const fieldName = `data${i + 1}`
+                                  return (
+                                    <td key={i} className="py-1 px-2 min-w-[100px]">
+                                      <input
+                                        type="text"
+                                        value={p[fieldName] !== undefined ? String(p[fieldName]) : ''}
+                                        onChange={(e) => {
+                                          let v: any = e.target.value
+                                          if (v === 'true') v = true
+                                          else if (v === 'false') v = false
+                                          else if (v !== '' && !isNaN(Number(v))) v = Number(v)
+                                          else if (v.trim().startsWith('{') || v.trim().startsWith('[')) {
+                                            try {
+                                              v = JSON.parse(v)
+                                            } catch (err) {
+                                              // Fallback to string
+                                            }
+                                          }
+                                          handleTableChange(idx, fieldName, v)
+                                        }}
+                                        className="w-full bg-transparent border-0 text-foreground text-xs outline-none focus:ring-1 focus:ring-primary/40 rounded px-1.5 py-1 text-zinc-100"
+                                        placeholder={`Value ${i + 1}`}
+                                      />
+                                    </td>
+                                  )
+                                })}
+                                <td className="py-1 px-2 text-center sticky right-0 bg-zinc-950 z-10 border-l border-border/20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.5)]">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteRow(idx)}
+                                    className="p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-all"
+                                    title="Delete Row"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                            {parsedPrincipals.length === 0 && (
+                              <tr>
+                                <td colSpan={11} className="py-8 text-center text-muted-foreground font-sans text-xs">
+                                  No active entries. Click the button below to add one.
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="h-[60px] border-t border-border/30 bg-muted/10 flex items-center justify-end px-4 shrink-0">
+                        <button
+                          type="button"
+                          onClick={handleAddRow}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg text-[10px] font-bold transition-all active:scale-95 animate-in fade-in duration-300"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          Add Principal Entry
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
                     <Editor
                       height="100%"
                       theme="vs-dark"
@@ -559,14 +716,14 @@ export const EngineConfigDialog: React.FC<EngineConfigDialogProps> = ({
                         smoothScrolling: true,
                       }}
                     />
-                  </div>
-                  {principalsError && (
-                    <div className="mt-1.5 p-2 rounded-lg bg-destructive/10 text-destructive text-[10px] flex items-center gap-1.5 shrink-0">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      <span className="font-mono text-[9px] truncate">{principalsError}</span>
-                    </div>
                   )}
                 </div>
+                {principalsError && (
+                  <div className="mt-1.5 p-2 rounded-lg bg-destructive/10 text-destructive text-[10px] flex items-center gap-1.5 shrink-0">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span className="font-mono text-[9px] truncate">{principalsError}</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
